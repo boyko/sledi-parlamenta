@@ -19,3 +19,5 @@
 ```bash
 php spreadsheet2csv.php -f ../../data/samples/votes-individual.xls -o test.csv
 ```
+### Извличане на гласовете на всеки депутат
+На ниво "скелет"" и базов код.
