@@ -1,0 +1,19 @@
+{
+	"name": "request-wrapper-with-error-handling",
+	"description": "Wrapper of the package `request` with additional error logging with winston to Loggly",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+		"email": "obshtestvo@facebook.com"
+	},
+	"main": "./index.js",
+	"dependencies": {
+		"winston": "*",
+		"winston-loggly": "*",
+		"cheerio": "*"
+	},
+	"keywords": [
+		"wrapper",
+		"http"
+	]
+}
