@@ -1,3 +1,4 @@
+var fs = require('fs');
 var request = require('request');
 var winston = require('winston');
 require('winston-loggly');
@@ -21,5 +22,8 @@ exports = module.exports = {
 			}
 			callback(html);
 		})
+	},
+	save: function(url, destination, callback) {
+		request(url).pipe(fs.createWriteStream(destination)).on("finish", callback);
 	}
 }
