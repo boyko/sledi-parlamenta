@@ -36,7 +36,7 @@
 
 ## Употреба
 ```bash
-node run.js -url=http://www.parliament.bg/bg/plenaryst
+node run.js --url=http://www.parliament.bg/bg/plenaryst
 ```
 
 което ще изведе поредица от `json` документи, с по един документ на 1 ред, тоест:
@@ -64,7 +64,7 @@ URL-то фактически определя кое (42ро, 41во...) нар
 Може да се подаде и стартова дата, преди която стенограмите нямат да бъдат обработвани. Дататата трябва да е _"unix timestamp"_:
 
 ```bash
-node run.js -url=http://www.parliament.bg/bg/plenaryst --date=1374418193
+node run.js --url=http://www.parliament.bg/bg/plenaryst --date=1374418193
 ```
 
 Чрез нея е планирано да може скрипта да се изпълнява всеки ден и да обработва само нови стенограми.
@@ -75,7 +75,7 @@ node run.js -url=http://www.parliament.bg/bg/plenaryst --date=1374418193
 Подаването на този списък към скрипта става като се подаде съдържанието на json документа към него. Или иначе казано списъка се _"pipe"_-не:
 
 ```bash
-cat listOfForcedTimeSpans.json | node run.js -url=http://www.parliament.bg/bg/plenaryst
+cat listOfForcedTimeSpans.json | node run.js --url=http://www.parliament.bg/bg/plenaryst
 ```
 като `listOfForcedTimeSpans.json` файлът може да изглежда така (за години):
 
@@ -107,7 +107,7 @@ cat listOfForcedTimeSpans.json | node run.js -url=http://www.parliament.bg/bg/pl
 Примерен _"декоратор"_ за SQL база данни има в `decorator/sql.js`. Дадения декоратор-скрипт се ползва като се пренасочи извежданата информация от `run.js` към него. Или иначе казано _"pipe"_:
 
 ```bash
-node run.js -url=http://www.parliament.bg/bg/plenaryst | node decorator/sql.js
+node run.js --url=http://www.parliament.bg/bg/plenaryst | node decorator/sql.js
 ```
 
 което ще превърне описания горе JSON документ в:
