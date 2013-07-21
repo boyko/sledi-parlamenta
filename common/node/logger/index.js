@@ -1,6 +1,6 @@
 var winston = require('winston');
 require('winston-loggly');
-winston.add(winston.transports.Loggly, options);
+//winston.add(winston.transports.Loggly, {});
 //require('winston-papertrail').Papertrail;
 
 exports = module.exports = function() {

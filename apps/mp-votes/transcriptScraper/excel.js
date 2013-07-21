@@ -3,9 +3,9 @@ var path = require('path');
 var when = require('q');
 var $ = require('cheerio');
 
-var csv = require('../../common/csv-util');
-var downloader = require('../../common/node/downloader')
-var convertor = require('../../common/node/spreadsheet2csv-node')
+var csv = require('../../../common/node/csv-util');
+var downloader = require('../../../common/node/downloader');
+var convertor = require('../../../common/node/spreadsheet2csv-node');
 
 var Scraper = function(url, tempDir) {
 	this.url = url;

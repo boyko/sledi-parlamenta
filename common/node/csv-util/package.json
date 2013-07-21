@@ -1,5 +1,5 @@
 {
-	"name": "csv-wrapper",
+	"name": "csv-util",
 	"description": "Wrapper of the package `csv`",
 	"version": "0.0.1",
 	"author": {
