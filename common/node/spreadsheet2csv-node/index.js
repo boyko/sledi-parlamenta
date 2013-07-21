@@ -7,7 +7,7 @@ var pathToConvertor = path.join(__dirname,'../../../apps/spreadsheet2csv/spreads
 exports = module.exports = {
 	convert: function(inputPath, outputPath, callback) {
 		exec("php " + pathToConvertor + ' -f '+inputPath+' -o '+outputPath, function (error, stdout, stderr) {
-			if (!(error == null && stdout == null && stderr == null)) {
+			if (!(error == null && stdout == '' && stderr == '')) {
 				logger.error('conversion error! From '+inputPath+' to '+outputPath+', err:'+error+', '+stdout);
 			}
 			callback();

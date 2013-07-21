@@ -1,4 +1,5 @@
 var path = require('path');
+var urlInfo = require('url');
 
 var when = require('q');
 var $ = require('cheerio');
@@ -8,11 +9,14 @@ var downloader = require('../../../common/node/downloader');
 var convertor = require('../../../common/node/spreadsheet2csv-node');
 
 var Scraper = function(url, tempDir) {
+	this.baseUrl = urlInfo.parse(url);
+	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
 	this.url = url;
 	this.tempDir = tempDir;
 }
 
 Scraper.prototype = {
+	baseUrl: null,
 	url: null,
 	tempDir: null,
 	date: null,
@@ -21,17 +25,17 @@ Scraper.prototype = {
 		downloader.get(this.url, function(html) {
 			var $article = $('#leftcontent', html);
 			var $spreadsheets = $article.find('.frontList a[href$=".xls"]');
-			self.date = $article.$('.markframe .dateclass').text();
+			self.date = $article.find('.markframe .dateclass').text();
 
 			var topicsExtraction = when.defer();
-			var groupDownload = downloadAndConvert(
-				$spreadsheets.filter('[href*="gv"]').attr('href')
+			var groupDownload = self.downloadAndConvert(
+				self.baseUrl+$spreadsheets.filter('[href*="gv"]').attr('href')
 			);
 			when.done(groupDownload, function(outputPath) {
 				topicsExtraction.resolve(self.extractTopicsFromGroupVotingCSV(outputPath))
-			})
+			});
 
-			var individualDownload = self.downloadAndConvert($spreadsheets.filter('[href*="iv"]').attr('href'));
+			var individualDownload = self.downloadAndConvert(self.baseUrl+$spreadsheets.filter('[href*="iv"]').attr('href'));
 			when.all([individualDownload, topicsExtraction.promise]).spread(self.extractIndividualVotesFromCSV)
 		})
 	},
@@ -41,22 +45,22 @@ Scraper.prototype = {
 		var name = urlTokens[urlTokens.length-1];
 		var downloadPath = path.join(this.tempDir, name)
 		var outputPath = downloadPath.replace('.xls', '.csv');
-		downloader.save(url, name, function() {
+		downloader.save(url, downloadPath, function() {
 			convertor.convert(downloadPath, outputPath, function() {
 				task.resolve(outputPath);
 			})
 		})
-		return task;
+		return task.promise;
 	},
 	extractTopicsFromGroupVotingCSV: function(path) {
 		var task = when.defer();
 		var markers = {
 			registration: "РЕГИСТРАЦИЯ",
-			voteSplitter: "РЕГИСТРАЦИЯ",
+			voteSplitter: "по тема",
 			vote: "ГЛАСУВАНЕ"
 		}
 		var getNum = function(title) {
-			var match = /Номер\s*\(?(\d)\)?/.exec(title);
+			var match = /Номер\s*\(?(\d+)\)?/.exec(title);
 			if (match!=null) return match[1];
 			return false;
 		}
@@ -84,7 +88,7 @@ Scraper.prototype = {
 				"time": time
 			};
 		})
-		reader.on('end', function(){ task.resolve(topics);})
+		reader.on('end', function(){task.resolve(topics);})
 
 		return task.promise;
 	},
@@ -94,7 +98,7 @@ Scraper.prototype = {
 	 * @param topics
 	 */
 	extractIndividualVotesFromCSV: function(path, topics) {
-		var self = this
+		var self = this;
 		var headers = []
 		var valueMapping = {
 			"П": 'present',
@@ -120,16 +124,16 @@ Scraper.prototype = {
 				if (i==0 && val!='') {
 					record.name = val;
 				}
-				if (val=='' || i < 3) return;
+				if (val=='' || i < 4) return;
 				var topic = topics.titlesByNum[headers[i]]
 				var entry = {
 					time: topics.metadataByTitle[topic].time,
-					val: mapping[val]
+					val: valueMapping[val]
 				}
 				if (topics.isRegistration(topic)) {
 					record.registration = entry
 				} else {
-					record.votes.append(entry)
+					record.votes.push(entry)
 				}
 			})
 			console.log(JSON.stringify(record))

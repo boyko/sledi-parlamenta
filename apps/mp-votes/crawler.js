@@ -1,4 +1,5 @@
 var $ = require('cheerio');
+var urlInfo = require('url');
 var downloader = require('../../common/node/downloader')
 
 /**
@@ -26,7 +27,10 @@ var downloader = require('../../common/node/downloader')
  * @constructor
  */
 var Crawler = function(url, target) {
+	this.baseUrl = urlInfo.parse(url);
+	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
 	this.url = url;
+
 	if (target instanceof Date) {
 		this.startDate = target;
 	} else {
@@ -34,6 +38,7 @@ var Crawler = function(url, target) {
 	}
 }
 Crawler.prototype = {
+	baseUrl: null,
 	url: null,
 	startDate: null,
 	forced: null,
@@ -57,12 +62,12 @@ Crawler.prototype = {
 			var $monthsLinks = $calender.find('a').filter(function() {
 				var hrefTokens = $(this).attr('href').split('/');
 				var date = hrefTokens[hrefTokens.length-1].split('-');
-				var month = parseInt(date[0])-1;
-				var year = parseInt(date[1]);
+				var month = parseInt(date[1])-1;
+				var year = parseInt(date[0]);
 				return self._shouldCrawl(year, month);
 			})
 			$monthsLinks.each(function() {
-				self.processMonth($(this).attr('href'), transcriptCallback);
+				self.processMonth(self.baseUrl+$(this).attr('href'), transcriptCallback);
 			})
 		})
 	},
@@ -76,6 +81,7 @@ Crawler.prototype = {
 	 */
 	processMonth: function(url, transcriptCallback) {
 		var self = this;
+
 		downloader.get(url, function(html) {
 			var $list= $('#monthview', html);
 			var $transcriptsLinks = $list.find('a').filter(function() {
@@ -83,7 +89,7 @@ Crawler.prototype = {
 				return self._shouldCrawl(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]))
 			})
 			$transcriptsLinks.each(function() {
-				transcriptCallback($(this).attr('href'))
+				transcriptCallback(self.baseUrl+$(this).attr('href'))
 			})
 		})
 	},
@@ -98,11 +104,11 @@ Crawler.prototype = {
 	 * @private
 	 */
 	_shouldCrawl: function(year, month, day) {
-		if (typeof this.startDate != 'undefined') {
+		if (this.startDate != null) {
 			var d = this.startDate;
 			return year >= d.getYear() && month >= d.getMonth && (typeof day == 'undefined' || day > d.getDate());
 		}
-		if (typeof this.forced == 'undefined') return true;
+		if (this.forced == null) return true;
 
 		// User has passed array of years
 		if (this.forced instanceof Array && this.forced.indexOf(year)==-1) return false;
@@ -122,3 +128,4 @@ Crawler.prototype = {
 		return this.forced[year][month].indexOf(day) > -1;
 	}
 }
+exports = module.exports = Crawler;

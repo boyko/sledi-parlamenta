@@ -1,5 +1,11 @@
 {
     "require": {
         "phpoffice/phpexcel": "dev-develop_2.0.0"
-    }
+    },
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/antitoxic/PHPExcel"
+		}
+	]
 }

@@ -4,7 +4,11 @@ require('winston-loggly');
 //require('winston-papertrail').Papertrail;
 
 exports = module.exports = function() {
-	var logger = new (winston.Logger)();
+	var logger = new (winston.Logger)({
+		transports: [
+			new (winston.transports.Console)()
+		]
+	});
 //	var logger = new winston.Logger({
 //		transports: [
 //			new winston.transports.Papertrail({
