@@ -5,6 +5,7 @@ var when = require('q');
 var $ = require('cheerio');
 
 var csv = require('../../../common/node/csv-util');
+var logger = require('../../../common/node/logger')()
 var downloader = require('../../../common/node/downloader');
 var convertor = require('../../../common/node/spreadsheet2csv-node');
 
@@ -25,6 +26,10 @@ Scraper.prototype = {
 		downloader.get(this.url, function(html) {
 			var $article = $('#leftcontent', html);
 			var $spreadsheets = $article.find('.frontList a[href$=".xls"]');
+			if ($spreadsheets.length==0) {
+				logger.info("Can't find XLS docs at: "+self.url)
+				return;
+			}
 			self.date = $article.find('.markframe .dateclass').text();
 
 			var topicsExtraction = when.defer();
@@ -136,7 +141,7 @@ Scraper.prototype = {
 					record.votes.push(entry)
 				}
 			})
-			console.log(JSON.stringify(record))
+//			console.log(JSON.stringify(record))
 		})
 	}
 
