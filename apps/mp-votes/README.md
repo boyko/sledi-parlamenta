@@ -49,6 +49,8 @@
 bash ./build.sh
 ```
 
+Което просто ще ползва `npm` и `composer` да свали нужните библиотеки.
+
 ## Употреба
 ```bash
 node run.js --url=http://www.parliament.bg/bg/plenaryst
