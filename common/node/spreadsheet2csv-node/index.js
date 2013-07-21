@@ -1,9 +1,7 @@
 var exec = require('child_process').exec;
-var pathToConvertor = '../../spreadsheet2csv.php';
-var winston = require('winston');
-require('winston-loggly');
-winston.add(winston.transports.Loggly, options);
-var logger = new (winston.Logger)();
+var logger = require('../logger')();
+
+var pathToConvertor = '../../../apps/spreadsheet2csv/spreadsheet2csv.php';
 
 exports = module.exports = {
 	convert: function(inputPath, outputPath, callback) {

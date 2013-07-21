@@ -1,6 +1,6 @@
 {
-	"name": "request-wrapper-with-error-handling",
-	"description": "Wrapper of the package `request` with the additional error logging and alerting",
+	"name": "logger-wrapper",
+	"description": "Wrapper of the package `winston` Loggly or Papertrail as transports",
 	"version": "0.0.1",
 	"author": {
 		"name": "Общество",
@@ -8,10 +8,11 @@
 	},
 	"main": "./index.js",
 	"dependencies": {
-		"cheerio": "*"
+		"winston": "*",
+		"winston-loggly": "*"
 	},
 	"keywords": [
 		"wrapper",
-		"http"
+		"logger"
 	]
 }
