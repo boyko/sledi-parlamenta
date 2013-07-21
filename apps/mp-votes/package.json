@@ -6,11 +6,12 @@
 		"name": "Общество",
 		"email": "obshtestvo@facebook.com"
 	},
-	"main": "./index.js",
+	"main": "./run.js",
 	"dependencies": {
 		"q": "*",
 		"cheerio": "*",
-		"request": "*"
+		"request": "*",
+		"byline": "git://github.com/antitoxic/node-byline.git"
 	},
 	"keywords": [
 		"gatherer",
