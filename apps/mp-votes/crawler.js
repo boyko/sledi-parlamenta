@@ -37,7 +37,11 @@ Crawler.prototype = {
 	url: null,
 	startDate: null,
 	forced: null,
-	findNewTranscripts: function(callback) {
+	/**
+	 * Starts the crawl
+	 * @param callback
+	 */
+	fetchTranscripts: function(callback) {
 		this.processParliament(callback);
 	},
 	/**
