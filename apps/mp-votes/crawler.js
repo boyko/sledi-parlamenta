@@ -1,5 +1,5 @@
 var $ = require('cheerio');
-var downloader = require('../common/node/downloader')
+var downloader = require('../../common/node/downloader')
 
 /**
  * Creates a crawler.

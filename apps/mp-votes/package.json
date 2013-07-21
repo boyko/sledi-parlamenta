@@ -11,6 +11,7 @@
 		"q": "*",
 		"cheerio": "*",
 		"request": "*",
+		"optimist": "*",
 		"byline": "git://github.com/antitoxic/node-byline.git"
 	},
 	"keywords": [

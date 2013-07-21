@@ -1,6 +1,8 @@
 ## Какво прави
 Скриптът извлича информаця за дейността на всеки народен представител от стенограмите налични в XLS формат на http://www.parliament.bg/bg/plenaryst .
 
+Все още скрипта е **НЕТЕСТВАН**, но описанието долу е фактически това което ще остане и след като всичко бъде тествано.
+
 За момента информацията е сведена до:
 
  - присъствие
@@ -27,21 +29,43 @@
     ],
     "registration": {
         "time": "21-05-2013 11:30",
-        "val": "absent"
+        "val": "present"
     }
 }
 ```
 
 ## Употреба
 ```bash
-node run.js 
+node run.js -url=http://www.parliament.bg/bg/plenaryst
 ```
 
-което ще изведе поредица от `json` документи, но един документ на 1 ред, тоест:
+което ще изведе поредица от `json` документи, с по един документ на 1 ред, тоест:
 
 ```json
 {"name":"Иван Иванов","date":"21/05/2013","votes":[{"topic":"Budget increase","val":"yes","time":"21-05-2013 11:54"}, /*...*/],"registration":{/*...*/}}
  ```
+
+Ето и _"help"_-а на скрипта за повече яснота:
+
+```
+Crawls parliament.bg and extracts MPs' voting infromation.
+Usage: node ./run.js
+
+Options:
+  -u, --url   Url to act as a start page for the crawl          [required]
+  -d, --date  Date as unix time. Start date for the crawl       [default: null]
+  -t, --temp  Temporary directory to store the raw transcripts  [default: "/var/tmp"]
+```
+
+URL-то фактически определя кое (42ро, 41во...) народно събание ще се _"crawl"_-ва.
+
+Може да се подаде и стартова дата, преди която стенограмите нямат да бъдат обработвани. Дататата трябва да е _"unix timestamp"_:
+
+```bash
+node run.js -url=http://www.parliament.bg/bg/plenaryst --date=1374418193
+```
+
+Чрез нея е планирано да може скрипта да се изпълнява всеки ден и да обработва само нови стенограми.
 
 ### Оформяне на изведената информация за запис
 Записа на информацията зависи от желаната база данни. За всяка различна DB, документите ще се трансформират за да паснат на нейната структура.
