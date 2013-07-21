@@ -1,9 +1,10 @@
 // Decorator of the normal run script.
 // Pipe the output of the mp_votes run to it like so:
-//   node run.js | node SqllRunTransformation
+//   node run.js | node decorator/sql.js
 //
-// Iinstead of outputting nested JSON objects,
-// it outputs flat objects suitable for storage in SQL DB
+// Instead of outputting nested JSON objects,
+// it outputs 2 level objects containing destination (table name)
+// and row object suitable for storage in SQL DB
 
 var LineStream = require('byline').LineStream;
 
