@@ -44,7 +44,7 @@ if (argv.date!=null) {
 // Run crawler & Scraper
 inputReady.promise.then(function(target) {
 	// if target is not a json doc then it's a unix timestamp
-	if (!(target instanceof Object)) {
+	if (typeof target != 'undefined' && !(target instanceof Object)) {
 		target = new Date(target * 1000)
 	}
 	// Creates a crawler
