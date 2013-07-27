@@ -141,7 +141,7 @@ Scraper.prototype = {
 					record.votes.push(entry)
 				}
 			})
-//			console.log(JSON.stringify(record))
+  			console.log(JSON.stringify(record))
 		})
 	}
 
