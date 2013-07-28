@@ -5,15 +5,17 @@ var when = require('q');
 var $ = require('cheerio');
 
 var csv = require('../../../common/node/csv-util');
-var logger = require('../../../common/node/logger')()
-var downloader = require('../../../common/node/downloader');
-var convertor = require('../../../common/node/spreadsheet2csv-node');
+var Downloader = require('../../../common/node/downloader');
+var Convertor = require('../../../common/node/spreadsheet2csv-node');
 
-var Scraper = function(url, tempDir) {
+var Scraper = function(url, tempDir, logger) {
+	this.url = url;
 	this.baseUrl = urlInfo.parse(url);
 	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
-	this.url = url;
 	this.tempDir = tempDir;
+	this.logger = loggerService;
+	this.downloader = new Downloader(logger);
+	this.convertor = new Convertor(logger);
 }
 
 Scraper.prototype = {
@@ -21,13 +23,15 @@ Scraper.prototype = {
 	url: null,
 	tempDir: null,
 	date: null,
+	logger: null,
+	convertor: null,
 	scrape: function() {
 		var self = this;
-		downloader.get(this.url, function(html) {
+		self.downloader.get(this.url, function(html) {
 			var $article = $('#leftcontent', html);
 			var $spreadsheets = $article.find('.frontList a[href$=".xls"]');
 			if ($spreadsheets.length==0) {
-				logger.info("Can't find XLS docs at: "+self.url)
+				self.logger.info("Can't find XLS docs at: "+self.url)
 				return;
 			}
 			self.date = $article.find('.markframe .dateclass').text();
@@ -45,13 +49,14 @@ Scraper.prototype = {
 		})
 	},
 	downloadAndConvert: function(url) {
+		var self = this;
 		var task = when.defer();
 		var urlTokens = url.split('/');
 		var name = urlTokens[urlTokens.length-1];
 		var downloadPath = path.join(this.tempDir, name)
 		var outputPath = downloadPath.replace('.xls', '.csv');
-		downloader.save(url, downloadPath, function() {
-			convertor.convert(downloadPath, outputPath, function() {
+		self.downloader.save(url, downloadPath, function() {
+			self.convertor.convert(downloadPath, outputPath, function() {
 				task.resolve(outputPath);
 			})
 		})

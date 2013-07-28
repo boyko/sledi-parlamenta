@@ -1,6 +1,6 @@
 var $ = require('cheerio');
 var urlInfo = require('url');
-var downloader = require('../../common/node/downloader')
+var Downloader = require('../../common/node/downloader')
 
 /**
  * Creates a crawler.
@@ -26,10 +26,12 @@ var downloader = require('../../common/node/downloader')
  *
  * @constructor
  */
-var Crawler = function(url, target) {
+var Crawler = function(url, target, logger) {
 	this.baseUrl = urlInfo.parse(url);
 	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
 	this.url = url;
+	this.logger = logger;
+	this.downloader = new Downloader(logger);
 
 	if (target instanceof Date) {
 		this.startDate = target;
@@ -42,6 +44,8 @@ Crawler.prototype = {
 	url: null,
 	startDate: null,
 	forced: null,
+	logger: null,
+	downloader: null,
 	/**
 	 * Starts the crawl
 	 * @param callback
@@ -57,7 +61,7 @@ Crawler.prototype = {
 	 */
 	processParliament: function(transcriptCallback) {
 		var self = this;
-		downloader.get(this.url, function(html) {
+		self.downloader.get(this.url, function(html) {
 			var $calender= $('#calendar', html);
 			var $monthsLinks = $calender.find('a').filter(function() {
 				var hrefTokens = $(this).attr('href').split('/');
@@ -82,7 +86,7 @@ Crawler.prototype = {
 	processMonth: function(url, transcriptCallback) {
 		var self = this;
 
-		downloader.get(url, function(html) {
+		self.downloader.get(url, function(html) {
 			var $list= $('#monthview', html);
 			var $transcriptsLinks = $list.find('a').filter(function() {
 				var date = $(this).parent().text().split(', ')[1].split('/');
