@@ -13,7 +13,7 @@ var Scraper = function(url, tempDir, logger) {
 	this.baseUrl = urlInfo.parse(url);
 	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
 	this.tempDir = tempDir;
-	this.logger = loggerService;
+	this.logger = logger;
 	this.downloader = new Downloader(logger);
 	this.convertor = new Convertor(logger);
 }
