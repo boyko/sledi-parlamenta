@@ -1,0 +1,24 @@
+{
+	"name": "bulgarian-mp-votes-gatherer",
+	"description": "Bulgarian MP votes gatherer",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+		"email": "obshtestvo@facebook.com"
+	},
+	"main": "./run.js",
+	"dependencies": {
+		"q": "*",
+		"cheerio": "*",
+		"request": "*",
+		"optimist": "*",
+		"byline": "git://github.com/antitoxic/node-byline.git"
+	},
+	"keywords": [
+		"gatherer",
+		"scraper",
+		"crawler",
+		"bulgaria",
+		"web"
+	]
+}
