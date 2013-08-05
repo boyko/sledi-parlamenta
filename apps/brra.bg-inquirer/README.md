@@ -12,3 +12,24 @@ phantomjs pure_phantomjs_test.js
 ```
 
 ще има създаден `export.png` файл в същата папка, който изобразява *"screenshot"* от сайта на държавния вестник. Важното в този *"screenshot"* е, че по него може да се види заредената страница, и тя не е началната, тоест навигацията е била успешна.
+
+## Phantomjs setup
+
+Просто сваляте от:
+http://phantomjs.org/download.html
+
+И добавяте в .bashrc, .zshrc  (или др каквото ползвате) към $PATH:
+
+```
+/path/to/downloaded/phantomjs/bin
+```
+
+
+## Судо код за crawl + decaptcha на brra.bg
+
+```
+nodejs ./captcha-server.js &
+phantomjs ./crawler.js
+```
+
+В момента е само судо код, но при готовност ще извежда json обекти с фирмите и позициите на търсеното лице.

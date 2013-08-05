@@ -1,0 +1,20 @@
+{
+	"name": "bulgarian-business-history-gatherer",
+	"description": "Bulgarian Business History Gatherer",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+		"email": "obshtestvo@facebook.com"
+	},
+	"main": "./run.js",
+	"dependencies": {
+		"phantomjs-nodify": "git://github.com/jgonera/phantomjs-nodify.git"
+	},
+	"keywords": [
+		"gatherer",
+		"scraper",
+		"crawler",
+		"bulgaria",
+		"web"
+	]
+}
