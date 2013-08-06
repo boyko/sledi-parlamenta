@@ -1,34 +1,49 @@
+require('./node_modules/phantomjs-nodify');
+var Q = require('./node_modules/q');
 var brraTab = require("webpage").create();
-var captchaTab = require("webpage").create();
-var nodejs = require("webpage").create();
-
+var brraFlow;
 var firstUrl = "https://public.brra.bg/CheckUps/Verifications/VerificationPersonOrg.ra";
-var mpName = "Иван Иванов Иванов"
-var EventEmitter = require('events').EventEmitter
 
-var brra = new EventEmitter()
-
-// Reference: https://github.com/ariya/phantomjs/wiki/API-Reference-WebPage
-brraTab.onLoadFinished = function(status) {
-    brra.emit('landingPage', status)
+brraTab.onLoadFinished = function (status) {
+    brraFlow.resolve(status);
 }
 
-brraTab.open(firstUrl, function(status) {
-    var captchaUrl = document.querySelector('[src^="Capt"]').src;
-    captchaTab.open(captchaUrl, function(status) {
-        //@todo finish
-        nodejs.open('http://localhost:3590/', 'POST', captchaTab.content, function(status) {
-            var solution  = JSON.parse(nodejs.content).solution;
-            var ev = document.createEvent("MouseEvents");
-            ev.initEvent("click", true, true);
-            document.querySelector('.search_form').querySelector('input[name*="CaptchaControl"]').value = solution;
-            document.querySelector('.search_form').querySelector('input[name*="OrganizationName"]').value = mpName;
-            document.querySelector('.search_form').querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
-        });
-    });
+var step = function(logic) {
+    return function() {
+        brraFlow = Q.defer();
+        logic();
+        return brraFlow.promise;
+    }
+}
 
-    // some sudo code
-    brraTab.onThirdReload(function() {
+// Open brra.bg landing page
+Q.when(step(function() {
+        brraTab.open(firstUrl);
+})())
+
+// Fetch captcha text
+.then(function() {
+    var captchaUrl = brraTab.evaluate(function() {
+        return document.querySelector('[src^="Capt"]').src;
+    })
+    return downloadAndSolveCaptcha(captchaUrl)
+})
+
+// Submit form
+.then(step(function(captchaText) {
+    brraTab.evaluate(function() {
+        var ev = document.createEvent("MouseEvents");
+        ev.initEvent("click", true, true);
+        document.querySelector('.search_form').querySelector('input[name*="CaptchaControl"]').value = solution;
+        document.querySelector('.search_form').querySelector('input[name*="OrganizationName"]').value = mpName;
+        document.querySelector('.search_form').querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
+    }, captchaText)
+}))
+
+// Scrape entries
+.then(function() {
+    //@todo brra.emit('searchResults', brraTab) instead of continuing the chain
+    var entries = brraTab.evaluate(function() {
         var searchWrapper = document.querySelector(".search_results");
         var results = searchWrapper.querySelectorAll('tr')
         var entries = []
@@ -42,6 +57,53 @@ brraTab.open(firstUrl, function(status) {
             })
         });
     })
+    return entries;
+})
+.then(function(entries) {
+    console.log(entries)
+    phantom.exit()
+})
+
+function downloadAndSolveCaptcha(captchaUrl) {
+    var resolved = Q.defer();
+    var captchaTab = require("webpage").create();
+    var captchaFlow;
+    var nodejs = new NodejsBridge();
+
+    captchaTab.onLoadFinished = function(status) { captchaFlow.resolve(status); }
+
+    var step = function(logic) {
+        return function() {
+            captchaFlow = Q.defer();
+            logic();
+            return captchaFlow.promise;
+        }
+    }
+
+    Q.when(step(function() {
+        captchaTab.open(captchaUrl);
+    }))
+    .then(function() {
+        resolved.resolve(nodejs.getCaptcha(captchaTab.content))
+    })
+    return resolved.promise();
+}
 
 
-});
+function NodejsBridge() {
+    this.tab = require("webpage").create();
+    this.endpoint = 'http://localhost:3590/';
+}
+NodejsBridge.prototype = {
+    tab: null,
+    endpoint: null,
+    getCaptcha: function(data) {
+        var loading = Q.defer();
+        var self = this;
+        self.tab.open(self.endpoint, 'POST', data, function(status) {
+            loading.resolve(JSON.parse(self.tab.content));
+        });
+        return loading.promise()
+
+    }
+}

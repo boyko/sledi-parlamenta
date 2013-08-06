@@ -33,3 +33,21 @@ phantomjs ./crawler.js
 ```
 
 В момента е само судо код, но при готовност ще извежда json обекти с фирмите и позициите на търсеното лице.
+
+
+## Зашо чист phantomjs, а не нещо друго?
+
+Погледнати бяха:
+
+ - [**selenium-webdriver**](https://code.google.com/p/selenium/wiki/WebDriverJs), виж след списъка за забележки по webdriver
+ - [admc/**wd**](https://github.com/admc/wd), виж след списъка за забележки по webdriver
+ - [WaterfallEngineering/**selenium-node-webdriver**](https://github.com/WaterfallEngineering/selenium-node-webdriver), виж след списъка за забележки по webdriver
+ - [n1k0/**casperjs**](https://github.com/n1k0/casperjs) - има същия проблем като чисто phantomjs, че не може да ползва nodejs модули. тоест фактически просто е 1 допълнителен слой, който увеличава възможността за бъгове
+ - [WaterfallEngineering/**SpookyJS**](https://github.com/WaterfallEngineering/SpookyJS) - прекалено много абстакция, от phantomjs до casperjs и вече отделно до nodejs.
+ - [sheebz/**phantom-proxy**](https://github.com/sheebz/phantom-proxy), wrapper, тоест няма винаги да е актуален с phantomjs, също превръща всяко повикване към phantomjs в async, което е лудост да се поддръжа
+ - [sgentle/**phantomjs-node**](https://github.com/sgentle/phantomjs-node), wrapper, тоест няма винаги да е актуален с phantomjs, също превръща всяко повикване към phantomjs в async, което е лудост да се поддръжа
+ - [alexscheelmeyer/**node-phantom**](https://github.com/alexscheelmeyer/node-phantom), wrapper, тоест няма винаги да е актуален с phantomjs, също превръща всяко повикване към phantomjs в async, което е лудост да се поддръжа
+
+Тези, които следват Webdriver протоколо внасят нова API, вместо да може да се ползва js директно. Защо трябва да се учи нов API, ако може просто с JS. 
+
+Затова с чист phantomjs.
