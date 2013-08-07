@@ -99,6 +99,8 @@ function downloadAndSolveCaptcha(captchaUrl) {
         captchaTab.open(url);
     }))
     .then(function() {
+        //@todo: captcha cant be downloaded via .content. use child_process
+        //https://github.com/ariya/phantomjs/wiki/API-Reference-ChildProcess
         captchaReady.resolve(nodejs.getCaptcha(captchaTab.content))
         captchaTab.close()
     })
