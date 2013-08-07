@@ -47,9 +47,10 @@ BrraShort.prototype.run = function() {
         self.tab.evaluate(function() {
             var ev = document.createEvent("MouseEvents");
             ev.initEvent("click", true, true);
-            document.querySelector('.search_form').querySelector('input[name*="CaptchaControl"]').value = solution;
-            document.querySelector('.search_form').querySelector('input[name*="OrganizationName"]').value = mpName;
-            document.querySelector('.search_form').querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
+            var form = document.querySelector('.search_form');
+            form.querySelector('input[name*="CaptchaControl"]').value = solution;
+            form.querySelector('input[name*="OrganizationName"]').value = mpName;
+            form.querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
         }, captchaText)
     }))
 
