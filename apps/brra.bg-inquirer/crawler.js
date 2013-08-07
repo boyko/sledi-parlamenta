@@ -82,6 +82,7 @@ function downloadAndSolveCaptcha(captchaUrl) {
     var captchaFlow;
     var nodejs = new NodejsBridge();
 
+    captchaTab.settings.javascriptEnabled = false;
     captchaTab.onLoadFinished = function(status) { captchaFlow.resolve(status); }
 
     var step = function(logic) {
@@ -104,6 +105,7 @@ function downloadAndSolveCaptcha(captchaUrl) {
 
 function NodejsBridge() {
     this.tab = require("webpage").create();
+    this.tab.settings.javascriptEnabled = false;
     this.endpoint = 'http://localhost:3590/';
 }
 NodejsBridge.prototype = {
