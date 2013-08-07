@@ -48,9 +48,11 @@ phantomjs ./crawler.js
  - [sgentle/**phantomjs-node**](https://github.com/sgentle/phantomjs-node), wrapper, тоест няма винаги да е актуален с phantomjs, също превръща всяко повикване към phantomjs в async, което е лудост да се поддръжа
  - [alexscheelmeyer/**node-phantom**](https://github.com/alexscheelmeyer/node-phantom), wrapper, тоест няма винаги да е актуален с phantomjs, също превръща всяко повикване към phantomjs в async, което е лудост да се поддръжа
 
-Тези, които следват Webdriver протоколо внасят нова API, вместо да може да се ползва js директно. Защо трябва да се учи нов API, ако може просто с JS. 
+Тези библиотеки, които следват Webdriver протокола внасят:
+ 1. Поддръжка на phantomjs под формата на WebDriver сървър. Това 100% означава време в предотратяване на crashes.
+ 1. Нова API, вместо да може да се ползва js директно. Защо трябва да се учи нов API, ако може просто с JS?
 
-Затова с чист phantomjs.
+Затова: **с чист phantomjs**.
 
 ## Най-проблемното на phantomjs:
 
