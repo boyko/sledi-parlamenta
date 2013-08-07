@@ -15,14 +15,14 @@ Downloader.prototype = {
 	logger: null,
 	get: function(url, callback) {
 		var self = this;
-		request({
+		return request({
 			"url": url,
 			"headers": headers
 		}, function (err, res, html) {
 			if (err || res.statusCode != 200) {
 				self.logger.error("Can't retrieve " + url + ", "+res.statusCode + ", err: "+res.statusCode);
 			}
-			callback(html);
+			if (typeof(callback) == 'function') callback(html);
 		})
 	},
 	save: function(url, destination, callback) {
