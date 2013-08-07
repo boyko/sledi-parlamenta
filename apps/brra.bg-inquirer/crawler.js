@@ -98,6 +98,7 @@ function downloadAndSolveCaptcha(captchaUrl) {
     }))
     .then(function() {
         captchaReady.resolve(nodejs.getCaptcha(captchaTab.content))
+        captchaTab.close()
     })
     return captchaReady.promise();
 }
@@ -116,6 +117,7 @@ NodejsBridge.prototype = {
         var self = this;
         self.tab.open(self.endpoint, 'POST', data, function(status) {
             loading.resolve(JSON.parse(self.tab.content));
+        	self.tab.close()
         });
         return loading.promise()
 
