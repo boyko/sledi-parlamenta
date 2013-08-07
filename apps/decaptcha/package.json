@@ -1,0 +1,16 @@
+{
+	"name": "decapatcha-app",
+	"description": "App that accepts an image as a stream and returns the text on the image",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+		"email": "obshtestvo@facebook.com"
+	},
+	"main": "./run.js",
+	"dependencies": {},
+	"keywords": [
+		"decaptcha",
+		"captcha",
+		"command"
+	]
+}

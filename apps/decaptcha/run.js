@@ -6,7 +6,7 @@ var loggerConfig = {
         filename: 'error.log'
     }
 }
-var logger = require('../../common/node/logger')(loggerConfig)
+var logger = require('../.')(loggerConfig)
 
 var image = new Buffer(0)
 process.stdin.resume();
