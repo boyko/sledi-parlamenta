@@ -4,6 +4,8 @@ var brraTab = require("webpage").create();
 var brraFlow;
 var firstUrl = "https://public.brra.bg/CheckUps/Verifications/VerificationPersonOrg.ra";
 
+
+function
 brraTab.onLoadFinished = function (status) {
     brraFlow.resolve(status);
 }
