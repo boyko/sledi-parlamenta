@@ -1,6 +1,7 @@
 require('./node_modules/phantomjs-nodify');
 var flow = require('./node_modules/q');
 
+//@todo: extend EventEmitter so that we can emit "searchresults" event
 function BrraShort(name) {
     var self = this;
     this.name = name;
