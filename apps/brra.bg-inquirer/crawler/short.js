@@ -26,37 +26,38 @@ BrraShort.prototype.run = function() {
     var self = this;
     var step = this._step; // shortcut to step func
 
+    // Start
     flow("https://public.brra.bg/CheckUps/Verifications/VerificationPersonOrg.ra")
 
-        // Open brra.bg landing page
-        .then(step(function(url) {
-            self.tab.open(url);
-        }))
+    // Open brra.bg landing page
+    .then(step(function(url) {
+        self.tab.open(url);
+    }))
 
-        // Fetch captcha text
-        .then(function() {
-            var captchaUrl = self.tab.evaluate(function() {
-                return document.querySelector('[src^="Capt"]').src;
-            })
-            return decaptcha(captchaUrl)
+    // Fetch captcha text
+    .then(function() {
+        var captchaUrl = self.tab.evaluate(function() {
+            return document.querySelector('[src^="Capt"]').src;
         })
+        return decaptcha(captchaUrl)
+    })
 
-        // Submit form
-        .then(step(function(captchaText) {
-            //@todo: test swapping it with evaluateAsync and whether passing arguments to it is allowed
-            self.tab.evaluate(function() {
-                var ev = document.createEvent("MouseEvents");
-                ev.initEvent("click", true, true);
-                document.querySelector('.search_form').querySelector('input[name*="CaptchaControl"]').value = solution;
-                document.querySelector('.search_form').querySelector('input[name*="OrganizationName"]').value = mpName;
-                document.querySelector('.search_form').querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
-            }, captchaText)
-        }))
+    // Submit form
+    .then(step(function(captchaText) {
+        //@todo: test swapping it with evaluateAsync and whether passing arguments to it is allowed
+        self.tab.evaluate(function() {
+            var ev = document.createEvent("MouseEvents");
+            ev.initEvent("click", true, true);
+            document.querySelector('.search_form').querySelector('input[name*="CaptchaControl"]').value = solution;
+            document.querySelector('.search_form').querySelector('input[name*="OrganizationName"]').value = mpName;
+            document.querySelector('.search_form').querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
+        }, captchaText)
+    }))
 
-        // Announce finish
-        .then(function() {
-            self.emit('searchresults')
-        })
+    // Announce finish
+    .then(function() {
+        self.emit('searchresults')
+    })
 }
 module.exports = exports = BrraShort;
 
