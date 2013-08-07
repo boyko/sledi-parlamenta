@@ -80,50 +80,14 @@ BrraShort.prototype = {
 
 function downloadAndSolveCaptcha(captchaUrl) {
     var captchaReady = flow.defer();
-    var captchaTab = require("webpage").create();
-    var captchaFlow;
-    var nodejs = new NodejsBridge();
-
-    captchaTab.settings.javascriptEnabled = false;
-    captchaTab.onLoadFinished = function(status) { captchaFlow.resolve(status); }
-
-    var step = function(logic) {
-        return function() {
-            captchaFlow = flow.defer();
-            logic.apply(this, arguments);
-            return captchaFlow.promise;
-        }
-    }
-    flow(captchaUrl).
-    then(step(function(url) {
-        captchaTab.open(url);
-    }))
-    .then(function() {
-        //@todo: captcha cant be downloaded via .content. use child_process
-        //https://github.com/ariya/phantomjs/wiki/API-Reference-ChildProcess
-        captchaReady.resolve(nodejs.getCaptcha(captchaTab.content))
-        captchaTab.close()
+    var spawn = require("child_process").spawn
+    var decaptcha = spawn('node', ['decaptcha-phantom-bridge.js', captchaUrl]);
+    var text = '';
+    decaptcha.stdout.on('data', function(data) {
+        text = text + data;
+    })
+    decaptcha.on("exit", function () {
+        captchaReady.resolve(text);
     })
     return captchaReady.promise();
-}
-
-
-function NodejsBridge() {
-    this.tab = require("webpage").create();
-    this.tab.settings.javascriptEnabled = false;
-    this.endpoint = 'http://localhost:3590/';
-}
-NodejsBridge.prototype = {
-    tab: null,
-    endpoint: null,
-    getCaptcha: function(data) {
-        var loading = flow.defer();
-        var self = this;
-        self.tab.open(self.endpoint, 'POST', data, function(status) {
-            loading.resolve(JSON.parse(self.tab.content));
-        	self.tab.close()
-        });
-        return loading.promise()
-
-    }
 }
