@@ -1,5 +1,5 @@
 require('./node_modules/phantomjs-nodify');
-var Q = require('./node_modules/q');
+var flow = require('./node_modules/q');
 var brraTab = require("webpage").create();
 var brraFlow;
 var firstUrl = "https://public.brra.bg/CheckUps/Verifications/VerificationPersonOrg.ra";
@@ -10,16 +10,19 @@ brraTab.onLoadFinished = function (status) {
 
 var step = function(logic) {
     return function() {
-        brraFlow = Q.defer();
-        logic();
+        brraFlow = flow.defer();
+        logic.apply(this, arguments);
         return brraFlow.promise;
     }
 }
 
+// Start by passing url
+flow(firstUrl)
+
 // Open brra.bg landing page
-Q.when(step(function() {
-        brraTab.open(firstUrl);
-})())
+.then(step(function(url) {
+        brraTab.open(url);
+}))
 
 // Fetch captcha text
 .then(function() {
@@ -65,7 +68,7 @@ Q.when(step(function() {
 })
 
 function downloadAndSolveCaptcha(captchaUrl) {
-    var resolved = Q.defer();
+    var captchaReady = flow.defer();
     var captchaTab = require("webpage").create();
     var captchaFlow;
     var nodejs = new NodejsBridge();
@@ -74,19 +77,19 @@ function downloadAndSolveCaptcha(captchaUrl) {
 
     var step = function(logic) {
         return function() {
-            captchaFlow = Q.defer();
-            logic();
+            captchaFlow = flow.defer();
+            logic.apply(this, arguments);
             return captchaFlow.promise;
         }
     }
-
-    Q.when(step(function() {
-        captchaTab.open(captchaUrl);
+    flow(captchaUrl).
+    then(step(function(url) {
+        captchaTab.open(url);
     }))
     .then(function() {
-        resolved.resolve(nodejs.getCaptcha(captchaTab.content))
+        captchaReady.resolve(nodejs.getCaptcha(captchaTab.content))
     })
-    return resolved.promise();
+    return captchaReady.promise();
 }
 
 
@@ -98,7 +101,7 @@ NodejsBridge.prototype = {
     tab: null,
     endpoint: null,
     getCaptcha: function(data) {
-        var loading = Q.defer();
+        var loading = flow.defer();
         var self = this;
         self.tab.open(self.endpoint, 'POST', data, function(status) {
             loading.resolve(JSON.parse(self.tab.content));
