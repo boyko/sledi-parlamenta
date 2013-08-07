@@ -44,7 +44,6 @@ BrraShort.prototype.run = function() {
 
     // Submit form
     .then(step(function(captchaText) {
-        //@todo: test swapping it with evaluateAsync and whether passing arguments to it is allowed
         self.tab.evaluate(function() {
             var ev = document.createEvent("MouseEvents");
             ev.initEvent("click", true, true);
