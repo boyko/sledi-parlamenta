@@ -1,11 +1,11 @@
 require('../node_modules/phantomjs-nodify');
 var util = require('util');
 var flow = require('../node_modules/q');
-var decaptcha = require('../../../common/phantom/node-decaptcha');
 
-function BrraShort(name) {
+function BrraShort(name, decaptcha) {
     var self = this;
     this.name = name;
+    this.decaptcha = decaptcha;
     this.tab = require("webpage").create();
     this.tab.onLoadFinished = function (status) { self.flow.resolve(status); }
 }
@@ -14,6 +14,7 @@ util.inherits(BrraShort, EventEmitter);
 BrraShort.prototype.name = null;
 BrraShort.prototype.tab = null;
 BrraShort.prototype.flow = null;
+BrraShort.prototype.decaptcha = null;
 BrraShort.prototype._step = function(logic) {
     var self = this;
     return function() {
@@ -39,7 +40,7 @@ BrraShort.prototype.run = function() {
         var captchaUrl = self.tab.evaluate(function() {
             return document.querySelector('[src^="Capt"]').src;
         })
-        return decaptcha(captchaUrl)
+        return self.decaptcha(captchaUrl)
     })
 
     // Submit form

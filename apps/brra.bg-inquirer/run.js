@@ -1,6 +1,7 @@
 var BrraShort = require('crawler/short.js')
+var Decaptcha = require('../../common/phantom/decaptcha-manual')
 
-var brra = new BrraShort("Иван Иванов Иванов");
+var brra = new BrraShort("Иван Иванов Иванов", new Decaptcha('/var/tmp'));
 brra.on('searchresults', function() {
     var entries = brra.tab.evaluate(function() {
         var searchWrapper = document.querySelector(".search_results");

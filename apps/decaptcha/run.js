@@ -15,5 +15,8 @@ process.stdin.on('data', function(buf) {
 });
 
 process.stdin.on('end', function() {
-    var decaptcha = new Decaptcha();
+    var decaptcha = new Decaptcha(logger);
+    decaptcha.solve(image).then(function(text) {
+        console.log(text)
+    })
 });
