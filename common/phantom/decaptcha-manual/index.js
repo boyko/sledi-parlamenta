@@ -9,8 +9,8 @@ Decaptcha = function(tempDir) {
 Decaptcha.prototype = {
     solve: function(captchaUrl) {
         var captchaReady = flow.defer();
-        var filepath = tempDir+'/captcha.jpg';
-        var downloader = spawn('curl', ['-o', filepath, captchaUrl]);
+        var filepath = this.tempDir+'/captcha.jpg';
+        var downloader = spawn('curl', ['-k', '-o', filepath, captchaUrl]);
 
         downloader.on("exit", function (code) {
             system.stdout.writeLine('Type in text from: '+filepath);
