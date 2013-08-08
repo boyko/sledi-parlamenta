@@ -1,4 +1,4 @@
-require('../node_modules/phantomjs-nodify');
+var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var flow = require('../node_modules/q');
 
@@ -7,8 +7,9 @@ function BrraShort(name, decaptcha) {
     this.name = name;
     this.decaptcha = decaptcha;
     this.tab = require("webpage").create();
-    this.tab.onLoadFinished = function (status) { self.flow.resolve(status); }
+    this.tab.onLoadFinished = function (status) {self.flow.resolve(status); }
     this.tab.settings.loadImages = false;
+    this.tab.settings.webSecurityEnabled  = false;
 }
 util.inherits(BrraShort, EventEmitter);
 
@@ -26,13 +27,12 @@ BrraShort.prototype._step = function(logic) {
 };
 BrraShort.prototype.run = function() {
     var self = this;
-    var step = this._step; // shortcut to step func
 
     // Start
     flow("https://public.brra.bg/CheckUps/Verifications/VerificationPersonOrg.ra")
 
     // Open brra.bg landing page
-    .then(step(function(url) {
+    .then(this._step(function(url) {
         self.tab.open(url);
     }))
 
@@ -45,15 +45,15 @@ BrraShort.prototype.run = function() {
     })
 
     // Submit form
-    .then(step(function(captchaText) {
-        self.tab.evaluate(function() {
+    .then(this._step(function(captchaText) {
+        self.tab.evaluate(function(captchaText, mpName) {
             var ev = document.createEvent("MouseEvents");
             ev.initEvent("click", true, true);
             var form = document.querySelector('.search_form');
-            form.querySelector('input[name*="CaptchaControl"]').value = solution;
+            form.querySelector('input[name*="CaptchaControl"]').value = captchaText;
             form.querySelector('input[name*="OrganizationName"]').value = mpName;
             form.querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
-        }, captchaText)
+        }, captchaText, self.name)
     }))
 
     // Announce finish
