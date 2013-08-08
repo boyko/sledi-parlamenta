@@ -1,6 +1,7 @@
 require('./node_modules/phantomjs-nodify');
 var BrraShort = require('./crawler/short.js')
 var Decaptcha = require('../../common/phantom/decaptcha-manual')
+//var Decaptcha = require('../../common/phantom/decaptcha-auto-node')
 
 var brra = new BrraShort("Иван Иванов Иванов", new Decaptcha('/var/tmp'));
 brra.run();
