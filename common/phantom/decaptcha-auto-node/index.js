@@ -1,6 +1,5 @@
 var flow = require('./node_modules/q');
 var spawn = require("child_process").spawn;
-}
 
 Decaptcha = function() {}
 Decaptcha.prototype = {
