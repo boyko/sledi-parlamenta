@@ -8,6 +8,7 @@ function BrraShort(name, decaptcha) {
     this.decaptcha = decaptcha;
     this.tab = require("webpage").create();
     this.tab.onLoadFinished = function (status) { self.flow.resolve(status); }
+    this.tab.settings.loadImages = false;
 }
 util.inherits(BrraShort, EventEmitter);
 
@@ -40,7 +41,7 @@ BrraShort.prototype.run = function() {
         var captchaUrl = self.tab.evaluate(function() {
             return document.querySelector('[src^="Capt"]').src;
         })
-        return self.decaptcha(captchaUrl)
+        return self.decaptcha.solve(captchaUrl)
     })
 
     // Submit form
