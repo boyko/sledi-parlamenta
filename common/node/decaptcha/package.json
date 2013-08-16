@@ -1,0 +1,17 @@
+{
+	"name": "decaptcher-wrapper",
+	"description": "Wrapper of decaptcha library",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+		"email": "obshtestvo@facebook.com"
+	},
+	"main": "./index.js",
+	"dependencies": {
+		"deathbycaptcha": "*"
+	},
+	"keywords": [
+		"wrapper",
+		"logger"
+	]
+}

@@ -1,0 +1,20 @@
+{
+	"name": "phantomjs-nodejs-decaptcha-bridge",
+	"description": "Small library to bridge phantomjs to node decaptcha app from rating-gov-representatives project",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+		"email": "obshtestvo@facebook.com"
+	},
+	"main": "./index.js",
+	"dependencies": {
+        "q": "*"
+	},
+	"keywords": [
+		"phantomjs",
+		"nodejs",
+		"bridge",
+		"decaptcha",
+		"captcha"
+	]
+}
