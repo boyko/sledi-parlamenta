@@ -66,3 +66,7 @@ Type in text from: /var/tmp/captcha.jpg
   1. Процес който сваля файл по дадено URL
   1. Процес, чийто `stdin` поема съдържанието на изображение и според съдържанието извършва ..нещо.
 
+#### Възможни решение за JAVA applet-и
+
+ - http://www.froglogic.com/squish/gui-testing/
+ - http://stackoverflow.com/questions/10765682/how-to-automate-java-applet
