@@ -12,7 +12,9 @@
 		"cheerio": "*",
 		"request": "*",
 		"optimist": "*",
-		"byline": "git://github.com/antitoxic/node-byline.git"
+		"xml2js": "*",
+		"events": "*",
+		"fs": "*"
 	},
 	"keywords": [
 		"gatherer",

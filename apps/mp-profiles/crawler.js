@@ -1,22 +1,25 @@
 var 
-$          = require('cheerio'),
-urlInfo    = require('url'),
-Downloader = require('../../common/node/downloader'),
+	$            = require('cheerio'),
+	urlInfo      = require('url'),
+	util         = require('util'),
+	Downloader   = require('../../common/node/downloader'),
+	EventEmitter = require('events').EventEmitter;
+
 
 /**
  * Creates a crawler.
  * @param url
  * @constructor
  */
-Crawler = function ( url, logger ) {
+function Crawler ( url, logger ) {
 
 	this.baseUrl    = urlInfo.parse( url );
 	this.baseUrl    = this.baseUrl.protocol + '//' + this.baseUrl.host;
 	this.url        = url;
 	this.logger     = logger;
 	this.downloader = new Downloader( logger );
-
-};
+}
+// util.inherits( BrraShort, EventEmitter );
 
 Crawler.prototype = {
 
@@ -26,74 +29,39 @@ Crawler.prototype = {
 	downloader : null,
 
 	/**
-	 * Starts the crawl
-	 * @param callback
-	 */
-	fetchProfiles : function ( callback ) {
-		this.crawlMPs( callback );
-	},
-
-	/**
 	 * 
 	 */
-	crawlMPs : function ( callback ) {
+	getProfileUrls : function ( url, callback ) {
 		var 
 			self = this,
 			$profileLinks,
-			urlComponents, 
-			url, 
-			mpid;
+			profileUrl,
+			profileUrls = [];
 
-		this.downloader.get( this.url, function ( response ) {
+		this.downloader.get( url, function ( response ) {
 
 			$profileLinks = $('.MPinfo a', response );
-			// $profileLinks.each( function ( index, domNode ) {
-			( function ( index, domNode ) {
+			$profileLinks.each( function ( index, domNode ) {
 
-				url = $(domNode).attr('href');
-				if( url ){
-					urlComponents = url.split('/');
-					mpid = parseInt( urlComponents[ urlComponents.length - 1 ], 10 );
+				profileUrl = $(domNode).attr('href');
 
-					self.crawlProfileXml( mpid, callback );
-
+				if( profileUrl ){
+					profileUrls.push( profileUrl );
 				} else {
 					// TODO: log error
 					console.log( 'couldnt find profile link' );
 				}
-			})( 0, $profileLinks[0] );
-			// });	
+			});
+
+			callback( profileUrls );
 		});
 
 	},
 
-	crawlProfileXml : function ( mpid, callback ) {
-		
-		var profileUrl = this.getProfileUrl( mpid, 'xml' );
-
-		this.downloader.get( profileUrl, function ( response ) {
-			callback( response, mpid );
+	crawlUrl : function ( url, callback ) {
+		this.downloader.get( urlInfo.resolve( this.baseUrl, url ), function ( response ) {
+			callback( response, url );
 		});
-
-	},
-
-	getProfileUrl : function ( mpid, type ) {
-
-		var result = '';
-
-		switch ( type ) {
-			case 'profile':
-				result = this.baseUrl + '/bg/MP/' + mpid;
-				break;
-
-			case 'xml':
-			default:
-				result = this.baseUrl + '/export.php/bg/xml/MP/' + mpid;
-				break; 
-		}
-
-		return result;
-
 	}
 
 };
