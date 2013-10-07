@@ -1,10 +1,13 @@
-Профили на народни представители, проект от https://docs.google.com/spreadsheet/ccc?key=0AoQEIaPHnvx6dHVWTDJIUDBrN0FEOURzMUZaRnFTTXc
+# Профили на народни представители
+Обща информация, анализа на активността и бизнесите им, свалима open data, web игри с депутати
 
 Утилмативно този проект ще се слее с:
 
  - http://openparliament.net/
  - http://www.parlamentaren-kontrol.com/
  - http://parliament.yurukov.net/
+
+Организацията на проекта се води в facebook група: https://www.facebook.com/groups/580457725344421/
 
 ## Налично до момента
 
