@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load restful %}
+{% block headTag %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/lib/normalize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/parliament.css' %}">
+{% endblock %}
+{% block content %}
+    <div>
+        Здрасти, Станчо,
+        Това тук ни е сайтчето. 
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+    <script src="{% static 'js/parliament.js' %}"></script>
+{% endblock %}
