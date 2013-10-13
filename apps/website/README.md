@@ -48,7 +48,7 @@ sudo service nginx restart
 
 Enable & activate "openparliament" in the `uwsgi` server:
 ```sh
-sudo ln -s /home/ubuntu/web/openparliament/openparliament.uwsgi /etc/uwsgi/apps-enabled/openparliament.ini
+sudo ln -s /home/ubuntu/web/openparliament/apps/website/openparliament.uwsgi /etc/uwsgi/apps-enabled/openparliament.ini
 sudo service uwsgi restart
 ```
 
