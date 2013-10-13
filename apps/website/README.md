@@ -36,9 +36,9 @@ Edit the domain name for your website in `openparliament.nginx`.
 Enable "openparliament" in `nginx` server:
 ```sh
 # in development:
-sudo ln -s /home/ubuntu/web/openparliament/openparliament.dev.nginx /etc/nginx/sites-enabled/
+sudo ln -s /home/ubuntu/web/openparliament/apps/website/openparliament.dev.nginx /etc/nginx/sites-enabled/
 # in production
-sudo ln -s /home/ubuntu/web/openparliament/openparliament.nginx /etc/nginx/sites-enabled/
+sudo ln -s /home/ubuntu/web/openparliament/apps/website/openparliament.nginx /etc/nginx/sites-enabled/
 ```
 
 And then to activate:
