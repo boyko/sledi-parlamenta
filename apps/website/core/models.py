@@ -42,6 +42,12 @@ class Company(CommonOrganization):
 
 
 class Party(CommonOrganization):
+    class Meta:
+        verbose_name_plural = 'Parties'
+
+    def __unicode__(self):
+        return u"%s (%s)" % (self.name, self.description)
+
     color = models.CharField(max_length=7)
     logo = models.ImageField(upload_to='party', blank=True, null=True)
     members = models.ManyToManyField('Person', through='Representative')
@@ -84,6 +90,9 @@ class Vote(models.Model):
 
 # Named generally Person as one could not be a representative
 class Person(models.Model):
+    def __unicode__(self):
+        return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
+
     # personal info
     first_name = models.CharField(max_length=255, blank=True, null=True)
     middle_name = models.CharField(max_length=255, blank=True, null=True)
