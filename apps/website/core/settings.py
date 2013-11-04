@@ -32,7 +32,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -74,11 +74,15 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'core.middleware.rest.HttpMergeParameters',
+    'core.middleware.rest.HttpMethodOverride',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'core.middleware.rest.ResponseFormatDetection',
+    'core.middleware.error_handler.ErrorHandler',
 )
 
 APPEND_SLASH = True
@@ -102,8 +106,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'core',
     'dashboard',
-    # 'rest_framework',
+    'south',
 )
+
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -133,16 +139,3 @@ LOGGING = {
         },
     }
 }
-
-# REST_FRAMEWORK = {
-#     # Use hyperlinked styles by default.
-#     # Only used if the `serializer_class` attribute is not set on a view.
-#     'DEFAULT_MODEL_SERIALIZER_CLASS':
-#         'rest_framework.serializers.HyperlinkedModelSerializer',
-
-#     # Use Django's standard `django.contrib.auth` permissions,
-#     # or allow read-only access for unauthenticated users.
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-#     ]
-# }
