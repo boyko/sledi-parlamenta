@@ -2,15 +2,14 @@ from django.db import models
 from core import settings
 
 
-# GENERAL @TODO: consider nullable fields and add blank=True, null=True to params
-
 # Organizations definitions
 class CommonOrganization(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    address = models.TextField(max_length=255)
-    email = models.EmailField()
-    phone = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    address = models.TextField(max_length=255, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=255, blank=True, null=True)
+    bulstat = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField()
 
     class Meta:
@@ -32,40 +31,36 @@ class Company(CommonOrganization):
         ('SD', 'SD'),
     )
     kind = models.CharField(max_length=6, choices=BUSINESS_TYPES)
-    vat_number = models.CharField(max_length=255)
-    activity = models.TextField(max_length=255)
-    founding_act = models.FileField(upload_to='founding_acts')
-    founding_act_expires = models.DateField()
+    vat_number = models.CharField(max_length=255, blank=True, null=True)
+    eik_number = models.CharField(max_length=255, blank=True, null=True)
+    activity = models.TextField(max_length=255, blank=True, null=True)
+    founding_act = models.FileField(upload_to='founding_acts', blank=True, null=True)
+    founding_act_expires = models.DateField(blank=True, null=True)
+    employees = models.ManyToManyField('Person', through='Employee')
 
-    parent = models.ForeignKey('self')
+    parent = models.ForeignKey('self', blank=True, null=True)
 
 
 class Party(CommonOrganization):
     color = models.CharField(max_length=7)
-    logo = models.ImageField(upload_to='party')
+    logo = models.ImageField(upload_to='party', blank=True, null=True)
+    members = models.ManyToManyField('Person', through='Representative')
+
 
 class Structure(CommonOrganization):
-
-    public = models.BooleanField() # if it is governmental or not
-    url = models.URLField()
-
+    public = models.NullBooleanField() # if it is governmental or not
+    url = models.URLField(blank=True, null=True)
 
 
-
-# Misc classes
-class Badge(models.Model):
-    title = models.CharField(max_length=255)
-    active = models.BooleanField()
-
-
+# Government voting process
 class Session(models.Model):
     date = models.DateField()
-    url = models.URLField()
+    url = models.URLField(blank=True, null=True)
 
 
 class SessionTag(models.Model):
     session = models.ForeignKey(Session)
-    tag = models.CharField(max_length=255)
+    tag = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Voting(models.Model):
@@ -73,28 +68,39 @@ class Voting(models.Model):
     title = models.CharField(max_length=255)
 
 
+class Vote(models.Model):
+    VOTE_TYPES = (
+        ('PRO', 'Pro'),
+        ('CONS', 'Cons'),
+        ('WHLD', 'Withhold'),
+        ('NOVT', 'No vote'),
+    )
+    voted = models.CharField(max_length=4, choices=VOTE_TYPES, default='NOVT')
+    person = models.ForeignKey('Person')
+    voting = models.ForeignKey(Voting)
+
 
 # Person related classes
 
 # Named generally Person as one could not be a representative
 class Person(models.Model):
     # personal info
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to='person')
+    photo = models.ImageField(upload_to='person', blank=True, null=True)
 
-    bio = models.TextField()
-    occupation = models.CharField(max_length=255)
+    bio = models.TextField(blank=True, null=True)
+    occupation = models.CharField(max_length=255, blank=True, null=True)
 
-    contact_twitter = models.CharField(max_length=255)
-    contact_facebook = models.CharField(max_length=255)
-    contact_email = models.EmailField()
-    contact_phone = models.CharField(max_length=255)
+    contact_twitter = models.CharField(max_length=255, blank=True, null=True)
+    contact_facebook = models.CharField(max_length=255, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_phone = models.CharField(max_length=255, blank=True, null=True)
 
-    government_profile = models.URLField()
+    government_profile = models.URLField(blank=True, null=True)
 
-    badges = models.ManyToManyField(Badge) # add assignment date to this
+    badges = models.ManyToManyField('Badge', through='PersonBadges')  # add assignment date to this
 
 
     # @TODO: add many to many relation with regions
@@ -105,43 +111,37 @@ class Person(models.Model):
 class Representative(models.Model):
     person = models.ForeignKey(Person)
     party = models.ForeignKey(Party)
-    date_from = models.DateField()
-    date_to = models.DateField()
+    date_from = models.DateField(blank=True, null=True)
+    date_to = models.DateField(blank=True, null=True)
 
 
 class Employee(models.Model):
     person = models.ForeignKey(Person)
     company = models.ForeignKey(Company)
+    date_from = models.DateField(blank=True, null=True)
+    date_to = models.DateField(blank=True, null=True)
+    position = models.CharField(max_length=255, blank=True, null=True)
+
+
+class PersonBadges(models.Model):
+    person = models.ForeignKey(Person)
+    badge = models.ForeignKey('Badge')
     date_from = models.DateField()
     date_to = models.DateField()
-    position = models.CharField(max_length=255)
-
-
+    badge_data = models.CharField(max_length=255, blank=True, null=True)  # contains pickled badge data
 
 
 class PersonGallery(models.Model):
     person = models.ForeignKey(Person)
     photo = models.ImageField(upload_to='person')
-    date_taken = models.DateField()
-    source = models.CharField(max_length=255)
+    date_taken = models.DateField(blank=True, null=True)
+    source = models.CharField(max_length=255, blank=True, null=True)
 
 
 class PersonMediaAppearing(models.Model):
     person = models.ForeignKey(Person)
     content = models.TextField()
     date = models.DateField()
-    source = models.CharField(max_length=255)
-
-
-class PersonActivity(models.Model):
-    person = models.ForeignKey(Person)
-    party = models.ForeignKey(Party)
-    structure = models.ForeignKey(Structure)
-
-    position = models.CharField(max_length=255)
-    content = models.TextField()
-    date_from = models.DateField()
-    date_to = models.DateField()
     source = models.CharField(max_length=255)
 
 
@@ -152,18 +152,16 @@ class Promise(models.Model):
     completed_at = models.DateField()
 
 
-
-
 # Law and voting related classes
 
 # http://en.wikipedia.org/wiki/Bill_(law)
 class Bill(models.Model):
-    proposed_by = models.ManyToManyField(Person)
-    proposed_by_structure = models.ManyToManyField(Structure)
+    proposed_by = models.ManyToManyField(Person, blank=True, null=True)
+    proposed_by_structure = models.ManyToManyField(Structure, blank=True, null=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     proposed_on = models.DateField()
-    accepted_on = models.DateField()
+    accepted_on = models.DateField(blank=True, null=True)
     votings = models.ManyToManyField(Voting)
     url = models.URLField()
 
@@ -175,13 +173,7 @@ class Law(models.Model):
     url = models.URLField()
 
 
-class Vote(models.Model):
-    VOTE_TYPES = (
-        ('PRO', 'Pro'),
-        ('CONS', 'Cons'),
-        ('WHLD', 'Withhold'),
-        ('NOVT', 'No vote'),
-    )
-    voted = models.CharField(max_length=4, choices=VOTE_TYPES, default='NOVT')
-    person = models.ForeignKey(Person)
-    voting = models.ForeignKey(Voting)
+# Misc classes
+class Badge(models.Model):
+    title = models.CharField(max_length=255)
+    active = models.BooleanField()
