@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext as _
 from core import settings
 
 
@@ -18,6 +19,10 @@ class CommonOrganization(models.Model):
 
 
 class Company(CommonOrganization):
+    class Meta:
+        verbose_name = _('Company')
+        verbose_name_plural = _('Companies')
+
     # according to http://en.wikipedia.org/wiki/Types_of_business_entity#Bulgaria
     BUSINESS_TYPES = (
         ('AD', 'AD'),
@@ -43,38 +48,59 @@ class Company(CommonOrganization):
 
 class Party(CommonOrganization):
     class Meta:
-        verbose_name_plural = 'Parties'
+        verbose_name = _('Party')
+        verbose_name_plural = _('Parties')
 
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.description)
 
     color = models.CharField(max_length=7)
     logo = models.ImageField(upload_to='party', blank=True, null=True)
-    members = models.ManyToManyField('Person', through='Representative')
+    members = models.ManyToManyField('Person', through='PartyMember')
 
 
 class Structure(CommonOrganization):
+    class Meta:
+        verbose_name = _('Structure')
+        verbose_name_plural = _('Structures')
+
     public = models.NullBooleanField() # if it is governmental or not
     url = models.URLField(blank=True, null=True)
 
 
 # Government voting process
 class Session(models.Model):
+    class Meta:
+        verbose_name = _('Session')
+        verbose_name_plural = _('Sessions')
+
     date = models.DateField()
     url = models.URLField(blank=True, null=True)
 
 
 class SessionTag(models.Model):
+    class Meta:
+        verbose_name = _('Session tag')
+        verbose_name_plural = _('Session tags')
+
     session = models.ForeignKey(Session)
     tag = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Voting(models.Model):
+    class Meta:
+        verbose_name = _('Voting')
+        verbose_name_plural = _('Votings')
+
     session = models.ForeignKey(Session)
     title = models.CharField(max_length=255)
 
 
 class Vote(models.Model):
+    class Meta:
+        verbose_name = _('Vote')
+        verbose_name_plural = _('Votes')
+
     VOTE_TYPES = (
         ('PRO', 'Pro'),
         ('CONS', 'Cons'),
@@ -90,6 +116,10 @@ class Vote(models.Model):
 
 # Named generally Person as one could not be a representative
 class Person(models.Model):
+    class Meta:
+        verbose_name = _('Person')
+        verbose_name_plural = _('Persons')
+
     def __unicode__(self):
         return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
 
@@ -117,7 +147,11 @@ class Person(models.Model):
     active = models.BooleanField()
 
 
-class Representative(models.Model):
+class PartyMember(models.Model):
+    class Meta:
+        verbose_name = _('Party member')
+        verbose_name_plural = _('Party members')
+
     person = models.ForeignKey(Person)
     party = models.ForeignKey(Party)
     date_from = models.DateField(blank=True, null=True)
@@ -125,6 +159,10 @@ class Representative(models.Model):
 
 
 class Employee(models.Model):
+    class Meta:
+        verbose_name = _('Company employee')
+        verbose_name_plural = _('Company employees')
+
     person = models.ForeignKey(Person)
     company = models.ForeignKey(Company)
     date_from = models.DateField(blank=True, null=True)
@@ -133,6 +171,10 @@ class Employee(models.Model):
 
 
 class PersonBadges(models.Model):
+    class Meta:
+        verbose_name = _('Person badge')
+        verbose_name_plural = _('Person badges')
+
     person = models.ForeignKey(Person)
     badge = models.ForeignKey('Badge')
     date_from = models.DateField()
@@ -141,6 +183,10 @@ class PersonBadges(models.Model):
 
 
 class PersonGallery(models.Model):
+    class Meta:
+        verbose_name = _('Person gallery')
+        verbose_name_plural = _('Person galleries')
+
     person = models.ForeignKey(Person)
     photo = models.ImageField(upload_to='person')
     date_taken = models.DateField(blank=True, null=True)
@@ -148,6 +194,10 @@ class PersonGallery(models.Model):
 
 
 class PersonMediaAppearing(models.Model):
+    class Meta:
+        verbose_name = _('Person media appearing')
+        verbose_name_plural = _('Person media appearings')
+
     person = models.ForeignKey(Person)
     content = models.TextField()
     date = models.DateField()
@@ -155,6 +205,10 @@ class PersonMediaAppearing(models.Model):
 
 
 class Promise(models.Model):
+    class Meta:
+        verbose_name = _('Promise')
+        verbose_name_plural = _('Promises')
+
     person = models.ForeignKey(Person)
     content = models.TextField()
     promised_at = models.DateField()
@@ -165,6 +219,10 @@ class Promise(models.Model):
 
 # http://en.wikipedia.org/wiki/Bill_(law)
 class Bill(models.Model):
+    class Meta:
+        verbose_name = _('Bill')
+        verbose_name_plural = _('Bills')
+
     proposed_by = models.ManyToManyField(Person, blank=True, null=True)
     proposed_by_structure = models.ManyToManyField(Structure, blank=True, null=True)
     title = models.CharField(max_length=255)
@@ -176,6 +234,10 @@ class Bill(models.Model):
 
 
 class Law(models.Model):
+    class Meta:
+        verbose_name = _('Law')
+        verbose_name_plural = _('Laws')
+
     title = models.CharField(max_length=255)
     content = models.TextField()
     published_sg = models.DateField() # date published on State Gazette
@@ -184,5 +246,9 @@ class Law(models.Model):
 
 # Misc classes
 class Badge(models.Model):
+    class Meta:
+        verbose_name = _('Badge')
+        verbose_name_plural = _('Badges')
+
     title = models.CharField(max_length=255)
     active = models.BooleanField()

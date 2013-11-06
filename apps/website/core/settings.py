@@ -24,11 +24,21 @@ ALLOWED_HOSTS = []
 TIME_ZONE = 'Europe/Sofia'
 LANGUAGE_CODE = 'bg-bg'
 
+gettext = lambda s: s
+LANGUAGES = (
+     ('bg', gettext('Bulgarian')),
+)
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
+
+LOCALE_PATHS = (
+    os.path.join(SITE_ROOT, 'core/locale')
+)
+
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
@@ -74,15 +84,16 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'core.middleware.rest.HttpMergeParameters',
-    'core.middleware.rest.HttpMethodOverride',
-    'django.middleware.common.CommonMiddleware',
+    #'core.middleware.rest.HttpMergeParameters',
+    #'core.middleware.rest.HttpMethodOverride',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'core.middleware.rest.ResponseFormatDetection',
-    'core.middleware.error_handler.ErrorHandler',
+    #'core.middleware.rest.ResponseFormatDetection',
+    #'core.middleware.error_handler.ErrorHandler',
 )
 
 APPEND_SLASH = True
