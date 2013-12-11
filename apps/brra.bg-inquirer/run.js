@@ -1,26 +1,51 @@
 require('./node_modules/phantomjs-nodify');
 var BrraShort = require('./crawler/short.js')
-var Decaptcha = require('../../common/phantom/decaptcha-manual')
-//var Decaptcha = require('../../common/phantom/decaptcha-auto-node')
-
-var brra = new BrraShort("Иван Иванов Иванов", new Decaptcha('/var/tmp'));
-brra.run();
-brra.on('searchresults', function() {
-    var entries = brra.tab.evaluate(function() {
-        var searchWrapper = document.querySelector(".search_results");
-        var results = [].slice.call(searchWrapper.querySelectorAll('tr'))
-        var entries = []
-        results.forEach(function (row) {
-            var company = row.querySelector("a");
-            if (company == null) return;
-            var title = row.querySelector('td');
-            entries.push({
-                "title": title.textContent.trim(),
-                "company": company.textContent.trim()
-            })
-        });
-        return entries;
+var fs = require('fs');
+var Decaptcha;
+var argv = require('optimist')
+    .usage('Crawls brra.bg and extracts businesses\' details for all the provided names.\nUsage: phantomjs --ignore-ssl-errors=true run.js')
+    .options('i', {
+        demand: true,
+        alias: 'input',
+        description: 'File or pipe path containing one full name on each line to be processed'
+    }).options('d', {
+        demand: true,
+        alias: 'decaptcha',
+        description: 'Either "auto" or "manual" Whether to use automatic or manual decaptcha service'
     })
-    console.log(JSON.stringify(entries))
-    phantom.exit();
-})
+    .options('t', {
+        alias: 'temp',
+        default: '/var/tmp',
+        description: 'Temporary directory to store manual captchas'
+    }).wrap(60)
+    .argv;
+
+if (argv.decaptcha=='auto') {
+    Decaptcha = require('../../common/phantom/decaptcha-auto-node')
+} else {
+    Decaptcha = require('../../common/phantom/decaptcha-manual')
+}
+
+var input = fs.open(argv.input, "r")
+while (fullname = input.readLine()) {
+    var brra = new BrraShort(fullname, new Decaptcha(argv.temp));
+    brra.run();
+    brra.on('searchresults', function() {
+        var entries = brra.tab.evaluate(function() {
+            var searchWrapper = document.querySelector(".search_results");
+            var results = [].slice.call(searchWrapper.querySelectorAll('tr'))
+            var entries = []
+            results.forEach(function (row) {
+                var company = row.querySelector("a");
+                if (company == null) return;
+                var title = row.querySelector('td');
+                entries.push({
+                    "title": title.textContent.trim(),
+                    "company": company.textContent.trim()
+                })
+            });
+            return entries;
+        })
+        console.log(JSON.stringify(entries))
+    })
+}

@@ -2,8 +2,7 @@ var system = require('system');
 var spawn = require("child_process").spawn
 var flow = require('./node_modules/q');
 
-
-Decaptcha = function(tempDir) {
+var Decaptcha = function(tempDir) {
     this.tempDir = tempDir;
 }
 Decaptcha.prototype = {

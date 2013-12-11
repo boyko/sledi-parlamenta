@@ -9,6 +9,7 @@
 	"main": "./run.js",
 	"dependencies": {
 		"phantomjs-nodify": "git://github.com/jgonera/phantomjs-nodify.git",
+        "optimist": "*",
         "q": "*"
 	},
 	"keywords": [
