@@ -13,7 +13,7 @@ var Downloader = function(logger) {
 }
 Downloader.prototype = {
 	logger: null,
-	get: function(url, callback) {
+	get: function(url, callback, attempt) {
 		var self = this;
 		return request({
 			"url": url,
@@ -24,12 +24,24 @@ Downloader.prototype = {
 			}
 			if (typeof(callback) == 'function') callback(html);
 		})
+        .on('error', function(err) {
+            self.logger.error("Can't retrieve " + url + ", " + err);
+            if (typeof attempt != 'undefined' && attempt>0) return;
+            self.get(url, callback, 1)
+        })
 	},
-	save: function(url, destination, callback) {
+	save: function(url, destination, callback, attempt) {
+        var self = this;
 		request({
 			"url": url,
 			"headers": headers
-		}).pipe(fs.createWriteStream(destination)).on("finish", callback);
+		})
+        .on('error', function(err) {
+            self.logger.error("Can't retrieve " + url + ", " + err);
+            if (typeof attempt != 'undefined' && attempt>0) return;
+            self.save(url, destination, callback, 1)
+        })
+        .pipe(fs.createWriteStream(destination)).on("finish", callback)
 	}
 }
 exports = module.exports = Downloader;

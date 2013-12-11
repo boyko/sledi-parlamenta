@@ -31,8 +31,12 @@ Scraper.prototype = {
 		self.downloader.get(this.url, function(html) {
 			var $article = $('#leftcontent', html);
 			var $spreadsheets = $article.find('.frontList a[href$=".xls"]');
-			if ($spreadsheets.length==0) {
-				self.logger.info("Can't find XLS docs at: "+self.url)
+			var $groupLink = $spreadsheets.filter('[href*="gv"]');
+			var $individualLink= $spreadsheets.filter('[href*="iv"]');
+			if ($spreadsheets.length==0 || $groupLink.length==0 || $individualLink.length==0) {
+				if ($spreadsheets.length==0) self.logger.info("Can't find any XLS docs at: "+self.url)
+				if ($groupLink.length==0) self.logger.info("Can't find group voting link at: "+self.url)
+				if ($individualLink.length==0) self.logger.info("Can't find individual voting link at: "+self.url)
                 done.resolve()
 				return;
 			}
