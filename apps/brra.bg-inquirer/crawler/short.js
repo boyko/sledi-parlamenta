@@ -46,12 +46,12 @@ BrraShort.prototype.run = function() {
 
     // Submit form
     .then(this._step(function(captchaText) {
-        self.tab.evaluate(function(captchaText, mpName) {
+        self.tab.evaluate(function(captchaText, name) {
             var ev = document.createEvent("MouseEvents");
             ev.initEvent("click", true, true);
             var form = document.querySelector('.search_form');
             form.querySelector('input[name*="CaptchaControl"]').value = captchaText;
-            form.querySelector('input[name*="OrganizationName"]').value = mpName;
+            form.querySelector('input[name*="OrganizationName"]').value = name;
             form.querySelector('input[name*="btnSearch"]').dispatchEvent(ev);
         }, captchaText, self.name)
     }))

@@ -40,11 +40,11 @@ AopShort.prototype.run = function() {
     }))
 
     // Follow first JS redirect
-    .then(this._step(function(url) {
+    .then(this._step(function() {
     }))
 
     // Follow Second JS redirect
-    .then(this._step(function(url) {
+    .then(this._step(function() {
     }))
 
     // Login
@@ -60,11 +60,32 @@ AopShort.prototype.run = function() {
     }))
 
     // Follow first JS redirect
-    .then(this._step(function(url) {
+    .then(this._step(function() {
     }))
 
     // Follow Second JS redirect
-    .then(this._step(function(url) {
+    .then(this._step(function() {
+    }))
+
+    // Find advanced search link and click it
+    .then(this._step(function() {
+        self.tab.evaluate(function() {
+            var ev = document.createEvent("MouseEvents");
+            ev.initEvent("click", true, true);
+            var advancedSearchLink = document.querySelector(".RegionHeaderColor a.boxLink")
+            advancedSearchLink.setAttribute('target','')
+            advancedSearchLink.dispatchEvent(ev);
+        })
+    }))
+
+    // Search
+    .then(this._step(function() {
+        self.tab.evaluate(function(name) {
+            var ev = document.createEvent("MouseEvents");
+            ev.initEvent("click", true, true);
+            document.querySelector("[name='co_word']").value=name;
+            document.querySelector("[value='Търси']").dispatchEvent(ev);
+        }, self.name)
     }))
 
     // Finish
