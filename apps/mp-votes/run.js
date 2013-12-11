@@ -67,9 +67,17 @@ inputReady.promise.then(function(target) {
 	// Creates a crawler
 	var crawler = new Crawler(argv.url, target, logger);
 	// Finds transcripts and extract data
+    var lastInQueue = when()
 	crawler.fetchTranscripts(function(transcriptUrl) {
-		var transcript = new TranscriptScraper(transcriptUrl, argv.temp, logger);
-		transcript.scrape();
+        // Slow down scraping
+        lastInQueue = lastInQueue.then(function() {
+            var transcript = new TranscriptScraper(transcriptUrl, argv.temp, logger);
+            var pause = when.defer();
+            transcript.scrape().then(function() {
+                setTimeout(pause.resolve, 5000)
+            });
+            return pause.promise;
+        })
 	});
 
 })

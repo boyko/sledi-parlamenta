@@ -27,11 +27,13 @@ Scraper.prototype = {
 	convertor: null,
 	scrape: function() {
 		var self = this;
+        var done = when.defer()
 		self.downloader.get(this.url, function(html) {
 			var $article = $('#leftcontent', html);
 			var $spreadsheets = $article.find('.frontList a[href$=".xls"]');
 			if ($spreadsheets.length==0) {
 				self.logger.info("Can't find XLS docs at: "+self.url)
+                done.resolve()
 				return;
 			}
 			self.date = $article.find('.markframe .dateclass').text();
@@ -45,8 +47,9 @@ Scraper.prototype = {
 			});
 
 			var individualDownload = self.downloadAndConvert(self.baseUrl+$spreadsheets.filter('[href*="iv"]').attr('href'));
-			when.all([individualDownload, topicsExtraction.promise]).spread(self.extractIndividualVotesFromCSV)
+            when.all([individualDownload, topicsExtraction.promise]).spread(self.extractIndividualVotesFromCSV).then(done.resolve)
 		})
+        return done.promise;
 	},
 	downloadAndConvert: function(url) {
 		var self = this;
@@ -109,6 +112,7 @@ Scraper.prototype = {
 	 */
 	extractIndividualVotesFromCSV: function(path, topics) {
 		var self = this;
+		var done = when.defer();
 		var headers = []
 		var valueMapping = {
 			"П": 'present',
@@ -148,6 +152,10 @@ Scraper.prototype = {
 			})
   			console.log(JSON.stringify(record))
 		})
+        .on('end', function(count){
+            done.resolve()
+        })
+        return done.promise
 	}
 
 }
