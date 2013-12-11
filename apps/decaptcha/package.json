@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"author": {
 		"name": "Общество",
-		"email": "obshtestvo@facebook.com"
+        "email": "info@obshtestvo.bg"
 	},
 	"main": "./run.js",
 	"dependencies": {},

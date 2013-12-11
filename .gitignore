@@ -4,3 +4,4 @@
 .idea/
 node_modules
 apps/website/app/secret_settings.py
+apps/aop.bg-inquirer/settings.secret.js

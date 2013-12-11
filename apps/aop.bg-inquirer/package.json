@@ -1,10 +1,10 @@
 {
-	"name": "bulgarian-business-history-gatherer",
-	"description": "Bulgarian Business History Gatherer",
+	"name": "bulgarian-state-order-gatherer",
+	"description": "Gatherer for state orders in Bulgaria",
 	"version": "0.0.1",
 	"author": {
 		"name": "Общество",
-        "email": "info@obshtestvo.bg"
+		"email": "info@obshtestvo.bg"
 	},
 	"main": "./run.js",
 	"dependencies": {
