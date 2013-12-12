@@ -4,13 +4,12 @@ var when = require('q');
 var $ = require('cheerio');
 
 var csv = require('../../../common/node/csv-util');
-var Downloader = require('../../../common/node/downloader');
 var Convertor = require('../../../common/node/spreadsheet2csv-node');
 
-var Scraper = function(tempDir, logger) {
+var Scraper = function(tempDir, logger, downloader) {
 	this.tempDir = tempDir;
 	this.logger = logger;
-	this.downloader = new Downloader(logger);
+	this.downloader = downloader;
 	this.convertor = new Convertor(logger);
 }
 

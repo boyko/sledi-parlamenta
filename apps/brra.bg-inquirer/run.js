@@ -49,3 +49,9 @@ while (fullname = input.readLine()) {
         console.log(JSON.stringify(entries))
     })
 }
+
+//$(".mlioccur .txtmark .addr").each(function(el){
+//    if (/.*ЕИК|Булстат.*/.test(el.textContent)) {
+//        console.log(el.textContent)
+//    }
+//})

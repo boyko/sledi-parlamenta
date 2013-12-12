@@ -1,7 +1,6 @@
 var $ = require('cheerio');
 var urlInfo = require('url');
 var util = require('util');
-var Downloader = require('../../common/node/downloader')
 var EventEmitter = require('events').EventEmitter;
 
 /**
@@ -28,12 +27,12 @@ var EventEmitter = require('events').EventEmitter;
  *
  * @constructor
  */
-var Crawler = function(url, target, logger) {
+var Crawler = function(url, target, logger, downloader) {
 	this.baseUrl = urlInfo.parse(url);
 	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
 	this.url = url;
 	this.logger = logger;
-	this.downloader = new Downloader(logger);
+	this.downloader = downloader;
 
 	if (target instanceof Date) {
 		this.startDate = target;
