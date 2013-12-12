@@ -15,8 +15,6 @@
 ??????????????
 ```
 
-### Demo
-![](https://raw.github.com/obshtestvo/rating-gov-representatives/master/apps/mp-votes/demo.gif)
 
 ## Изисквания
  - `nodejs` (тествано с `0.10.13`)
