@@ -19,21 +19,20 @@ var argv = require('optimist')
 var input = fs.open(argv.input, "r")
 while (business = input.readLine()) {
     var aop = new AopShort(business, settings);
-    aop.run();
     aop.on('searchresults', function() {
         var entries = aop.tab.evaluate(function() {
-            var searchWrapper = document.document.querySelector("#resultaTable");
+            var searchWrapper = document.querySelector("#resultaTable");
             var resultsRows = [].slice.call(searchWrapper.querySelectorAll('tr'))
 
             var entries = []
             var isOrderSeparator = function(row) {
-                return row.querySelector("hr").length > 0;
+                return row.querySelector("hr") != null;
             }
             var isListingEnd = function(row) {
-                return row.querySelector("hr").length > 0 && row.nextSibling..querySelector("img").length > 0;
+                return row.querySelector("hr") != null && row.nextElementSibling.querySelector("img") != null;
             }
             var order = {}
-            resultsRows.forEach(function (row) {
+            resultsRows.every(function (row) {
                 if (isListingEnd(row)) {
                     if (Object.keys(order).length>0) entries.push(order)
                     return false;
@@ -41,18 +40,23 @@ while (business = input.readLine()) {
                 if (isOrderSeparator(row)) {
                     if (Object.keys(order).length>0) entries.push(order)
                     order = {}
-                    return;
+                    return true;
                 }
-                var key = row.querySelector("td")[0].trim();
-                var value = row.querySelector("td")[1].trim();
+                var rowCells = row.querySelectorAll("td");
+                var key = rowCells[0].textContent.trim();
+                var valueEl = rowCells[1]
+                var value;
+                if (valueEl.querySelector("a")!=null) {
+                    value = {text: valueEl.textContent.trim(), link:  valueEl.querySelector("a").getAttribute('href')}
+                } else {
+                    value = valueEl.textContent.trim()
+                }
                 order[key] = value
+                return true;
             });
             return entries;
         })
-//        var entries = aop.tab.evaluate(function() {
-//            return document.querySelector(".up_menu_link").textContent.trim()
-//        })
-//        console.log(JSON.stringify(entries))
-        console.log(aop.tab.content)
+        console.log(JSON.stringify(entries))
     })
+    aop.run();
 }
