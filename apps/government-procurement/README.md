@@ -32,8 +32,8 @@ phantomjs --ignore-ssl-errors=true run.js --input=/var/tmp/aop
 echo "Име на фирма ЕООД" > /var/tmp/aop
 ```
 
-### Примерен резултат
-На фирма, която е спечелила 2 обществени порчъки:
+## Очакван резултат
+При фирма, която е спечелила 2 обществени порчъки:
 
 ```
 [
@@ -75,7 +75,7 @@ echo "Име на фирма ЕООД" > /var/tmp/aop
 ```
 
 ### Demo
-![](demo.gif)
+![](https://raw.github.com/obshtestvo/rating-gov-representatives/master/apps/government-procurement/demo.gif)
 
 ### Технологични решения
 

@@ -32,6 +32,9 @@
 }
 ```
 
+### Demo
+![](https://raw.github.com/obshtestvo/rating-gov-representatives/master/apps/mp-votes/demo.gif)
+
 ## Изисквания
  - `php` 5.3+
  - `nodejs` (тествано с `0.10.13`)
