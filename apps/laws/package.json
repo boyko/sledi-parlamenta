@@ -1,0 +1,24 @@
+{
+	"name": "bulgarian-laws-gatherer",
+	"description": "Bulgarian laws gatherer",
+	"version": "0.0.1",
+	"author": {
+		"name": "Общество",
+        "email": "info@obshtestvo.bg"
+	},
+	"main": "./run.js",
+	"dependencies": {
+		"q": "*",
+		"cheerio": "*",
+		"xml2js": "*",
+		"request": "*",
+		"optimist": "*"
+	},
+	"keywords": [
+		"gatherer",
+		"scraper",
+		"crawler",
+		"bulgaria",
+		"web"
+	]
+}
