@@ -35,11 +35,17 @@ echo "Иван Иванов Иванов" > /var/tmp/brrabg
 Type in text from: /var/tmp/captcha.jpg
 ```
 
-След като въведете текста, ще се изведат намерените бизнес занимания във вида:
+След като въведете текста, ще се изведат намерените бизнес занимания.
+
+### Очакван резултат
 
 ```
 [{"company":"\"Иван\" ЕООД","title":"Управители"},{"company":"\"Иванушка\" ООД","title":"Съдружници"}]
 ```
+
+
+### Demo
+![](https://raw.github.com/obshtestvo/rating-gov-representatives/master/apps/brra.bg-inquirer/demo.gif)
 
 ### Технологични решения
 
