@@ -1,6 +1,6 @@
 {
-	"name": "bulgarian-state-order-gatherer",
-	"description": "Gatherer for state orders in Bulgaria",
+	"name": "bulgarian-government-procurement-gatherer",
+	"description": "Gatherer for government procurement in Bulgaria, filtered by company name",
 	"version": "0.0.1",
 	"author": {
 		"name": "Общество",
