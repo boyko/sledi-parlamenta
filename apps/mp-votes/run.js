@@ -21,6 +21,4 @@ inputMan.findTargetDates(argv).then(function(target) {
         return scraper.run(transcriptUrl)
 	})
     crawler.run()
-}).fail(function(err) {
-    console.log(err)
 })
