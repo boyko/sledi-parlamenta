@@ -1,6 +1,8 @@
 var $ = require('cheerio');
 var urlInfo = require('url');
+var util = require('util');
 var Downloader = require('../../common/node/downloader')
+var EventEmitter = require('events').EventEmitter;
 
 /**
  * Creates a crawler.
@@ -39,97 +41,90 @@ var Crawler = function(url, target, logger) {
 		this.forced = target;
 	}
 }
-Crawler.prototype = {
-	baseUrl: null,
-	url: null,
-	startDate: null,
-	forced: null,
-	logger: null,
-	downloader: null,
-	/**
-	 * Starts the crawl
-	 * @param callback
-	 */
-	fetchTranscripts: function(callback) {
-		this.processParliament(callback);
-	},
-	/**
-	 * Crawls the page that includes calendar gateway point to all
-	 * transcripts of a parliament active for one certain mandate
-	 *
-	 * @param transcriptCallback Callback for a single transcript
-	 */
-	processParliament: function(transcriptCallback) {
-		var self = this;
-		self.downloader.get(this.url, function(html) {
-			var $calender= $('#calendar', html);
-			var $monthsLinks = $calender.find('a').filter(function() {
-				var hrefTokens = $(this).attr('href').split('/');
-				var date = hrefTokens[hrefTokens.length-1].split('-');
-				var month = parseInt(date[1])-1;
-				var year = parseInt(date[0]);
-				return self._shouldCrawl(year, month);
-			})
-			$monthsLinks.each(function() {
-				self.processMonth(self.baseUrl+$(this).attr('href'), transcriptCallback);
-			})
-		})
-	},
 
-	/**
-	 * Crawls the page that includes a month worth of transcripts of a
-	 * parliament active for one certain mandate
-	 *
-	 * @param url
-	 * @param transcriptCallback
-	 */
-	processMonth: function(url, transcriptCallback) {
-		var self = this;
+util.inherits(Crawler, EventEmitter);
 
-		self.downloader.get(url, function(html) {
-			var $list= $('#monthview', html);
-			var $transcriptsLinks = $list.find('a').filter(function() {
-				var date = $(this).parent().text().split(', ')[1].split('/');
-				return self._shouldCrawl(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]))
-			})
-			$transcriptsLinks.each(function() {
-				transcriptCallback(self.baseUrl+$(this).attr('href'))
-			})
-		})
-	},
+Crawler.prototype.baseUrl = null;
+Crawler.prototype.url = null;
+Crawler.prototype.startDate = null;
+Crawler.prototype.forced = null;
+Crawler.prototype.logger = null;
+Crawler.prototype.downloader = null;
 
-	/**
-	 * Checks whether to crawl transcripts on certain year, or certain year and month or certain date
-	 *
-	 * @param year
-	 * @param month
-	 * @param day
-	 * @returns {boolean}
-	 * @private
-	 */
-	_shouldCrawl: function(year, month, day) {
-		if (this.startDate != null) {
-			var d = this.startDate;
-			return year >= d.getYear() && month >= d.getMonth && (typeof day == 'undefined' || day > d.getDate());
-		}
-		if (this.forced == null) return true;
-
-		// User has passed array of years
-		if (this.forced instanceof Array && this.forced.indexOf(year)==-1) return false;
-		// User has passed array of months or hash map of months, each with array of days
-		if (typeof this.forced[year] == 'undefined') return false;
-		// User hasn't passed a month, return true
-		if (typeof month == 'undefined') return true;
-
-		// User has passed array of months
-		if (this.forced[year] instanceof Array && this.forced[year].indexOf(month)==-1) return false;
-		// User has passed hash map of months, each with array of days
-		if (typeof this.forced[year][month] == 'undefined') return false;
-		// User hasn't passed a day, return true
-		if (typeof day == 'undefined') return true;
-
-		// Checks for specific date
-		return this.forced[year][month].indexOf(day) > -1;
-	}
+/**
+ * Crawls the page that includes calendar gateway point to all
+ * transcripts of a parliament active for one certain mandate
+ */
+Crawler.prototype.run = function() {
+    var self = this;
+    self.downloader.get(this.url, function(html) {
+        var $calender= $('#calendar', html);
+        var $monthsLinks = $calender.find('a').filter(function() {
+            var hrefTokens = $(this).attr('href').split('/');
+            var date = hrefTokens[hrefTokens.length-1].split('-');
+            var month = parseInt(date[1])-1;
+            var year = parseInt(date[0]);
+            return self._shouldCrawl(year, month);
+        })
+        $monthsLinks.each(function() {
+            self.processMonth(self.baseUrl+$(this).attr('href'));
+        })
+    })
 }
+
+/**
+ * Crawls the page that includes a month worth of transcripts of a
+ * parliament active for one certain mandate
+ *
+ * @param url
+ */
+Crawler.prototype.processMonth = function(url) {
+    var self = this;
+
+    self.downloader.get(url, function(html) {
+        var $list= $('#monthview', html);
+        var $transcriptsLinks = $list.find('a').filter(function() {
+            var date = $(this).parent().text().split(', ')[1].split('/');
+            return self._shouldCrawl(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]))
+        })
+        $transcriptsLinks.each(function() {
+            self.emit('plenary', self.baseUrl+$(this).attr('href'))
+        })
+    })
+}
+
+/**
+ * Checks whether to crawl transcripts on certain year, or certain year and month or certain date
+ *
+ * @param year
+ * @param month
+ * @param day
+ * @returns {boolean}
+ * @private
+ */
+Crawler.prototype._shouldCrawl = function(year, month, day) {
+    if (this.startDate != null) {
+        var d = this.startDate;
+        return year >= d.getYear() && month >= d.getMonth && (typeof day == 'undefined' || day > d.getDate());
+    }
+    if (this.forced == null) return true;
+
+    // User has passed array of years
+    if (this.forced instanceof Array && this.forced.indexOf(year)==-1) return false;
+    // User has passed array of months or hash map of months, each with array of days
+    if (typeof this.forced[year] == 'undefined') return false;
+    // User hasn't passed a month, return true
+    if (typeof month == 'undefined') return true;
+
+    // User has passed array of months
+    if (this.forced[year] instanceof Array && this.forced[year].indexOf(month)==-1) return false;
+    // User has passed hash map of months, each with array of days
+    if (typeof this.forced[year][month] == 'undefined') return false;
+    // User hasn't passed a day, return true
+    if (typeof day == 'undefined') return true;
+
+    // Checks for specific date
+    return this.forced[year][month].indexOf(day) > -1;
+}
+
 exports = module.exports = Crawler;

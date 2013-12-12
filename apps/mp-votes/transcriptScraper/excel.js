@@ -1,6 +1,5 @@
 var path = require('path');
 var urlInfo = require('url');
-
 var when = require('q');
 var $ = require('cheerio');
 
@@ -8,10 +7,7 @@ var csv = require('../../../common/node/csv-util');
 var Downloader = require('../../../common/node/downloader');
 var Convertor = require('../../../common/node/spreadsheet2csv-node');
 
-var Scraper = function(url, tempDir, logger) {
-	this.url = url;
-	this.baseUrl = urlInfo.parse(url);
-	this.baseUrl = this.baseUrl.protocol+'//'+this.baseUrl.host
+var Scraper = function(tempDir, logger) {
 	this.tempDir = tempDir;
 	this.logger = logger;
 	this.downloader = new Downloader(logger);
@@ -19,24 +15,24 @@ var Scraper = function(url, tempDir, logger) {
 }
 
 Scraper.prototype = {
-	baseUrl: null,
 	url: null,
 	tempDir: null,
 	date: null,
 	logger: null,
 	convertor: null,
-	scrape: function() {
+	run: function(url) {
 		var self = this;
+        var baseUrl = self._getBaseUrl(url)
         var done = when.defer()
-		self.downloader.get(this.url, function(html) {
+		self.downloader.get(url, function(html) {
 			var $article = $('#leftcontent', html);
 			var $spreadsheets = $article.find('.frontList a[href$=".xls"]');
 			var $groupLink = $spreadsheets.filter('[href*="gv"]');
 			var $individualLink= $spreadsheets.filter('[href*="iv"]');
 			if ($spreadsheets.length==0 || $groupLink.length==0 || $individualLink.length==0) {
-				if ($spreadsheets.length==0) self.logger.info("Can't find any XLS docs at: "+self.url)
-				if ($groupLink.length==0) self.logger.info("Can't find group voting link at: "+self.url)
-				if ($individualLink.length==0) self.logger.info("Can't find individual voting link at: "+self.url)
+				if ($spreadsheets.length==0) self.logger.info("Can't find any XLS docs at: "+url)
+				if ($groupLink.length==0) self.logger.info("Can't find group voting link at: "+url)
+				if ($individualLink.length==0) self.logger.info("Can't find individual voting link at: "+url)
                 done.resolve()
 				return;
 			}
@@ -44,14 +40,14 @@ Scraper.prototype = {
 
 			var topicsExtraction = when.defer();
 			var groupDownload = self.downloadAndConvert(
-				self.baseUrl+$spreadsheets.filter('[href*="gv"]').attr('href')
+                baseUrl + $spreadsheets.filter('[href*="gv"]').attr('href')
 			);
 			when.done(groupDownload, function(outputPath) {
 				topicsExtraction.resolve(self.extractTopicsFromGroupVotingCSV(outputPath))
 			});
 
-			var individualDownload = self.downloadAndConvert(self.baseUrl+$spreadsheets.filter('[href*="iv"]').attr('href'));
-            when.all([individualDownload, topicsExtraction.promise]).spread(self.extractIndividualVotesFromCSV).then(done.resolve)
+			var individualDownload = self.downloadAndConvert(baseUrl+$spreadsheets.filter('[href*="iv"]').attr('href'));
+            when.all([individualDownload, topicsExtraction.promise]).spread(self.extractIndividualVotesFromCSV).then(done.resolve).fail()
 		})
         return done.promise;
 	},
@@ -109,6 +105,7 @@ Scraper.prototype = {
 
 		return task.promise;
 	},
+
 	/**
 	 * Processes CSV and forms
 	 * @param path
@@ -160,8 +157,18 @@ Scraper.prototype = {
             done.resolve()
         })
         return done.promise
-	}
+	},
 
+    /**
+     * Extracts base url from full link
+     * @param url
+     * @returns {string}
+     * @private
+     */
+    _getBaseUrl: function(url) {
+        url = urlInfo.parse(url);
+        return url.protocol+'//'+url.host
+    }
 }
 
 exports = module.exports = Scraper;

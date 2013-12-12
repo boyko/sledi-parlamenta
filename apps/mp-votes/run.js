@@ -11,15 +11,18 @@ inputMan.findTargetDates(argv).then(function(target) {
 	var logger = require('../../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
 	// Creates a crawler
 	var crawler = new Crawler(argv.url, target, logger);
+	// Creates a scraper
+	var scraper = new TranscriptScraper(argv.temp, logger);
 
 	// Finds transcripts and extract data
     var lastInQueue = flow()
-	crawler.fetchTranscripts(function(transcriptUrl) {
+	crawler.on('plenary', function(transcriptUrl) {
         // Slow down scraping
         lastInQueue = lastInQueue.then(function() {
-            var transcript = new TranscriptScraper(transcriptUrl, argv.temp, logger);
-            return transcript.scrape()
+            return scraper.run(transcriptUrl)
         }).delay(5000)
-	});
-
+	})
+    crawler.run()
+}).fail(function(err) {
+    console.log(err)
 })
