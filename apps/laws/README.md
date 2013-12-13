@@ -64,7 +64,7 @@
 ```
 
 ### Demo
-![](https://raw.github.com/obshtestvo/rating-gov-representatives/master/apps/mp-votes/demo.gif)
+![](https://raw.github.com/obshtestvo/rating-gov-representatives/master/apps/laws/demo.gif)
 
 
 ## Изисквания
