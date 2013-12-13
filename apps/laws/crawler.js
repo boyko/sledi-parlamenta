@@ -39,7 +39,6 @@ Crawler.prototype.run = function() {
         })
         $monthsLinks.each(function() {
             self.processMonth(self.baseUrl+$(this).attr('href'));
-            return false;
         })
     })
 }
@@ -50,11 +49,10 @@ Crawler.prototype.processMonth = function(url) {
         var $list= $('#monthview', html);
         var $lawLinks = $list.find('a').filter(function() {
             var date = $(this).parent().text().split(', ')[1].split('/');
-            return self._shouldCrawl(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]))
+            return self._shouldCrawl(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[1]))
         })
         $lawLinks.each(function() {
             self.emit('law', self.baseUrl+$(this).attr('href'))
-            return false;
         })
     })
 }
