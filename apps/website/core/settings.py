@@ -117,6 +117,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'core',
     'dashboard',
+    # 'rest_framework',
+    'parsers',
     'south',
 )
 
