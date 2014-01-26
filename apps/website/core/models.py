@@ -44,6 +44,7 @@ class Structure(CommonOrganization):
     url = models.URLField(blank=True, null=True)
     members = models.ManyToManyField('Person', through='Member')
 
+
 # Misc classes
 class Badge(models.Model):
     title = models.CharField(max_length=255)
@@ -88,8 +89,8 @@ class Person(models.Model):
     # @TODO: add many to many relation with regions
     active = models.BooleanField(default=True)
 
-    def __str__(self):
-        return "%s %s %s" % (self.first_name, self.middle_name, self.last_name)
+    def __unicode__(self):
+        return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
 
 
 class Member(models.Model):

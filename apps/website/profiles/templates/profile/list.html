@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for person in items %}
+    <p><a href="{{ person.id }}">{{ person }}</a></p>
+{% endfor %}
+{% endblock %}

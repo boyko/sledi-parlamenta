@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    {{ person.first_name }}
+    {{ person.last_name }}
+
+    Участия в структури:
+    <table border="1">
+    {% for membership in person.member_set.all %}
+        <tr>
+            <td>{{ membership.structure.name }}</td>
+            <td>{{ membership.date_from }}</td>
+            <td>{{ membership.date_to }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

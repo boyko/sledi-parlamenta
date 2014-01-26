@@ -1,4 +1,4 @@
-import urllib2, time
+import urllib2, time, sys
 from django.core.management.base import BaseCommand, CommandError
 from core.models import *
 
@@ -45,11 +45,10 @@ class Command(BaseCommand):
                 xml = urllib2.urlopen('http://www.parliament.bg/export.php/bg/xml/MP/%s' % mp_id)
                 tree = etree.XML(xml.read())
             except Exception, e:
-                if failed == 1000:
+                if failed == 2000:
                     print 'Too many failed. Exiting.'
                     exit()
                 failed += 1
-                #print "%s is empty. Incrementing..." % mp_id
                 continue
             else:
                 failed = 0
@@ -68,8 +67,6 @@ class Command(BaseCommand):
                 middle_name=middle_name,
                 last_name=last_name
             )
-            if not created:
-                continue
 
             person.hometown = hometown
             person.birthday = self.parse_date(birthday)
@@ -104,8 +101,6 @@ class Command(BaseCommand):
                         date_to=self.parse_date(period_to),
                         position=position
                     )
-
-            #self.stdout.write("%s - OK" % (person))
 
     def parse_date(self, date):
         if date == '00/00/0000':

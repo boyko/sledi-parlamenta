@@ -105,6 +105,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'dashboard/templates'),
+    os.path.join(SITE_ROOT, 'profiles/templates'),
 )
 
 INSTALLED_APPS = (

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from core.models import Person, Party
+from core.models import Person, Structure
 
 
 class RepresentativeInline(admin.TabularInline):
-    model = Party.members.through
+    model = Structure.members.through
     extra = 1
 
 
@@ -14,8 +14,8 @@ class PersonAdmin(admin.ModelAdmin):
 admin.site.register(Person, PersonAdmin)
 
 
-class PartyAdmin(admin.ModelAdmin):
+class StructureAdmin(admin.ModelAdmin):
     inlines = [
         RepresentativeInline,
     ]
-admin.site.register(Party, PartyAdmin)
+admin.site.register(Structure, StructureAdmin)
