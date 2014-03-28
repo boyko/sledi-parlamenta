@@ -30,8 +30,8 @@ Scraper.prototype = {
 			var $individualLink= $spreadsheets.filter('[href*="iv"]');
 			if ($spreadsheets.length==0 || $groupLink.length==0 || $individualLink.length==0) {
 				if ($spreadsheets.length==0) self.logger.info("Can't find any XLS docs at: "+url)
-				if ($groupLink.length==0) self.logger.info("Can't find group voting link at: "+url)
-				if ($individualLink.length==0) self.logger.info("Can't find individual voting link at: "+url)
+				if ($spreadsheets.length && $groupLink.length==0) self.logger.info("Can't find group voting link at: "+url)
+				if ($spreadsheets.length && $individualLink.length==0) self.logger.info("Can't find individual voting link at: "+url)
                 done.resolve()
 				return;
 			}
@@ -46,7 +46,7 @@ Scraper.prototype = {
 			});
 
 			var individualDownload = self.downloadAndConvert(baseUrl+$spreadsheets.filter('[href*="iv"]').attr('href'));
-            when.all([individualDownload, topicsExtraction.promise]).spread(self.extractIndividualVotesFromCSV).then(done.resolve).fail()
+            when.all([individualDownload, topicsExtraction.promise, url]).spread(self.extractIndividualVotesFromCSV.bind(self)).then(done.resolve).fail()
 		})
         return done.promise;
 	},
@@ -100,7 +100,9 @@ Scraper.prototype = {
 				"time": time
 			};
 		})
-		reader.on('end', function(){task.resolve(topics);})
+		reader.on('end', function(){
+            task.resolve(topics);
+        })
 
 		return task.promise;
 	},
@@ -110,7 +112,7 @@ Scraper.prototype = {
 	 * @param path
 	 * @param topics
 	 */
-	extractIndividualVotesFromCSV: function(path, topics) {
+	extractIndividualVotesFromCSV: function(path, topics, url) {
 		var self = this;
 		var done = when.defer();
 		var headers = []
@@ -132,7 +134,8 @@ Scraper.prototype = {
 			}
 			var record = {
 				date: self.date,
-				votes: []
+				votes: [],
+                source: url
 			}
 			row.forEach(function(val, i) {
 				if (i==0 && val!='') {
@@ -140,6 +143,10 @@ Scraper.prototype = {
 				}
 				if (val=='' || i < 4) return;
 				var topic = topics.titlesByNum[headers[i]]
+
+				if (!topics.metadataByTitle[topic]) {
+                    self.logger.info("Don't have metadata for topic '"+topic+"' at: "+url)
+                }
 				var entry = {
 					time: topics.metadataByTitle[topic].time,
 					val: valueMapping[val]

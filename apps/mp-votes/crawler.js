@@ -84,7 +84,7 @@ Crawler.prototype.processMonth = function(url) {
         var $list= $('#monthview', html);
         var $transcriptsLinks = $list.find('a').filter(function() {
             var date = $(this).parent().text().split(', ')[1].split('/');
-            return self._shouldCrawl(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]))
+            return self._shouldCrawl(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]))
         })
         $transcriptsLinks.each(function() {
             self.emit('plenary', self.baseUrl+$(this).attr('href'))
