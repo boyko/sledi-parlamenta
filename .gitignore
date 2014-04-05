@@ -7,3 +7,4 @@ apps/website/app/secret_settings.py
 apps/government-procurement/settings.secret.js
 apps/spreadsheet2csv/composer.lock
 apps/spreadsheet2csv/vendor/
+apps/op_website/db/schema.rb
