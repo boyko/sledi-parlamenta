@@ -149,7 +149,8 @@ Scraper.prototype = {
                 }
 				var entry = {
 					time: topics.metadataByTitle[topic].time,
-					val: valueMapping[val]
+					val: valueMapping[val],
+          topic: topic
 				}
 				if (topics.isRegistration(topic)) {
 					record.registration = entry
