@@ -4,9 +4,11 @@ class CreateMembers < ActiveRecord::Migration
       t.string :name
       t.integer :gov_site_id
       t.date :birthday
+      t.date :time
       t.string :hometown
       t.string :profession
       t.string :position
+      t.string :status
       t.string :elected_from
       t.string :languages
       t.string :email
