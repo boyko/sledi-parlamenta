@@ -8,10 +8,17 @@
 
 Party.delete_all
 
-Party.create({ abbreviation: "ГЕРБ", name: "ПП „Граждани за Европейско Развитие на България“"})
-Party.create({ abbreviation: "КБ", name: "КП „Коалиция за България“"})
-Party.create({ abbreviation: "ДПС", name: "ПП „Движение за права и свободи“"})
-Party.create({ abbreviation: "Aтака", name: "ПП „Атака“"})
+Party.create({ abbreviation: "ГЕРБ", name: "Граждани за Европейско Развитие на България"})
+Party.create({ abbreviation: "КБ", name: "Коалиция за България"})
+Party.create({ abbreviation: "ДПС", name: "Движение за права и свободи"})
+Party.create({ abbreviation: "Aтака", name: "Атакa"})
+Party.create({ abbreviation: "НДСВ", name: "Национално движение Симеон Втори"})
+Party.create({ abbreviation: "СК", name: "Синята коалиция"})
+Party.create({ abbreviation: "РЗС", name: "Ред, законност и справедливост"})
+Party.create({ abbreviation: "ОДС", name: "Обединени Демократични Сили"})
+Party.create({ abbreviation: "ДСБ", name: "Демократи за силна България"})
+Party.create({ abbreviation: "БНС", name: "Български Народен Съюз"})
+
 puts "Successfuly imported political parties"
 
 pc = Party.count
