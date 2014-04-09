@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  session_id: 
+  url: MyString
+  date: 2014-04-08
+
+two:
+  session_id: 
+  url: MyString
+  date: 2014-04-08
