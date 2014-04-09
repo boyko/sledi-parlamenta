@@ -83,7 +83,7 @@ var c = new Crawler({
       s: $('Speeches').html()
     }
 
-    console.log(mp);
+    console.log(JSON.stringify(mp));
   }
 });
 

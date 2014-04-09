@@ -45,36 +45,8 @@ def fetch_member gov_site_id
     end
     party_id "xpath=//ul[@class='frontList']//li[contains(., 'Избран(а) с политическа сила: ')]" do |e|
       unless e.nil?
-        party_dict = {
-          # 42
-          "ПП „ГЕРБ“"                                       =>  1,
-          "КП „Коалиция за България“"                       =>  2,
-          "ПП „Движение за права и свободи“"                =>  3,
-          "ПП „Атака“"                                      =>  4,
-          # 41
-          "ГЕРБ"                                            =>  1,
-          '"Коалиция за България"'                          =>  2,
-          'ДПС "Движение за права и свободи"'               =>  3,
-          'Партия "Атака"'                                  =>  4,
-          '"Синята коалиция"'                               =>  5,
-          '"Ред, законност и справедливост"'                =>  6,
-          # 40
-          '"Коалиция за България"'                          =>  2,
-          '"Движение за права и свободи"'                   =>  3,
-          'Коалиция "Атака"'                                =>  4,
-          '"Национално движение Симеон Втори"'              =>  7,
-          'Коалиция "Обединени Демократични Сили"'          =>  8,
-          "Демократи за силна България"                     =>  9,
-          'Коалиция "Български Народен Съюз"'               =>  10,
-          # 39
-          '"Коалиция за България"'                          =>  2,
-          'ДПС (ДПС – Либерален съюз – Евророма)'           =>  3,
-          '“Национално движение Симеон Втори”'              =>  7,
-          '“Обединени демократични сили – СДС, Народен съюз: БЗНС-Народен съюз и Демократическа партия, БСДП, Национално ДПС”'  =>  8
-        }
         party_str = e.gsub(/Избран\(а\) с политическа сила: /, "").gsub(/ \d+\.\d+%;/, '')
-        puts party_dict[party_str]
-        party_dict[party_str]
+        find_party_id party_str
       end
     end
     profession "xpath=//ul[@class='frontList']//li[contains(., 'Професия: ')]" do |e|
@@ -121,6 +93,39 @@ def fetch_members_inner_data_end_persist members
   end
 end
 
+def find_party_id party_str
+  party_dict = {
+    # 42
+    "ПП „ГЕРБ“"                                       =>  1,
+    "КП „Коалиция за България“"                       =>  2,
+    "ПП „Движение за права и свободи“"                =>  3,
+    "ПП „Атака“"                                      =>  4,
+    # 41
+    "ГЕРБ"                                            =>  1,
+    '"Коалиция за България"'                          =>  2,
+    'ДПС "Движение за права и свободи"'               =>  3,
+    'Партия "Атака"'                                  =>  4,
+    '"Синята коалиция"'                               =>  5,
+    '"Ред, законност и справедливост"'                =>  6,
+    # 40
+    '"Коалиция за България"'                          =>  2,
+    '"Движение за права и свободи"'                   =>  3,
+    'Коалиция "Атака"'                                =>  4,
+    '"Национално движение Симеон Втори"'              =>  7,
+    'Коалиция "Обединени Демократични Сили"'          =>  8,
+    "Демократи за силна България"                     =>  9,
+    'Коалиция "Български Народен Съюз"'               =>  10,
+    # 39
+    '"Коалиция за България"'                          =>  2,
+    'ДПС (ДПС – Либерален съюз – Евророма)'           =>  3,
+    '“Национално движение Симеон Втори”'              =>  7,
+    '“Обединени демократични сили – СДС, Народен съюз: БЗНС-Народен съюз и Демократическа партия, БСДП, Национално ДПС”'  =>  8
+  }
+  party_id = party_dict[party_str]
+  raise "no such party found: #{party_str}" if party_id.nil?
+  return party_id
+end
+
 namespace :fetch do
 
   namespace :members do
@@ -128,6 +133,32 @@ namespace :fetch do
     # Populate DB with all MP's on gov. site.
     # MP's are fetched by iterating all the id's
     task :all => :environment do
+      members_str = %x{node lib/assets/mp-info.js}
+      members_str.each_line do |member|
+        member_ob = JSON.load member
+        final = {
+          first_name: member_ob['fn'],
+          sir_name: member_ob['sn'],
+          last_name: member_ob['ln'],
+          gov_site_id: member_ob['gi'],
+          birthday: member_ob['db'],
+          hometown: member_ob['pb'],
+          profession: member_ob['p'].join(', '),
+          languages: member_ob['l'].join(', '),
+          marital_status: member_ob['ms'],
+          party_id: find_party_id(member_ob['pf']),
+          constituency: member_ob['co'],
+          email: member_ob['em'],
+          website: member_ob['ws'],
+        }
+        Member.create(final)
+      end
+    end
+
+    # Populate DB with all MP's on gov. site.
+    # MP's are fetched by iterating the members in every assembly that
+    # is shown on the site.
+    task :all_iterative => :environment do
       members = []
       assemblies_url_paths = ["/bg/archive/1/1/1", "/bg/archive/2/1/138", "/bg/archive/7/1/216", "/bg/mp"]
       assemblies_url_paths.each do |path|
