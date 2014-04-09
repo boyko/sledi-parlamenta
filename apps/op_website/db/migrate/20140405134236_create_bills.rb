@@ -9,6 +9,7 @@ class CreateBills < ActiveRecord::Migration
       t.date :accepted_on
       t.string :url
 
+
       t.timestamps
     end
   end

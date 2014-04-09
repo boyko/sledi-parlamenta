@@ -1,4 +1,5 @@
 class Bill < ActiveRecord::Base
   belongs_to :member
   belongs_to :party
+  has_many :votings
 end
