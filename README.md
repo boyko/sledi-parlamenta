@@ -3,7 +3,7 @@
 
 ## Как мога да помогна?
 
-- с код.
+- [с код](https://github.com/obshtestvo/open-parliament/issues?milestone=1&state=open).
 - с правна помощ.
 
 ## Как да се включа?

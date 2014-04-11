@@ -6,6 +6,10 @@ class CreateParties < ActiveRecord::Migration
       t.string :info
       t.string :website
 
+      t.references :prev_party
+
+      t.references :assembly
+
       t.timestamps
     end
   end

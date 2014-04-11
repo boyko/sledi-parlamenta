@@ -2,22 +2,10 @@
 
 one:
   name: MyString
-  kind: MyString
   info: MyText
-  address: MyString
-  email: MyString
-  phone: MyString
-  active: false
-  website: MyString
-  gov_url: MyString
+  continuous: false
 
 two:
   name: MyString
-  kind: MyString
   info: MyText
-  address: MyString
-  email: MyString
-  phone: MyString
-  active: false
-  website: MyString
-  gov_url: MyString
+  continuous: false

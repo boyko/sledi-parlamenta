@@ -10,16 +10,18 @@ class CreateMembers < ActiveRecord::Migration
       t.string :profession
       t.string :languages
       t.string :marital_status
-      t.references :party, index: true
       t.string :constituency
       t.string :email
       t.string :website
       t.string :position
+      t.boolean :non_affiliated
       t.string :status
       t.string :gender
       t.boolean :council_ministers
       t.string :cm_position
       t.text :bio
+
+      t.references :party, index: true
 
       t.timestamps
     end
