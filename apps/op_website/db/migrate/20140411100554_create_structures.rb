@@ -3,7 +3,7 @@ class CreateStructures < ActiveRecord::Migration
     create_table :structures do |t|
       t.string :name
       t.text :info
-      t.kind :string
+      t.string :kind
       t.boolean :continuous
 
       t.timestamps

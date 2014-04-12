@@ -6,6 +6,15 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+Assembly.delete_all
+
+Assembly.create({ name: "39-то Народно събрание" })
+Assembly.create({ name: "40-то Народно събрание" })
+Assembly.create({ name: "41-то Народно събрание" })
+Assembly.create({ name: "42-то Народно събрание" })
+
+puts "Successfuly imported assemblies"
+
 Party.delete_all
 
 Party.create({ abbreviation: "ГЕРБ", name: "Граждани за Европейско Развитие на България"})
@@ -33,3 +42,4 @@ Bill.create({ member_id: (Random.rand() * mc).ceil, party_id: (Random.rand() * p
 Bill.create({ member_id: (Random.rand() * mc).ceil, party_id: (Random.rand() * pc).ceil, title: "Закон за защита на учениците.", content: "Eдин закон който е важен!\n Конкуренцията е нещо важно. \n Много важно даже. ", proposed_on: Time.now, accepted_on: Time.now, url: "http://bla.com" })
 Bill.create({ member_id: (Random.rand() * mc).ceil, party_id: (Random.rand() * pc).ceil, title: "Закон за защита на разни работи.", content: "Eдин закон който е важен!\n Конкуренцията е нещо важно. \n Много важно даже. ", proposed_on: Time.now, accepted_on: Time.now, url: "http://bla.com" })
 
+Session.create({ date: "15/01/2014".to_date })
