@@ -1,3 +1,4 @@
 class Session < ActiveRecord::Base
-  belongs_to :session
+  belongs_to :assembly
+  has_many :votings
 end

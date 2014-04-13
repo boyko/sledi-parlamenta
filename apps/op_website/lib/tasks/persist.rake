@@ -12,20 +12,30 @@ namespace :persist do
 
       raise "No member with name #{voting['name']} found" if member.nil?
 
-      session = Session.find_by_date(voting['date'].to_date)
+      session_date = voting['date'].to_date
+      assembly_id = 0
+
+      Assembly.all.each do |a|
+        if a.start_date >= session_date and a.end_date <= session_date
+          assembly_id = a.id
+          break
+        end
+      end
+
+      session = Session.where(date: session_date, assembly_id: assembly_id, url: voting['source']).first_or_create
       votes = []
 
-      voting['votes'].each do |v|
+      voting['votes'].each do |vote|
         voting = Voting.where({
           session: session,
-          time: v['time'].to_datetime,
-          topic: v['topic']
+          time: vote['time'].to_datetime,
+          topic: vote['topic']
         }).first_or_create
 
         votes.push({
           member: member,
           voting: voting,
-          value: v['val']
+          value: vote['val']
         })
       end
 
