@@ -1,5 +1,5 @@
 // This script collects publicly available information from
-// the government"s website and prints it to stdout.
+// the government's website and prints it to stdout.
 
 var Crawler = require("crawler").Crawler;
 var cheerio = require("cheerio");

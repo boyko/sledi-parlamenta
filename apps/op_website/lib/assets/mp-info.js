@@ -1,5 +1,5 @@
 // This script collects publicly available information from
-// the government"s website and prints it to stdout.
+// the government's website and prints it to stdout.
 
 var Crawler = require("crawler").Crawler;
 var cheerio = require("cheerio");
@@ -54,8 +54,8 @@ var c = new Crawler({
     $("ParliamentaryControl > Question").each(function(idx, el) {
       var question = {
         a:  $(el).find("About")[0].children[0].data,
-        t:  $(el).find("To")[0].attribs.value.split(",")[0],               // note: the "," is bulgarian
-        tp: $(el).find("To")[0].attribs.value.match(",.*")[0].substr(2),   // note: the "," is bulgarian
+        t:  $(el).find("To")[0].attribs.value.split(",")[0],
+        tp: $(el).find("To")[0].attribs.value.match(",.*")[0].substr(2),
         d:  $(el).find("Date")[0].attribs.value
       }
       questions[idx] = question;
@@ -86,7 +86,7 @@ var c = new Crawler({
   }
 });
 
-for (var i = 1; i < 10; i ++) {
+for (var i = 1; i < 2312; i ++) {
  queue.push("http://www.parliament.bg/export.php/bg/xml/MP/" + i);
 }
 c.queue(queue);
