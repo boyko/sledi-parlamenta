@@ -4,7 +4,7 @@ class CreateVotings < ActiveRecord::Migration
       t.references :session, index: true
       t.references :version, index: true
       t.string :topic
-      t.datetime :time
+      t.datetime :voted_at
       t.string :result
 
       t.timestamps

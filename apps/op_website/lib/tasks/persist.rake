@@ -6,31 +6,24 @@ namespace :persist do
 
   # run this task when Members are persisted
   task :svv => :environment do
-    File.open(data_path + "mp-votes.txt").each do |voting|
+    File.open(data_path + "mp-votes.json").each do |voting|
       voting = JSON.load voting
       member = Member.find_by_3_names voting['name']
 
       raise "No member with name #{voting['name']} found" if member.nil?
 
       session_date = voting['date'].to_date
-      assembly_id = 0
 
-      Assembly.all.each do |a|
-        if a.start_date >= session_date and a.end_date <= session_date
-          assembly_id = a.id
-          break
-        end
-      end
-
-      session = Session.where(date: session_date, assembly_id: assembly_id, url: voting['source']).first_or_create
+      assembly = Assembly.where("(start_date < ? and end_date > ?) or end_date is ?", session_date, session_date, nil).first
+      session = Session.where(date: session_date, assembly: assembly, url: voting['source']).first_or_create
       votes = []
 
       voting['votes'].each do |vote|
-        voting = Voting.where({
+        voting = Voting.find_or_create_by({
           session: session,
-          time: vote['time'].to_datetime,
+          voted_at: Time.zone.parse(vote['time']),
           topic: vote['topic']
-        }).first_or_create
+        })
 
         votes.push({
           member: member,
