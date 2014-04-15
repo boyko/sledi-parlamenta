@@ -3,6 +3,8 @@ BASEDIR=$(cd "$(dirname "$0")"; pwd)
 
 npmToInstall=(
 	$BASEDIR/apps/mp-votes
+	$BASEDIR/apps/laws
+	$BASEDIR/apps/government-procurement
 	$BASEDIR/apps/brra.bg-inquirer
 	$BASEDIR/common/node/csv-util
 	$BASEDIR/common/node/downloader
