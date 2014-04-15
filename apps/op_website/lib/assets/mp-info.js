@@ -15,7 +15,8 @@ var c = new Crawler({
         nationalAssembly = [],
         bills = [],
         questions = [],
-        structures = [];
+        structures = [],
+        speeches = [];
 
     $ = cheerio.load(result.body);
 
@@ -61,6 +62,15 @@ var c = new Crawler({
       questions[idx] = question;
     });
 
+    $("Speeches > Speech").each(function(idx, el) {
+      var speech = {
+        t:  $(el).find("Topic")[0].children[0].data,
+        d:  $(el).find("Date")[0].attribs.value,
+        ty: $(el).find("Type")[0].attribs.value
+      }
+      speeches[idx] = speech;
+    });
+
     var mp = {
       fn: $("FirstName")[0].attribs["value"],
       sn: $("SirName")[0].attribs["value"],
@@ -70,16 +80,16 @@ var c = new Crawler({
       pb: $("PlaceOfBirth")[0].attribs["value"],
       p: proffs,
       l: langs,
-      sd: $("Speeches").html(),
       ms: $("MaritalStatus")[0].attribs["value"],
       pf: $("PoliticalForce")[0].attribs["value"].replace(/ \d+\.\d+%/, ""),
       co: $("Constituency")[0].attribs["value"],
       na: nationalAssembly,
       em: $("E-mail")[0].attribs["value"],
       ws: $("Website")[0].attribs["value"],
+      st: structures,
       b: bills,
       q: questions,
-      s: $("Speeches").html()
+      s: speeches
     }
 
     console.log(JSON.stringify(mp));
@@ -87,6 +97,6 @@ var c = new Crawler({
 });
 
 for (var i = 1; i < 2312; i ++) {
- queue.push("http://www.parliament.bg/export.php/bg/xml/MP/" + i);
+  queue.push("http://www.parliament.bg/export.php/bg/xml/MP/" + i);
 }
 c.queue(queue);

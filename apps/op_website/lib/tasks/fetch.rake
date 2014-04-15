@@ -93,38 +93,6 @@ def fetch_members_inner_data_end_persist members
   end
 end
 
-def find_party_id party_str
-  party_dict = {
-    # 42
-    "ПП „ГЕРБ“"                                       =>  1,
-    "КП „Коалиция за България“"                       =>  2,
-    "ПП „Движение за права и свободи“"                =>  3,
-    "ПП „Атака“"                                      =>  4,
-    # 41
-    "ГЕРБ"                                            =>  1,
-    '"Коалиция за България"'                          =>  2,
-    'ДПС "Движение за права и свободи"'               =>  3,
-    'Партия "Атака"'                                  =>  4,
-    '"Синята коалиция"'                               =>  5,
-    '"Ред, законност и справедливост"'                =>  6,
-    # 40
-    '"Коалиция за България"'                          =>  2,
-    '"Движение за права и свободи"'                   =>  3,
-    'Коалиция "Атака"'                                =>  4,
-    '"Национално движение Симеон Втори"'              =>  7,
-    'Коалиция "Обединени Демократични Сили"'          =>  8,
-    "Демократи за силна България"                     =>  9,
-    'Коалиция "Български Народен Съюз"'               =>  10,
-    # 39
-    '"Коалиция за България"'                          =>  2,
-    'ДПС (ДПС – Либерален съюз – Евророма)'           =>  3,
-    '“Национално движение Симеон Втори”'              =>  7,
-    '“Обединени демократични сили – СДС, Народен съюз: БЗНС-Народен съюз и Демократическа партия, БСДП, Национално ДПС”'  =>  8
-  }
-  party_id = party_dict[party_str]
-  raise "no such party found: #{party_str}" if party_id.nil?
-  return party_id
-end
 
 namespace :fetch do
 
@@ -133,7 +101,41 @@ namespace :fetch do
     # Populate DB with all MP's on gov. site.
     # MP's are fetched by iterating all the id's
     task :all => :environment do
-      members_str = %x{node lib/assets/mp-info.js}
+
+      a39 = Assembly.find_by_name("39-то Народно събрание")
+      a40 = Assembly.find_by_name("40-то Народно събрание")
+      a41 = Assembly.find_by_name("41-то Народно събрание")
+      a42 = Assembly.find_by_name("42-то Народно събрание")
+
+      party_dict = {
+        # 42
+        "ПП „ГЕРБ“"                                       =>  Party.where(assembly: a42, abbreviation: "ГЕРБ").first,
+        "КП „Коалиция за България“"                       =>  Party.where(assembly: a42, abbreviation: "КБ").first,
+        "ПП „Движение за права и свободи“"                =>  Party.where(assembly: a42, abbreviation: "ДПС").first,
+        "ПП „Атака“"                                      =>  Party.where(assembly: a42, abbreviation: "АТАКА").first,
+        # 41
+        "ГЕРБ"                                            =>  Party.where(assembly: a41, abbreviation: "ГЕРБ").first,
+        '"Коалиция за България"'                          =>  Party.where(assembly: a41, abbreviation: "КБ").first,
+        'ДПС "Движение за права и свободи"'               =>  Party.where(assembly: a41, abbreviation: "ДПС").first,
+        'Партия "Атака"'                                  =>  Party.where(assembly: a41, abbreviation: "Атака").first,
+        '"Синята коалиция"'                               =>  Party.where(assembly: a41, abbreviation: "СК").first,
+        '"Ред, законност и справедливост"'                =>  Party.where(assembly: a41, abbreviation: "РЗС").first,
+        # 40
+        '"Коалиция за България"'                          =>  Party.where(assembly: a40, abbreviation: "КБ").first,
+        '"Национално движение Симеон Втори"'              =>  Party.where(assembly: a40, abbreviation: "НДСВ").first,
+        '"Движение за права и свободи"'                   =>  Party.where(assembly: a40, abbreviation: "ДПС").first,
+        'Коалиция "Атака"'                                =>  Party.where(assembly: a40, abbreviation: "Атака").first,
+        'Коалиция "Обединени Демократични Сили"'          =>  Party.where(assembly: a40, abbreviation: "ОДС").first,
+        '"Демократи за Силна България"'                   =>  Party.where(assembly: a40, abbreviation: "ДСБ").first,
+        'Коалиция "Български Народен Съюз"'               =>  Party.where(assembly: a40, abbreviation: "БНС").first,
+        # 39
+        '“Национално движение Симеон Втори”'              =>  Party.where(assembly: a39, abbreviation: "НДСВ").first,
+        '“Обединени демократични сили – СДС, Народен съюз: БЗНС-Народен съюз и Демократическа партия, БСДП, Национално ДПС”'  =>  Party.where(assembly: a39, abbreviation: "ОДС").first,
+        '"Коалиция за България"'                          =>  Party.where(assembly: a39, abbreviation: "КБ").first,
+        'ДПС (ДПС – Либерален съюз – Евророма)'           =>  Party.where(assembly: a39, abbreviation: "КБ").first
+      }
+
+      members_str = %x{cat ../../../mp-info-sp.json}
       members_str.each_line do |member|
         member_ob = JSON.load member
         final = {
@@ -146,12 +148,32 @@ namespace :fetch do
           profession: member_ob['p'].join(', '),
           languages: member_ob['l'].join(', '),
           marital_status: member_ob['ms'],
-          party_id: find_party_id(member_ob['pf']),
+          party: party_dict[member_ob['pf']],
           constituency: member_ob['co'],
           email: member_ob['em'],
           website: member_ob['ws'],
         }
-        Member.create(final)
+        m = Member.create(final)
+
+        # loop questions
+        member_ob['q'].each do |q|
+          question = {
+            title: q['a'],
+            questioner: m,
+            asked: q['d']
+          }
+          Question.create(question)
+        end
+
+        # loop speeches
+        member_ob['s'].each do |s|
+          speech = {
+            topic: s['t'],
+            date: s['d'],
+            kind: s['ty']
+          }
+          Speech.create(speech)
+        end
       end
     end
 
