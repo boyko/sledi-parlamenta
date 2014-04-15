@@ -15,12 +15,14 @@ wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - 
 sudo mkdir -p $HOME/.oh-my-zsh/custom/plugins
 git clone git://github.com/zsh-users/zsh-syntax-highlighting.git  $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 sudo chsh -s `which zsh` vagrant
-sed -i.bak 's/^plugins=(.*/plugins=(git django python pip virtualenvwrapper emoji-clock zsh-syntax-highlighting bower)/' $HOME/.zshrc
+sed -i.bak 's/^plugins=(.*/plugins=(git zsh-syntax-highlighting)/' $HOME/.zshrc
 
 # ruby stuff
 \curl -sSL https://get.rvm.io | bash -s stable --ruby=2.1.1
-sudo apt-get install libsqlite3-dev
-cd apps/op_website
+sudo apt-get install libsqlite3-dev -y
+cd $VAGRANT_DIR/apps/op_website
+source $HOME/.rvm/scripts/rvm
+rvm use 2
 bundle install
 rake db:migrate
 rake db:seed
@@ -38,14 +40,8 @@ wget -qO- https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
 source $HOME/.nvm/nvm.sh
 nvm install 0.10
 nvm alias default 0.10
-sudo apt-get install freetype-devel fontconfig-devel
+sudo apt-get install libfontconfig libfontconfig-dev libfreetype6-dev
 npm install phantomjs -g
 
 # build the rest of the crawlers
 bash $VAGRANT_DIR/build.sh
-#
-## settings
-#if [ ! -f "$VAGRANT_DIR/server/settings_app.py" ]; then
-#    cp $VAGRANT_DIR/server/settings_app.py.vagrant-sample $VAGRANT_DIR/server/settings_app.py
-#fi
-#
