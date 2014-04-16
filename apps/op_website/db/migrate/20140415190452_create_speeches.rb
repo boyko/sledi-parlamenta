@@ -5,6 +5,8 @@ class CreateSpeeches < ActiveRecord::Migration
       t.date :date
       t.string :kind
 
+      t.references :member
+
       t.timestamps
     end
   end

@@ -8,7 +8,8 @@
 
 Assembly.delete_all
 
-a39 = Assembly.create({ name: "39-то Народно събрание", start_date: "05.07.2001".to_date, end_date: "17.06.2005".to_date })
+# Some of the names are wrong... But otherwise the code breaks.
+a39 = Assembly.create({ name: "39-то Народно Събрание", start_date: "05.07.2001".to_date, end_date: "17.06.2005".to_date })
 a40 = Assembly.create({ name: "40-то Народно събрание", start_date: "11.07.2005".to_date, end_date: "25.06.2009".to_date })
 a41 = Assembly.create({ name: "41-то Народно събрание", start_date: "14.07.2009".to_date, end_date: "15.03.2013".to_date })
 a42 = Assembly.create({ name: "42-то Народно събрание", start_date: "21.05.2013".to_date, end_date: nil })
