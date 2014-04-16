@@ -3,8 +3,6 @@
 
 var Crawler = require("crawler").Crawler;
 var cheerio = require("cheerio");
-var queue = [];
-var last_gov_id = 10;
 
 var c = new Crawler({
   "maxConnections": 10,
@@ -96,7 +94,21 @@ var c = new Crawler({
   }
 });
 
-for (var i = 1; i < 2312; i ++) {
-  queue.push("http://www.parliament.bg/export.php/bg/xml/MP/" + i);
+function fetchAll() {
+  var queue = [];
+  for (var i = 1; i < 2312; i ++) {
+    queue.push("http://www.parliament.bg/export.php/bg/xml/MP/" + i);
+  }
+  c.queue(queue)
 }
-c.queue(queue);
+
+function fetchSingle(gov_site_id) {
+  c.queue("http://www.parliament.bg/export.php/bg/xml/MP/" + gov_site_id)
+}
+
+function init() {
+  process.argv.length === 3 ? fetchSingle(process.argv[2]) : fetchAll();
+}
+
+init();
+
