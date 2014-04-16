@@ -7,64 +7,52 @@ namespace :persist do
   # Persist members, question, speeches
   task :mqs => :environment do
 
-    a39 = Assembly.find_by_name("39-то Народно събрание")
-    a40 = Assembly.find_by_name("40-то Народно събрание")
-    a41 = Assembly.find_by_name("41-то Народно събрание")
-    a42 = Assembly.find_by_name("42-то Народно събрание")
-
-    party_dict = {
-      # 42
-      "ПП „ГЕРБ“"                                       =>  Party.where(assembly: a42, abbreviation: "ГЕРБ").first,
-      "КП „Коалиция за България“"                       =>  Party.where(assembly: a42, abbreviation: "КБ").first,
-      "ПП „Движение за права и свободи“"                =>  Party.where(assembly: a42, abbreviation: "ДПС").first,
-      "ПП „Атака“"                                      =>  Party.where(assembly: a42, abbreviation: "АТАКА").first,
-      # 41
-      "ГЕРБ"                                            =>  Party.where(assembly: a41, abbreviation: "ГЕРБ").first,
-      '"Коалиция за България"'                          =>  Party.where(assembly: a41, abbreviation: "КБ").first,
-      'ДПС "Движение за права и свободи"'               =>  Party.where(assembly: a41, abbreviation: "ДПС").first,
-      'Партия "Атака"'                                  =>  Party.where(assembly: a41, abbreviation: "Атака").first,
-      '"Синята коалиция"'                               =>  Party.where(assembly: a41, abbreviation: "СК").first,
-      '"Ред, законност и справедливост"'                =>  Party.where(assembly: a41, abbreviation: "РЗС").first,
-      # 40
-      '"Коалиция за България"'                          =>  Party.where(assembly: a40, abbreviation: "КБ").first,
-      '"Национално движение Симеон Втори"'              =>  Party.where(assembly: a40, abbreviation: "НДСВ").first,
-      '"Движение за права и свободи"'                   =>  Party.where(assembly: a40, abbreviation: "ДПС").first,
-      'Коалиция "Атака"'                                =>  Party.where(assembly: a40, abbreviation: "Атака").first,
-      'Коалиция "Обединени Демократични Сили"'          =>  Party.where(assembly: a40, abbreviation: "ОДС").first,
-      '"Демократи за Силна България"'                   =>  Party.where(assembly: a40, abbreviation: "ДСБ").first,
-      'Коалиция "Български Народен Съюз"'               =>  Party.where(assembly: a40, abbreviation: "БНС").first,
-      # 39
-      '“Национално движение Симеон Втори”'              =>  Party.where(assembly: a39, abbreviation: "НДСВ").first,
-      '“Обединени демократични сили – СДС, Народен съюз: БЗНС-Народен съюз и Демократическа партия, БСДП, Национално ДПС”'  =>  Party.where(assembly: a39, abbreviation: "ОДС").first,
-      '"Коалиция за България"'                          =>  Party.where(assembly: a39, abbreviation: "КБ").first,
-      'ДПС (ДПС – Либерален съюз – Евророма)'           =>  Party.where(assembly: a39, abbreviation: "КБ").first
-    }
-
-    members_str = %x{node ../assets/mp-info.js}
+    members_str = %x{cat ~/repos/mp-info.json}
+    party_arr = []
     members_str.each_line do |member|
       member_ob = JSON.load member
-      final = {
-        first_name: member_ob['fn'],
-        sir_name: member_ob['sn'],
-        last_name: member_ob['ln'],
-        gov_site_id: member_ob['gi'],
-        birthday: member_ob['db'],
-        hometown: member_ob['pb'],
-        profession: member_ob['p'].join(', '),
-        languages: member_ob['l'].join(', '),
-        marital_status: member_ob['ms'],
-        party: party_dict[member_ob['pf']],
-        constituency: member_ob['co'],
-        email: member_ob['em'],
-        website: member_ob['ws'],
-      }
-      m = Member.create(final)
+
+      # find member
+      names = member_ob['fn'] + " " + member_ob['sn'] + " " + member_ob['ln']
+      member = Member.find_by_names_and_bd(names, member_ob['db'])
+
+      # find assembly
+      assembly_data = member_ob['st'].select { |ps| ps['t'] == "Членове на Народно събрание" }
+      p assembly_data[0]
+      assembly = Assembly.find_by_name(assembly_data[0]['n']) unless assembly_data.empty?
+      #p assembly.name unless assembly_data.empty?
+
+      # find party
+      party_data = member_ob['st'].select { |ps| ps['t'] == "Парламентарни групи" }
+      unless party_data.empty?
+        party_name = party_data[0]['n'].split('Парламентарна група на ')[1]
+        party = Party.where(assembly: assembly, name: party_name).first
+      end
+
+      #raise "no party #{member_ob['gi']}" if party_data.empty?
+
+      #unless party_arr.include? party_data[0]['n']
+        #party_arr.push(party_data[0]['n'])
+      #end
+
+      # assign other information
+      member.party = party unless party.nil?
+      member.gov_site_id = member_ob['gi'] # what should it do?
+      member.hometown = member_ob['pb']    # all of them have a hometown
+      member.profession = member_ob['p'].join(', ') unless member_ob['p'].empty?
+      member.languages = member_ob['l'].join(', ') unless member_ob['l'].empty?
+      member.marital_status = member_ob['ms'] unless member_ob['ms'].empty?
+      member.constituency = member_ob['co'] unless member_ob['co'].empty?
+      member.email = member_ob['em'] unless member_ob['em'].empty?
+      member.website = member_ob['ws'] unless member_ob['ws'].empty?
+
+      member.save
 
       # loop questions
       member_ob['q'].each do |q|
         question = {
           title: q['a'],
-          questioner: m,
+          questioner: member,
           asked: q['d']
         }
         Question.create(question)
@@ -75,11 +63,13 @@ namespace :persist do
         speech = {
           topic: s['t'],
           date: s['d'],
-          kind: s['ty']
+          kind: s['ty'],
+          member: member
         }
         Speech.create(speech)
       end
     end
+    PP.pp party_arr
   end
 
   # run this task when Members are persisted
