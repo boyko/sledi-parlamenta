@@ -1,0 +1,19 @@
+<h1>Member#index</h1>
+
+<table border=1>
+  <tr>
+    <td>Имена</td>
+    <td>НС</td>
+    <td>Партия</td>
+    <td>GOV ID</td>
+  </tr>
+<% @members.each do |m| %>
+  <tr>
+    <td><%= link_to m.names, member_path(m) %></td>
+    <td><%= m.party.assembly.name unless m.party.nil? %></td>
+    <td><%= m.party.name unless m.party.nil? %></td>
+    <td><%= m.gov_site_id %></td>
+  </tr>
+<% end %>
+
+</table>

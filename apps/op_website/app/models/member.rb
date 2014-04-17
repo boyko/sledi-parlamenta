@@ -17,11 +17,15 @@ class Member < ActiveRecord::Base
   def self.find_by_names_and_bd names, db
     names = names.split
     if db == '00/00/0000'
-      return Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2]).first_or_initialize
+      Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2]).first_or_initialize
     else
       birth_day = Date.parse(db).strftime("%Y-%m-%d")
-      return Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2], birthday: birth_day).first_or_initialize
+      Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2], birthday: birth_day).first_or_initialize
     end
+  end
+
+  def names
+    (self.first_name + " " + self.sir_name + " " + self.last_name).mb_chars.titleize
   end
 
 end
