@@ -29,68 +29,65 @@ var c = new Crawler({
 
     $("ParliamentaryActivity > ParliamentaryStructure").each(function(idx, el) {
       var structure = {
-        n: $(el).find("ParliamentaryStructureName")[0].attribs.value,
-        t: $(el).find("ParliamentaryStructureType")[0].attribs.value,
-        p: $(el).find("ParliamentaryStructurePosition")[0].attribs.value,
-        pe: {
-          f: $(el).find("From")[0].attribs.value,
-          t: $(el).find("To")[0].attribs.value
-        }
+        name:     $(el).find("ParliamentaryStructureName")[0].attribs.value,
+        type:     $(el).find("ParliamentaryStructureType")[0].attribs.value,
+        position: $(el).find("ParliamentaryStructurePosition")[0].attribs.value,
+        from:     $(el).find("From")[0].attribs.value,
+        to:       $(el).find("To")[0].attribs.value
       };
       structures.push(structure);
     });
 
     $("Bills > Bill").each(function(idx, el) {
       var bill = {
-        n: $(el).find("Name")[0].attribs.value,
-        s: $(el).find("Signature")[0].attribs.value,
-        d: $(el).find("Date")[0].attribs.value,
-        p: $(el).find("ProfileURL")[0].attribs.value.match(/\d+/)[0]
+        name:        $(el).find("Name")[0].attribs.value,
+        signature:   $(el).find("Signature")[0].attribs.value,
+        date:        $(el).find("Date")[0].attribs.value,
+        gov_site_id: $(el).find("ProfileURL")[0].attribs.value.match(/\d+/)[0]
       }
       bills[idx] = bill;
     });
 
     $("ParliamentaryControl > Question").each(function(idx, el) {
       var question = {
-        a:  $(el).find("About")[0].children[0].data,
-        t:  $(el).find("To")[0].attribs.value.split(",")[0],
-        tp: $(el).find("To")[0].attribs.value.match(",.*")[0].substr(2),
-        d:  $(el).find("Date")[0].attribs.value
+        topic:               $(el).find("About")[0].children[0].data,
+        respondent:          $(el).find("To")[0].attribs.value.split(",")[0],
+        respondent_position: $(el).find("To")[0].attribs.value.match(",.*")[0].substr(2),
+        date:                $(el).find("Date")[0].attribs.value
       }
       questions[idx] = question;
     });
 
     $("Speeches > Speech").each(function(idx, el) {
       var speech = {
-        t:  $(el).find("Topic")[0].children[0].data,
-        d:  $(el).find("Date")[0].attribs.value,
-        ty: $(el).find("Type")[0].attribs.value
+        topic: $(el).find("Topic")[0].children[0].data,
+        date:  $(el).find("Date")[0].attribs.value,
+        type:  $(el).find("Type")[0].attribs.value
       }
       speeches[idx] = speech;
     });
 
-    var mp = {
-      fn: $("FirstName")[0].attribs["value"],
-      sn: $("SirName")[0].attribs["value"],
-      ln: $("FamilyName")[0].attribs["value"],
-      gi: result.req.path.match(/\d+/)[0],
-      db: $("DateOfBirth")[0].attribs["value"],
-      pb: $("PlaceOfBirth")[0].attribs["value"],
-      p: proffs,
-      l: langs,
-      ms: $("MaritalStatus")[0].attribs["value"],
-      pf: $("PoliticalForce")[0].attribs["value"].replace(/ \d+\.\d+%/, ""),
-      co: $("Constituency")[0].attribs["value"],
-      na: nationalAssembly,
-      em: $("E-mail")[0].attribs["value"],
-      ws: $("Website")[0].attribs["value"],
-      st: structures,
-      b: bills,
-      q: questions,
-      s: speeches
+    var member_of_parliament = {
+      first_name:      $("FirstName")[0].attribs["value"],
+      sir_name:        $("SirName")[0].attribs["value"],
+      last_name:       $("FamilyName")[0].attribs["value"],
+      gov_site_id:     result.req.path.match(/\d+/)[0],
+      date_of_birth:   $("DateOfBirth")[0].attribs["value"],
+      place_of_birth:  $("PlaceOfBirth")[0].attribs["value"],
+      proffesions:     proffs,
+      languges:        langs,
+      marital_status:  $("MaritalStatus")[0].attribs["value"],
+      political_force: $("PoliticalForce")[0].attribs["value"].replace(/ \d+\.\d+%/, ""),
+      constituency:    $("Constituency")[0].attribs["value"],
+      email:           $("E-mail")[0].attribs["value"],
+      website:         $("Website")[0].attribs["value"],
+      structures:      structures,
+      bills:           bills,
+      questions:       questions,
+      speeches:        speeches
     }
 
-    console.log(JSON.stringify(mp));
+    console.log(JSON.stringify(member_of_parliament));
   }
 });
 
