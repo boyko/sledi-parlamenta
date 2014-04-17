@@ -21,8 +21,6 @@ class CreateMembers < ActiveRecord::Migration
       t.string :cm_position
       t.text :bio
 
-      t.references :party, index: true
-
       t.timestamps
     end
   end

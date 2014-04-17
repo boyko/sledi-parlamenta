@@ -1,5 +1,4 @@
 class Member < ActiveRecord::Base
-  belongs_to :party
   has_many :votes
   has_many :speeches
   has_many :asked, :foreign_key => "questioner_id"

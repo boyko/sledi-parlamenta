@@ -1,4 +1,4 @@
 class Assembly < ActiveRecord::Base
   has_many :sessions
-  has_many :parties
+  has_many :structures
 end
