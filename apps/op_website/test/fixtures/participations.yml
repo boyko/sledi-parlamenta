@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  member_id: 
+  structure_id: 
+  position: MyString
+  start_date: 2014-04-18
+  end_date: 2014-04-18
+
+two:
+  member_id: 
+  structure_id: 
+  position: MyString
+  start_date: 2014-04-18
+  end_date: 2014-04-18
