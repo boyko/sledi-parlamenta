@@ -5,71 +5,59 @@ data_path = "lib/assets/"
 namespace :persist do
 
   # Persist members, question, speeches
-  task :mqs => :environment do
+  task :msqs => :environment do
 
     members_str = %x{cat ~/repos/mp-info.json}
-    party_arr = []
     members_str.each_line do |member|
       member_ob = JSON.load member
 
-      # find member
-      names = member_ob['fn'] + " " + member_ob['sn'] + " " + member_ob['ln']
-      member = Member.find_by_names_and_bd(names, member_ob['db'])
+      # find member - this will merge profiles
+      member = Member.find_by_names_and_bd member_ob['first_name'], member_ob['sir_name'], member_ob['last_name'], member_ob['date_of_birth']
 
-      # find assembly
-      assembly_data = member_ob['st'].select { |ps| ps['t'] == "Членове на Народно събрание" }
-      p assembly_data[0]
-      assembly = Assembly.find_by_name(assembly_data[0]['n']) unless assembly_data.empty?
-      #p assembly.name unless assembly_data.empty?
-
-      # find party
-      party_data = member_ob['st'].select { |ps| ps['t'] == "Парламентарни групи" }
-      unless party_data.empty?
-        party_name = party_data[0]['n'].split('Парламентарна група на ')[1]
-        party = Party.where(assembly: assembly, name: party_name).first
+      member_ob['structures'].each do |s|
+        structure = Structure.find_or_create_by(name: s['name'], kind: s['type'])
+        Participation.create(member: member, structure: structure, position: s['position'], start_date: s['start_data'], end_date: s['end_date'])
       end
 
-      #raise "no party #{member_ob['gi']}" if party_data.empty?
-
-      #unless party_arr.include? party_data[0]['n']
-        #party_arr.push(party_data[0]['n'])
-      #end
-
       # assign other information
-      member.party = party unless party.nil?
-      member.gov_site_id = member_ob['gi'] # what should it do?
-      member.hometown = member_ob['pb']    # all of them have a hometown
-      member.profession = member_ob['p'].join(', ') unless member_ob['p'].empty?
-      member.languages = member_ob['l'].join(', ') unless member_ob['l'].empty?
-      member.marital_status = member_ob['ms'] unless member_ob['ms'].empty?
-      member.constituency = member_ob['co'] unless member_ob['co'].empty?
-      member.email = member_ob['em'] unless member_ob['em'].empty?
-      member.website = member_ob['ws'] unless member_ob['ws'].empty?
+      member.gov_site_id = member_ob['gov_site_id']
+      member.hometown = member_ob['place_of_birth']
+      member.profession = member_ob['professions'].join(', ') unless member_ob['professions'].empty?
+      member.languages = member_ob['languages'].join(', ') unless member_ob['languages'].empty?
+      member.marital_status = member_ob['marital_status'] unless member_ob['marital_status'].empty?
+      member.constituency = member_ob['constituency'] unless member_ob['constituency'].empty?
+      member.email = member_ob['email'] unless member_ob['email'].empty?
+      member.website = member_ob['website'] unless member_ob['website'].empty?
 
       member.save
 
-      # loop questions
-      member_ob['q'].each do |q|
-        question = {
-          title: q['a'],
-          questioner: member,
-          asked: q['d']
-        }
-        Question.create(question)
-      end
-
       # loop speeches
-      member_ob['s'].each do |s|
+      member_ob['speeches'].each do |s|
         speech = {
-          topic: s['t'],
-          date: s['d'],
-          kind: s['ty'],
+          topic: s['topic'],
+          date: s['date'],
+          kind: s['type'],
           member: member
         }
         Speech.create(speech)
       end
     end
-    PP.pp party_arr
+
+    # persist questions
+    members_str.each_line do |member|
+      member_ob = JSON.load member
+      member_ob['questions'].each do |q|
+        respondent = Member.find_by_two_names q['respondent']
+        question = {
+          topic: q['topic'],
+          questioner: member,
+          respondent: respondent,
+          asked: q['date']
+        }
+        Question.create(question)
+      end
+    end
+
   end
 
   # run this task when Members are persisted
