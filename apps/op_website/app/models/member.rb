@@ -1,7 +1,7 @@
 class Member < ActiveRecord::Base
   has_many :votes
   has_many :speeches
-  has_many :asked, :foreign_key => "questioner_id"
+  has_many :questions, :foreign_key => "questioner_id"
   has_many :participations
   has_many :structures, through: :participations
 
@@ -26,6 +26,34 @@ class Member < ActiveRecord::Base
 
   def names
     (self.first_name + " " + self.sir_name + " " + self.last_name).mb_chars.titleize
+  end
+
+  def assemblies
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Членове на Народно събрание")
+  end
+
+  def parties
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Парламентарни групи")
+  end
+
+  def comittees
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Постоянни парламентарни комисии")
+  end
+
+  def t_comittees
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Временни парламентарни комисии")
+  end
+
+  def subcomittees
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Парламентарни подкомисии")
+  end
+
+  def delegations
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Парламентарни делегации")
+  end
+
+  def friendship_groups
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Групи за приятелство")
   end
 
 end
