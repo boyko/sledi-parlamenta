@@ -55,3 +55,62 @@
   </tr>
 </table>
 
+Народни събрания:<br>
+<ul>
+<% @member.assemblies.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
+Постоянни комисии
+<ul>
+<% @member.comittees.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
+Временни комисии
+<ul>
+<% @member.t_comittees.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
+Парламентарни подкомисии
+<ul>
+<% @member.subcomittees.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
+Делегации
+<ul>
+<% @member.delegations.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
+Групи за приятелство
+<ul>
+<% @member.friendship_groups.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
+Зададени въпроси
+<ul>
+<% @member.questions.each do |q| %>
+  <li>
+    <%= q.topic %>
+  </li>
+<% end %>
+</ul>
+
+Изказвания
+<ul>
+<% @member.speeches.each do |s| %>
+  <li>
+    <%= s.topic %>
+  </li>
+<% end %>
+</ul>
