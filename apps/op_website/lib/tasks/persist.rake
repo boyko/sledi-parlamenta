@@ -16,7 +16,7 @@ namespace :persist do
 
       member_ob['structures'].each do |s|
         structure = Structure.find_or_create_by(name: s['name'], kind: s['type'])
-        Participation.create(member: member, structure: structure, position: s['position'], start_date: s['start_data'], end_date: s['end_date'])
+        Participation.create(member: member, structure: structure, position: s['position'], start_date: s['from'], end_date: s['to'])
       end
 
       # assign other information
@@ -46,6 +46,9 @@ namespace :persist do
     # persist questions
     members_str.each_line do |member|
       member_ob = JSON.load member
+
+      member = Member.find_by_names_and_bd member_ob['first_name'], member_ob['sir_name'], member_ob['last_name'], member_ob['date_of_birth']
+
       member_ob['questions'].each do |q|
         respondent = Member.find_by_two_names q['respondent']
         question = {
