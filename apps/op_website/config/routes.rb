@@ -1,6 +1,10 @@
 OpWebsite::Application.routes.draw do
 
-  resources :members
+  resources :sessions, :only => [:index, :show] do
+    resources :votings, :only => [:show]
+  end
+
+  resources :members, :only => [:index, :show]
 
   get '/' => "application#start"
   # The priority is based upon order of creation: first created -> highest priority.

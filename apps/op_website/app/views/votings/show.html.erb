@@ -1,0 +1,7 @@
+<%= @voting.topic %>
+
+<ul>
+  <% @voting.votes.each do |v| %>
+    <li><%= v.member.names %> <%= v.value %></li>
+  <% end %>
+</ul>

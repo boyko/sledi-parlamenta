@@ -1,13 +1,13 @@
 require 'json'
 
-data_path = "lib/assets/"
+#data_path = "lib/assets/"
 
 namespace :persist do
 
   # Persist members, question, speeches
   task :msqs => :environment do
 
-    members_str = %x{cat ~/repos/mp-info.json}
+    members_str = %x{cat directory/to/mp-info.json}
     members_str.each_line do |member|
       member_ob = JSON.load member
 
@@ -65,7 +65,7 @@ namespace :persist do
 
   # run this task when Members are persisted
   task :svv => :environment do
-    File.open(data_path + "mp-votes.json").each do |voting|
+    File.open("/directory/to/mp-votes.json").each do |voting|
       voting = JSON.load voting
       member = Member.find_by_three_names voting['name']
 
@@ -73,8 +73,8 @@ namespace :persist do
 
       session_date = voting['date'].to_date
 
-      assembly = Assembly.where("(start_date < ? and end_date > ?) or end_date is ?", session_date, session_date, nil).first
-      session = Session.where(date: session_date, assembly: assembly, url: voting['source']).first_or_create
+      #assembly = Assembly.where("(start_date < ? and end_date > ?) or end_date is ?", session_date, session_date, nil).first
+      session = Session.where(date: session_date, url: voting['source']).first_or_create
       votes = []
 
       voting['votes'].each do |vote|

@@ -1,0 +1,8 @@
+
+
+<ul>
+<% @session.votings.each do |v| %>
+  <li><%= link_to v.topic, session_voting_path(@session, v) %></li>
+<% end %>
+</ul>
+

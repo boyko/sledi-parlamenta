@@ -1,0 +1,7 @@
+<h1>Сесии</h1>
+
+<ul>
+<% @sessions.each do |s| %>
+  <li><%= link_to s.date, session_path(s) %></li>
+<% end %>
+</ul>
