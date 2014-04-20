@@ -1,0 +1,7 @@
+<h1>Гласувания</h1>
+
+<ul>
+  <% @votings.each do |v| %>
+    <li><%= link_to v.topic, voting_path(v) %></li>
+  <% end%>
+</ul>

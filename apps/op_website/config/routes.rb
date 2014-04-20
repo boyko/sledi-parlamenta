@@ -1,8 +1,8 @@
 OpWebsite::Application.routes.draw do
 
-  resources :sessions, :only => [:index, :show] do
-    resources :votings, :only => [:show]
-  end
+  resources :sessions, :only => [:index, :show]
+
+  resources :votings, :only => [:index, :show]
 
   resources :members, :only => [:index, :show]
 

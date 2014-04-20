@@ -2,7 +2,7 @@
 
 <ul>
 <% @session.votings.each do |v| %>
-  <li><%= link_to v.topic, session_voting_path(@session, v) %></li>
+  <li><%= link_to v.topic, voting_path(v) %></li>
 <% end %>
 </ul>
 
