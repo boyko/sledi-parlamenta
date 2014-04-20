@@ -1,5 +1,10 @@
 <h1>Members (<%= @members.count %>)</h1>
 
+<%= form_for :party, method: :get do |f| %>
+  <%= f.select("party_id", Structure.parties.collect {|p| [ p.name, p.id ] }, :selected => params[:party][:party_id]) %>
+  <%= f.submit "Намери", name: nil %>
+<% end %>
+
 <table border=1>
   <tr>
     <td>index</td>

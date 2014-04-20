@@ -1,6 +1,12 @@
 class MembersController < ApplicationController
   def index
-    @members = Member.all
+    party = params[:party]
+
+    if party.nil?
+      @members = Member.all
+    else
+      @members = Structure.find(party[:party_id]).members
+    end
   end
 
   def show
