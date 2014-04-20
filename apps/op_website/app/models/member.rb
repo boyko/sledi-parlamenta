@@ -70,4 +70,8 @@ class Member < ActiveRecord::Base
     participation
   end
 
+  def self.party party_name
+    Member.all.joins(:structures).where("structures.kind == ? and structures.name == ?", "Парламентарни групи", party_name)
+  end
+
 end
