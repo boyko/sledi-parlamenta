@@ -62,6 +62,13 @@
 <% end %>
 </ul>
 
+Партии:<br>
+<ul>
+<% @member.parties.each do |p| %>
+  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
+<% end %>
+</ul>
+
 Постоянни комисии
 <ul>
 <% @member.comittees.each do |p| %>

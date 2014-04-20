@@ -15,7 +15,10 @@ namespace :persist do
       member = Member.find_by_names_and_bd member_ob['first_name'], member_ob['sir_name'], member_ob['last_name'], member_ob['date_of_birth']
 
       member_ob['structures'].each do |s|
-        structure = Structure.find_or_create_by(name: s['name'], kind: s['type'])
+        name = s['name'].gsub("Парламентарна група на ", "")
+                        .gsub("Парламентарен съюз на ", "")
+                        .gsub("Парламентарна група ", "") if s['type'] == "Парламентарни групи"
+        structure = Structure.find_or_create_by(name: name, kind: s['type'])
         Participation.create(member: member, structure: structure, position: s['position'], start_date: s['from'], end_date: s['to'])
       end
 
