@@ -60,4 +60,14 @@ class Member < ActiveRecord::Base
     Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Групи за приятелство")
   end
 
+  def party date
+    participation = Participation
+      .where("member_id == ? and ((start_date <= ? and end_date >= ?) or end_date is ?)", self.id, date, date, nil)
+      .joins(:structure).where("structures.kind == ?", "Парламентарни групи").first
+
+    raise "No such party found!" if participation.nil?
+
+    participation
+  end
+
 end
