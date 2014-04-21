@@ -3,11 +3,11 @@ class Structure < ActiveRecord::Base
   has_many :members, through: :participations
 
   def self.party_names
-    Structure.where(:kind => "Парламентарни групи").map(&:name)
+    Structure.where(:kind => "party").map(&:name)
   end
 
   def self.parties
-    Structure.where(:kind => "Парламентарни групи")
+    Structure.where(:kind => "party")
   end
 
 end

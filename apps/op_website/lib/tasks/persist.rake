@@ -15,10 +15,30 @@ namespace :persist do
       member = Member.find_by_names_and_bd member_ob['first_name'], member_ob['sir_name'], member_ob['last_name'], member_ob['date_of_birth']
 
       member_ob['structures'].each do |s|
-        name = s['name'].gsub("Парламентарна група на ", "")
-                        .gsub("Парламентарен съюз на ", "")
-                        .gsub("Парламентарна група ", "") if s['type'] == "Парламентарни групи"
-        structure = Structure.find_or_create_by(name: name, kind: s['type'])
+
+        type = case s['type']
+          when "Членове на Народно събрание" then "assembly"
+          when "Парламентарни групи" then "party"
+          when "Постоянни парламентарни комисии" then "comittee"
+          when "Временни парламентарни комисии" then "t_comittee"
+          when "Парламентарни подкомисии" then "subcomittee"
+          when "Парламентарни делегации" then "delegation"
+          when "Групи за приятелство" then "f_group"
+          else "Unknown type"
+        end
+
+        name = s['name']
+        name = name.gsub("Парламентарна група на ", "").gsub("Парламентарен съюз на ", "").gsub("Парламентарна група ", "").gsub("&quot;", "")
+
+        name = name
+          .gsub("39-то Народно Събрание", "39-то Народно събрание")
+          .gsub("41-о Народно събрание", "41-во Народно събрание")
+
+        name = name.mb_chars.downcase.capitalize.to_s if type == "comittee"
+
+        name = name.gsub("\n", "").gsub("\r\n", "")
+
+        structure = Structure.find_or_create_by(name: name, kind: type)
         Participation.create(member: member, structure: structure, position: s['position'], start_date: s['from'], end_date: s['to'])
       end
 

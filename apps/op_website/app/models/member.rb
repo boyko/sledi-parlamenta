@@ -33,37 +33,37 @@ class Member < ActiveRecord::Base
   end
 
   def assemblies
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Членове на Народно събрание")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "assembly")
   end
 
   def parties
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Парламентарни групи")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "party")
   end
 
   def comittees
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Постоянни парламентарни комисии")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "comittee")
   end
 
   def t_comittees
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Временни парламентарни комисии")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "t_comittee")
   end
 
   def subcomittees
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Парламентарни подкомисии")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "subcomittee")
   end
 
   def delegations
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Парламентарни делегации")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "delegation")
   end
 
   def friendship_groups
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "Групи за приятелство")
+    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "f_group")
   end
 
   def party date
     participation = Participation
       .where("member_id == ? and ((start_date <= ? and end_date >= ?) or end_date is ?)", self.id, date, date, nil)
-      .joins(:structure).where("structures.kind == ?", "Парламентарни групи").first
+      .joins(:structure).where("structures.kind == ?", "party").first
 
     raise "No such party found!" if participation.nil?
 
@@ -71,7 +71,7 @@ class Member < ActiveRecord::Base
   end
 
   def self.party party_name
-    Member.all.joins(:structures).where("structures.kind == ? and structures.name == ?", "Парламентарни групи", party_name)
+    Member.all.joins(:structures).where("structures.kind == ? and structures.name == ?", "party", party_name)
   end
 
 end
