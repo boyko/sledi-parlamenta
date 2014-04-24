@@ -6,7 +6,7 @@ OpWebsite::Application.routes.draw do
 
   resources :members, :only => [:index, :show]
 
-  get '/' => "application#start"
+  root :to => "application#home"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
