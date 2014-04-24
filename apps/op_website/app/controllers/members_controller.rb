@@ -2,7 +2,7 @@ class MembersController < ApplicationController
   def index
     party = params[:party]
 
-    if party.nil?
+    if party.nil? or party["party_id"] == ""
       @members = Member.all
     else
       @members = Structure.find(party[:party_id]).members
