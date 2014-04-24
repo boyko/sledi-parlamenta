@@ -8,5 +8,12 @@ namespace :delete do
     Speech.delete_all
     p "Members, structures, questions and speeches deleted successfully."
   end
+
+  task :svv => :environment do
+    Session.delete_all
+    Voting.delete_all
+    Vote.delete_all
+    p "Sessions, votings, and votes deleted successfully."
+  end
 end
 
