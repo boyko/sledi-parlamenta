@@ -1,18 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OpWebsite</title>
+  <title><%= t('open-parliament') %></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= link_to "Сесии", sessions_path %>
-<%= link_to "Депутати", members_path %>
-<%= link_to "Гласувания", votings_path %>
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        <%= image_tag "logo.png" %>
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li <%= controller_name == "application" ? "class=active" : "" %>> <%= link_to t('nav.home'), root_path %> </li>
+      <li <%= controller_name == "members" ? "class=active" : "" %>> <%= link_to t('nav.members'), members_path %> </li>
+      <li <%= controller_name == "sessions" ? "class=active" : "" %>> <%= link_to t('nav.sessions'), sessions_path %> </li>
+      <li <%= controller_name == "votings" ? "class=active" : "" %>> <%= link_to t('nav.votings'), votings_path %> </li>
+    </ul>
+  </div>
+</nav>
 
-<%= yield %>
+<div class="container">
+  <%= yield %>
+</div>
+
+<div class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <%= image_tag "logo.png" %>
+        <p>Много важен и информативен текст! Ехаааа, колко интересно.</p>
+      </div>
+      <div class="col-md-2">
+        <p class="lead">Obshtestvo.bg</p>
+      </div>
+      <div class="col-md-2">
+        <p class="lead">Open Parliament</p>
+      </div>
+      <div class="col-md-4">
+        <p class="lead">from the BLOG</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="social-media">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9">
+        <small>2014 OpenParliament | Obshtestvo.bg</small>
+      </div>
+      <div class="col-md-3">
+         <i class="fa fa-facebook fa-2x"></i>
+         <i class="fa fa-github fa-2x"></i>
+         <i class="fa fa-twitter fa-2x"></i>
+         <i class="fa fa-google-plus fa-2x"></i>
+         <i class="fa fa-rss fa-2x"></i>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

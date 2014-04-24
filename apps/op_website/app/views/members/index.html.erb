@@ -1,12 +1,14 @@
-<h1>Members (<%= @members.count %>)</h1>
+<div class="page-header">
+  <h1><%= t('nav.members') %> <span class="label label-default"><%= @members.count%></span></h1>
+</div>
 
 <%= form_for :party, method: :get do |f| %>
   <% selected = params[:party][:party_id] unless params[:party].nil? %>
-  <%= f.select("party_id", Structure.parties.collect {|p| [ p.name, p.id ] }, :selected => selected) %>
+  <%= f.select("party_id", Structure.parties.collect {|p| [ p.name, p.id ] }, :selected => selected, include_blank: 'Всички') %>
   <%= f.submit "Намери", name: nil %>
 <% end %>
 
-<table border=1>
+<table class="table table-striped">
   <tr>
     <td>index</td>
     <td>Имена</td>
