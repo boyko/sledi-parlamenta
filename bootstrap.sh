@@ -26,7 +26,6 @@ rvm use 2
 bundle install
 rake db:migrate
 rake db:seed
-rails s -d
 cd $CURRENT_DIR
 
 # php
@@ -43,5 +42,18 @@ nvm alias default 0.10
 sudo apt-get install libfontconfig libfontconfig-dev libfreetype6-dev
 npm install phantomjs -g
 
+# fixtures
+(cd $VAGRANT_DIR/apps/op_website/db/ && wget -qO - https://dl.dropboxusercontent.com/u/4296335/db.dump.gz | zcat | sqlite3 development.sqlite3)
+
+# run server
+rails s -d
+
 # build the rest of the crawlers
 bash $VAGRANT_DIR/build.sh
+
+# always run server
+echo "start on vagrant-mounted
+
+script
+  (cd /vagrant/apps/op_website/ && rails s -d)
+end script" | sudo tee /etc/init/rails-dev-server.conf
