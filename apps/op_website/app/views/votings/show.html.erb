@@ -1,7 +1,16 @@
-<%= @voting.topic %>
+<p><%= @voting.topic %></p>
+
+
+<svg height= 264 width= 440>
+  <% @voting.votes.each_with_index do |v, index| %>
+    <g>
+      <%= raw create_rect(20, 20, 20, 1, index, v.member.names, v.value) %>
+    </g>
+  <% end %>
+</svg>
 
 <ul>
-  <% @voting.votes.each do |v| %>
-    <li><%= v.member.names %> <%= v.value %></li>
+  <% @voting.votes.each_with_index do |v, index| %>
+    <li><%= index %> <%= v.member.names %> <%= v.value %></li>
   <% end %>
 </ul>
