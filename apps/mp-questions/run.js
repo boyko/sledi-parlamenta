@@ -1,7 +1,6 @@
 // We need this to build our post string
 var querystring = require('querystring');
 var http = require('http');
-var fs = require('fs');
 var cheerio = require('cheerio');
 var Crawler = require("simplecrawler");
 
@@ -11,11 +10,9 @@ scraper.timeout = 1000 * 30; // 30 sec timout
 scraper.maxConcurency = 10;
 
 var question_data = [];
-
-
-
 var base_url = 'http://www.parliament.bg/bg/topical_nature/';
 
+// collect MPIDs and MIDs
 http.get({
     hostname: 'www.parliament.bg', 
     port: 80,
@@ -44,6 +41,7 @@ http.get({
             mpid.push($(el).val());
         });
 
+        // collection question ids 
         gather_ids(mid, mpid);
     });
 });
@@ -120,7 +118,7 @@ function parse_page (html) {
 }
 
 
-// fetch and save
+// parse question page
 scraper.on('fetchcomplete', function(item, data, response) {
     $ = cheerio.load(data.toString());
     var question = {
