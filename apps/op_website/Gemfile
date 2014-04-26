@@ -34,6 +34,8 @@ group :development do
   gem "binding_of_caller"
 end
 
+gem "highcharts-rails", "~> 3.0.0"
+
 gem 'wombat'
 gem 'resque'
 #gem 'sidekiq'
