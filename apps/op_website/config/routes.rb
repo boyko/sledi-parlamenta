@@ -1,6 +1,9 @@
 OpWebsite::Application.routes.draw do
 
-  resources :sessions, :only => [:index, :show]
+  resources :sessions, :only => [:index, :show] do
+    get 'attendance'
+    get 'votes'
+  end
 
   resources :votings, :only => [:index, :show]
 
