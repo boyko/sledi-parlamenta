@@ -90,6 +90,23 @@ namespace :persist do
 
   end
 
+  task :stenographs => :environment do
+    sessions = Session.select("id, url").map { |s| [s.id, s.url.match(/\d+$/)[0]]  }
+
+    File.open("/directory/to/stenographs.json").each do |stenograph|
+      stenograph_ob = JSON.load stenograph
+
+      s_id = sessions.select { |s| s[1] == stenograph_ob['id'] }[0][0]
+
+      s = Session.find(s_id)
+      raise "No session with id: #{s_id}" if s.nil?
+
+      s.stenograph = stenograph_ob['text']
+      s.save
+
+    end
+  end
+
   # run this task when Members are persisted
   task :svv => :environment do
     File.open("/directory/to/mp-votes.json").each do |voting|
