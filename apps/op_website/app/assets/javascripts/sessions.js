@@ -1,4 +1,3 @@
-//= require highcharts
 $(document).on('ready page:load', function () {
 
   function session_id() {
