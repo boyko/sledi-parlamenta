@@ -8,7 +8,7 @@ $(document).on('ready page:load', function () {
   }
 
   $.ajax({
-    url: "/sessions/" + session_id() + "/votes",
+    url: "/sessions/" + session_id() + "/votings",
     context: document.body
   }).done(function(data) {
     $('#hc-votes').highcharts({
