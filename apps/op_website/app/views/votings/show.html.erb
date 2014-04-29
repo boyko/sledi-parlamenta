@@ -8,6 +8,8 @@
   <% end %>
 </svg>
 
+<div id="hc-votes-by-parties"></div>
+
 <ul>
   <% @voting.votes.each_with_index do |v, index| %>
     <li><%= index %> <%= v.member.names %> <%= v.value %></li>
