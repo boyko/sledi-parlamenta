@@ -18,12 +18,15 @@ $(document).on('ready page:load', function() {
       chart: {
         type: 'column'
       },
+      xAxis: {
+        categories: data.categories
+      },
       plotOptions: {
         column: {
           stacking: 'normal'
         }
       },
-      series: data
+      series: data.data
     });
   });
 

@@ -10,27 +10,30 @@ class ApplicationController < ActionController::Base
 
   def prepare_data records
     votes = records.map { |v| v.flatten }
-    res = []
+    data = []
     words = ["absent", "abstain", "no", "yes"].reverse
 
-    parties = votes.map { |v| v[0] }.uniq
-    parties.each do |p|
+    categories = votes.map { |v| v[0] }.uniq
+    categories.each do |p|
       current = votes.select { |v| v[0] == p }.map { |v| v[1] }
       missing = words - current
       missing.each do |mw|
         idx = votes.index { |v| v[0] == p }
-        votes.insert(idx+3, [p, mw, 0])
+        votes.insert(idx+2, [p, mw, 0])
       end
     end
 
     words.each do |w|
-      res.push({
+      data.push({
         name: w,
         data: votes.select { |v| v[1] == w }.map { |v| v[2] }
       })
     end
 
-    res
+    {
+      categories: categories,
+      data: data
+    }
   end
 
 end

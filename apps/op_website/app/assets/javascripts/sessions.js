@@ -14,6 +14,9 @@ $(document).on('ready page:load', function () {
       chart: {
         type: 'column'
       },
+      xAxis: {
+        categories: data.categories
+      },
       yAxis: {
         plotLines: [{
           color: 'gray',
@@ -34,7 +37,7 @@ $(document).on('ready page:load', function () {
           stacking: 'normal'
         }
       },
-      series: data
+      series: data.data
     });
   });
 
