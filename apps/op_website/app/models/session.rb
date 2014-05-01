@@ -1,6 +1,11 @@
 class Session < ActiveRecord::Base
   has_many :votings
   has_many :votes, :through => :votings
+  belongs_to :assembly, :class_name => "Structure", :foreign_key => "assembly_id"
+
+  def members
+    self.votings.first.members
+  end
 
   def absent_votes
     absent = self.votings.order("voted_at").joins(:votes).where("votes.value" => "absent").count

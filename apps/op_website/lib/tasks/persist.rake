@@ -133,8 +133,9 @@ namespace :persist do
 
       session_date = voting['date'].to_date
 
-      #assembly = Assembly.where("(start_date < ? and end_date > ?) or end_date is ?", session_date, session_date, nil).first
-      session = Session.where(date: session_date, url: voting['source']).first_or_create
+      assembly = Structure.assemblies.by_date(session_date).first
+      session = Session.where(date: session_date, assembly: assembly, url: voting['source']).first_or_create
+
       votes = []
 
       voting['votes'].each do |vote|
