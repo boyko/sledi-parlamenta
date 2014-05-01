@@ -2,17 +2,14 @@ class Structure < ActiveRecord::Base
   has_many :participations
   has_many :members, through: :participations
 
+  scope :parties, -> { where(kind: "party") }
+  scope :assemblies, -> { where(kind: "assembly") }
+  scope :by_date, ->(date) {
+    where("(start_date < ? and end_date > ?) or (start_date < ? and end_date is NULL)", date, date, date)
+  }
+
   def self.party_names
     Structure.where(:kind => "party").map(&:name)
-  end
-
-  def self.parties
-    Structure.where(:kind => "party")
-  end
-
-  def self.parties_by_date date = nil
-    Structure.where("structures.kind == ?", "party")
-    .joins(:participations).where("(participations.start_date <= ? and participations.end_date >= ?) or end_date is ?", date, date, nil).group("name")
   end
 
   # get all members of a structure in a given date
