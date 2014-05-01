@@ -13,7 +13,7 @@ scraper.on('queueadd', function() {
 });
 
 if (is_single_image) {
-    for (var c = 241; c < 2400; ++c) {
+    for (var c = 1; c < 2312; ++c) {
         scraper.queue.add('http', 'parliament.bg', 80, '/images/Assembly/' + c + '.png');
     }
 } else {
@@ -34,14 +34,14 @@ scraper.on('fetchcomplete', function(item, data, response) {
     if(item.stateData.code != 200) {
         return;
     }
-    
+
     fs.writeFile(save_path + name, data, function(err) {
         if(err) {
             console.log('Failed to save image ' + name);
         } else {
             console.log(save_path + name);
         }
-    }); 
+    });
 });
 
 scraper.start();
