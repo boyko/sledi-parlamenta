@@ -14,6 +14,18 @@ $(document).on('ready page:load', function() {
     url: "/votings/" + version_id() + "/by_party",
     context: document.body
   }).done(function(data) {
+
+    var remapped = [];
+    for (var i = 0, l = data.data.length; i < l; i ++) {
+      var v = data.data[i];
+      v.color = v.name === "yes" ? "green" :
+                v.name === "no"  ? "red"   :
+                v.name === "abstain" ? "gray" :
+                v.name === "absent"  ? "blue" : "yellow"
+
+      remapped.push(v)
+    }
+
     $('#hc-votes-by-parties').highcharts({
       chart: {
         type: 'column'
@@ -26,7 +38,7 @@ $(document).on('ready page:load', function() {
           stacking: 'normal'
         }
       },
-      series: data.data
+      series: remapped
     });
   });
 
