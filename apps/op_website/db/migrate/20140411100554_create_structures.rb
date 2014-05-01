@@ -5,6 +5,8 @@ class CreateStructures < ActiveRecord::Migration
       t.string :name
       t.string :abbreviation
       t.text :info
+      t.date :start_date
+      t.date :end_date
       t.string :website
 
       t.timestamps
