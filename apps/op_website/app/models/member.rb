@@ -1,5 +1,6 @@
 class Member < ActiveRecord::Base
   has_many :votes
+  has_many :votings, through: :votes
   has_many :speeches
   has_many :questions, :foreign_key => "questioner_id"
   has_many :participations

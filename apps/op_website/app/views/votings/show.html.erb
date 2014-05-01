@@ -1,17 +1,12 @@
-<p><%= @voting.topic %></p>
+<h1><%= @voting.topic %></h1>
 
-<svg height= 264 width= 440>
-  <% @voting.votes.each_with_index do |v, index| %>
+<svg height="264" width="440">
+  <% @voting.votes.includes(:member).each_with_index do |v, index| %>
     <g>
-      <%= raw create_rect(20, 20, 20, 1, index, v.member.names, v.value) %>
+    <a xlink:href="/members/<%= v.member.id %>"><%= raw create_rect(20, 20, 20, 1, index, v.member.names, v.value) %></a>
     </g>
   <% end %>
 </svg>
 
 <div id="hc-votes-by-parties"></div>
 
-<ul>
-  <% @voting.votes.each_with_index do |v, index| %>
-    <li><%= index %> <%= v.member.names %> <%= v.value %></li>
-  <% end %>
-</ul>

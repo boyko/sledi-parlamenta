@@ -41,8 +41,7 @@ $(document).on('ready page:load', function () {
           dashStyle: 'line',
           value: '240',
           width: '2'
-        }
-        ]
+        }]
       },
       plotOptions: {
         column: {
