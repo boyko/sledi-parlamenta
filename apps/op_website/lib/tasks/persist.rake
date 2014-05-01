@@ -47,7 +47,8 @@ namespace :persist do
       end
 
       # assign other information
-      member.gov_site_id = member_ob['gov_site_id']
+      prev_gsid = member.gov_site_id.nil? ? "" : member.gov_site_id.to_s + ", " # append gsids
+      member.gov_site_id = prev_gsid + member_ob['gov_site_id']
       member.hometown = member_ob['place_of_birth']
       member.profession = member_ob['professions'].join(', ') unless member_ob['professions'].empty?
       member.languages = member_ob['languages'].join(', ') unless member_ob['languages'].empty?
@@ -86,6 +87,21 @@ namespace :persist do
         }
         Question.create(question)
       end
+    end
+
+    # all members, structures, questions and speeches are persisted by now.
+    # Get assemblies and assign them the timerange.
+
+    data = [["39-то Народно събрание", "05.07.2001", "17.06.2005"],
+            ["40-то Народно събрание", "11.07.2005", "25.06.2009"],
+            ["41-во Народно събрание", "14.07.2009", "15.03.2013"],
+            ["42-ро Народно събрание", "21.05.2013", nil]]
+
+    data.each do |a|
+      s = Structure.find_by_name(a[0])
+      s.start_date = a[1]
+      s.end_date = a[2]
+      s.save
     end
 
   end
