@@ -7,6 +7,7 @@ OpWebsite::Application.routes.draw do
 
   resources :votings, :only => [:index, :show] do
     get 'by_party'
+    get 'by_name'
   end
 
   resources :members, :only => [:index, :show]

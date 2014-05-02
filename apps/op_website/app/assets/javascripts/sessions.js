@@ -51,7 +51,10 @@ $(document).ready(function () {
       },
       plotOptions: {
         column: {
-          stacking: 'normal'
+          stacking: 'normal',
+          animation: false,
+          shadow: false,
+          enableMouseTracking: false
         }
       },
       series: remapped
@@ -59,17 +62,19 @@ $(document).ready(function () {
   });
 
   $('.show-voting').on('click', function(event) {
-    event.preventDefault();
     var voting_count = parseInt($(this).attr("data-voting"));
+    var $el = $(this);
+    var target = $('#content-' + $el.attr('data-voting'))
 
-    console.log(voting_ids[voting_count]);
+    target.html("loading...")
 
-    //$.ajax({
-      //url: "/votings/" + voting_ids[voting_count] + "/votings",
-      //context: document.body
-    //}).done(function(data) {
-      //console.log(data);
-    //});
+    $.ajax({
+      url: "/votings/" + voting_ids[voting_count] + "/by_name",
+      context: document.body
+    }).done(function(data) {
+      target.html(data)
+      $("svg rect").tooltip({ 'container': 'body', });
+    });
 
   });
 

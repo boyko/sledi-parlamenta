@@ -1,6 +1,6 @@
 <div id="hc-votes"></div>
 
-<ul>
+<ul id="votings-list">
 <% @session.votings.each do |v| %>
   <li><%= link_to v.topic, voting_path(v) %></li>
 <% end %>
