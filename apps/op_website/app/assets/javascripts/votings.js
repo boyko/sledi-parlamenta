@@ -1,4 +1,4 @@
-$(document).on('ready page:load', function() {
+$(document).ready(function() {
 
   $("svg rect").tooltip({
     'container': 'body',

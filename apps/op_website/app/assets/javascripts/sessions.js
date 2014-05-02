@@ -1,4 +1,10 @@
-$(document).on('ready page:load', function () {
+var voting_ids = [];
+
+$(document).ready(function () {
+
+  $('#votings-list a').each(function(idx, el) {
+    voting_ids.push(el.href.match(/\d+$/)[0])
+  })
 
   function session_id() {
     var url = typeof document.URL === "undefined" ? window.location.href : document.URL;
@@ -52,5 +58,22 @@ $(document).on('ready page:load', function () {
     });
   });
 
+  $('.show-voting').on('click', function(event) {
+    event.preventDefault();
+    var voting_count = parseInt($(this).attr("data-voting"));
+
+    console.log(voting_ids[voting_count]);
+
+    //$.ajax({
+      //url: "/votings/" + voting_ids[voting_count] + "/votings",
+      //context: document.body
+    //}).done(function(data) {
+      //console.log(data);
+    //});
+
+  });
+
 });
+
+
 
