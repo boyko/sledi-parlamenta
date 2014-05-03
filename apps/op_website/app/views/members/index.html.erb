@@ -8,6 +8,8 @@
   <%= f.submit "Намери", name: nil %>
 <% end %>
 
+<%= will_paginate @members, :renderer => PaginationListLinkRenderer, :class => "pagination pagination-sm pull-right" %>
+
 <table class="table table-striped">
   <tr>
     <td>index</td>
@@ -23,3 +25,5 @@
 <% end %>
 
 </table>
+
+<%= will_paginate @members, :renderer => PaginationListLinkRenderer, :class => "pagination" %>

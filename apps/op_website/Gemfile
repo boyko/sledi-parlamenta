@@ -39,7 +39,8 @@ gem "highcharts-rails", "~> 3.0.0"
 
 gem 'wombat'
 gem 'resque'
-#gem 'sidekiq'
+
+gem 'will_paginate', '~> 3.0'
 
 gem 'less-rails-bootstrap'
 gem "font-awesome-rails"
