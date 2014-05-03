@@ -7,6 +7,7 @@ class Structure < ActiveRecord::Base
   scope :by_date, ->(date) {
     where("(start_date < ? and end_date > ?) or (start_date < ? and end_date is NULL)", date, date, date)
   }
+  scope :ordered, -> { order("start_date") }
 
   def self.party_names
     Structure.where(:kind => "party").map(&:name)

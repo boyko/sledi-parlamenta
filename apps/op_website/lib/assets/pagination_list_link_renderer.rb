@@ -14,6 +14,10 @@ class PaginationListLinkRenderer < WillPaginate::ActionView::LinkRenderer
       end
     end
 
+    def gap
+      tag :li, link(super, '#'), :class => 'disabled'
+    end
+
     def html_container(html)
       tag(:ul, html, container_attributes)
     end

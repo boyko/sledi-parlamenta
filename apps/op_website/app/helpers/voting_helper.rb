@@ -5,4 +5,5 @@ module VotingHelper
 
     "<rect height='#{height}' width='#{width}' x='#{x}' y='#{y}' class='#{value}' data-toggle='tooltip' data-placement='top' title='#{names}'>"
   end
+
 end

@@ -7,11 +7,8 @@ class Vote < ActiveRecord::Base
   scope :yes, -> { where(value: "yes") }
   scope :no, -> { where(value: "no") }
   scope :abstain, -> { where(value: "abstain") }
-  scope :absent_by_date, -> (date) { absent.joins(:session).where("sessions.date" => date) }
-  scope :absent_by_date_grouped, -> (date) { absent_by_date(date).group("voting_id").count }
-  scope :absent_by_date_grouped_by_time, -> (date) {
-    absent_by_date(date).joins(:voting).group("votings.voted_at").count
-  }
+  scope :by_date, ->(date) { joins(:session).where("sessions.date" => date) }
+  scope :by_voting, ->(voting) { where(voting: voting) }
 
   def party
     self.member.party(self.voting.voted_at).structure.id
