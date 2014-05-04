@@ -63,7 +63,7 @@ class Member < ActiveRecord::Base
 
   def party date
     participation = Participation
-      .where("member_id == ? and ((start_date <= ? and end_date >= ?) or end_date is ?)", self.id, date, date, nil)
+      .where("member_id == ? and ((start_date <= ? and end_date >= ?) or (start_date <= ? and end_date is ?)", self.id, date, date, date, nil)
       .joins(:structure).where("structures.kind == ?", "party").first
 
     raise "No such party found!" if participation.nil?
@@ -75,4 +75,30 @@ class Member < ActiveRecord::Base
     Member.all.joins(:structures).where("structures.kind == ? and structures.name == ?", "party", party_name)
   end
 
+  def self.search(query)
+    if query.blank?
+      all
+    else
+      sql = query.split.map do |word|
+       %w[first_name sir_name last_name].map do |column|
+        sanitize_sql ["#{column} LIKE ?", "%#{word}%"]
+       end.join(" or ")
+      end.join(") and (")
+      where("(#{sql})")
+    end
+  end
+
+  def self.create_joins structure_ids
+    if structure_ids.empty?
+      all
+    else
+      queries = []
+      structure_ids.each_with_index do |id, idx|
+        join_statements = "INNER JOIN 'participations' 'p#{idx}' ON 'p#{idx}'.'member_id' = 'members'.'id'"
+        q = joins(join_statements).where("p#{idx}.structure_id" => id)
+        queries.push(q)
+      end
+      queries.reduce(:merge)
+    end
+  end
 end

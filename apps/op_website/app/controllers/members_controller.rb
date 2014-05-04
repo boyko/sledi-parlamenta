@@ -1,12 +1,13 @@
 class MembersController < ApplicationController
   def index
-    party = params[:party]
 
-    if party.nil? or party["party_id"] == ""
-      @members = Member.paginate(:page => params[:page])
-    else
-      @members = Structure.find(party[:party_id]).members.paginate(:page => params[:page])
-    end
+    query = Member.all
+    query = query.search(params[:q])
+
+    ids = params.slice(:party_id, :assembly_id).values.delete_if { |v| v.blank? }.map { |v| v.to_i }
+    query = query.create_joins ids
+
+    @members = query.paginate(:page => params[:page])
   end
 
   def show

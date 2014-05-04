@@ -18,14 +18,14 @@ class Voting < ActiveRecord::Base
   def by_party
     date = self.session.date
     self.members.joins(:structures)
-    .where("(participations.start_date <= ? and participations.end_date >= ?) or (participations.start_date <= ? and participations.end_date is NULL)", date, date, date)
+    .where("(participations.start_date < :d and participations.end_date > :d) or (participations.start_date < :d and participations.end_date is NULL)", :d => date)
     .where("structures.kind" => "party").group("structures.name", "votes.value").count
   end
 
   def by_name
     date = self.session.date
     self.members.joins(:structures).where("structures.kind" => :party)
-    .where("(participations.start_date < ? and participations.end_date > ?) or (participations.start_date < ? and participations.end_date is NULL)", date, date, date)
+    .where("(participations.start_date < :d and participations.end_date > :d) or (participations.start_date < :d and participations.end_date is NULL)", :d => date)
     .group("structures.name").group("members.id", "members.first_name" ,"members.last_name", "value").count
   end
 

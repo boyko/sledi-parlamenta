@@ -2,25 +2,26 @@
   <h1><%= t('nav.members') %> <span class="label label-default"><%= @members.count%></span></h1>
 </div>
 
-<%= form_for :party, method: :get do |f| %>
-  <% selected = params[:party][:party_id] unless params[:party].nil? %>
-  <%= f.select("party_id", Structure.parties.collect {|p| [ p.name, p.id ] }, :selected => selected, include_blank: 'Всички') %>
-  <%= f.submit "Намери", name: nil %>
+<%= form_tag("/members", method: "get", html: { class: "form-inline"} ) do %>
+  <div class="input-group">
+    <%= text_field_tag(:q, params[:q], class: "form-control input-sm", placeholder: "търси") %>
+    <span class="input-group-btn">
+      <%= submit_tag("Търси", name: nil, class: "btn btn-default btn-sm") %>
+    </span>
+  </div>
+  <%= select(nil, :party_id, options_for_select(Structure.parties.pluck("name", "id"), selected: params[:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm"  }) %>
+  <%= select(nil, :assembly_id, options_for_select(Structure.assemblies.pluck("name", "id"), selected: params[:assembly_id]), { include_blank: 'Всички събрания' }, { class: "form-control input-sm"  }) %>
 <% end %>
 
 <%= will_paginate @members, :renderer => PaginationListLinkRenderer, :class => "pagination pagination-sm pull-right" %>
 
 <table class="table table-striped">
   <tr>
-    <td>index</td>
     <td>Имена</td>
-    <td>GOV ID</td>
   </tr>
 <% @members.each_with_index do |m, index| %>
   <tr>
-    <td><%= index %></td>
     <td><%= link_to m.names, member_path(m) %></td>
-    <td><%= m.gov_site_id %></td>
   </tr>
 <% end %>
 

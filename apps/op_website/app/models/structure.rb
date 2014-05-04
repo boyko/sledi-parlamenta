@@ -5,17 +5,12 @@ class Structure < ActiveRecord::Base
   scope :parties, -> { where(kind: "party") }
   scope :assemblies, -> { where(kind: "assembly") }
   scope :by_date, ->(date) {
-    where("(start_date < ? and end_date > ?) or (start_date < ? and end_date is NULL)", date, date, date)
+    where("(start_date < :d and end_date > :d) or (start_date < :d and end_date is NULL)", :d => date)
   }
   scope :ordered, -> { order("start_date") }
 
   def self.party_names
     Structure.where(:kind => "party").map(&:name)
-  end
-
-  # get all members of a structure in a given date
-  def members_by_date date
-    Member.all.joins(:participations).where("structure_id = ? and ((start_date <= ? and end_date >= ?) or end_date is ?)", self.id, date, date, nil)
   end
 
 end
