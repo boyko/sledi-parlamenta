@@ -92,13 +92,10 @@ class Member < ActiveRecord::Base
     if structure_ids.empty?
       all
     else
-      queries = []
-      structure_ids.each_with_index do |id, idx|
-        join_statements = "INNER JOIN 'participations' 'p#{idx}' ON 'p#{idx}'.'member_id' = 'members'.'id'"
-        q = joins(join_statements).where("p#{idx}.structure_id" => id)
-        queries.push(q)
-      end
-      queries.reduce(:merge)
+      structure_ids.each_with_index.map { |id, idx|
+        joins("INNER JOIN 'participations' 'p#{idx}' ON 'p#{idx}'.'member_id' = 'members'.'id'")
+        .where("p#{idx}.structure_id" => id).uniq
+      }.reduce(:merge)
     end
   end
 end
