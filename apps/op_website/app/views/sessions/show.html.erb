@@ -1,9 +1,3 @@
 <div id="hc-votes"></div>
 
-<ul id="votings-list">
-<% @session.votings.each do |v| %>
-  <li><%= link_to v.topic, voting_path(v) %></li>
-<% end %>
-</ul>
-
-<pre><%= raw process_stenograph @session %></pre>
+<%= raw process_stenograph @session %>

@@ -17,10 +17,8 @@
       </a>
     </div>
     <ul class="nav navbar-nav">
-      <li <%= controller_name == "application" ? "class=active" : "" %>> <%= link_to t('nav.home'), root_path %> </li>
       <li <%= controller_name == "members" ? "class=active" : "" %>> <%= link_to t('nav.members'), members_path %> </li>
       <li <%= controller_name == "sessions" ? "class=active" : "" %>> <%= link_to t('nav.sessions'), sessions_path %> </li>
-      <li <%= controller_name == "votings" ? "class=active" : "" %>> <%= link_to t('nav.votings'), votings_path %> </li>
     </ul>
   </div>
 </nav>
