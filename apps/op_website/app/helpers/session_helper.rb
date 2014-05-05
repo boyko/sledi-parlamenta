@@ -1,10 +1,17 @@
 module SessionHelper
+
   # s is for session. 'session' is reserved word for rails
   def process_stenograph s
 
     members = Member.select("first_name, last_name, id").map { |m| [m.id, m.first_name + " " + m.last_name] }
+    votings = Voting.select("id", "topic").by_session(s).ordered.to_a
 
-    stenograph = s.stenograph
+    stenograph = "<div class='links'>"
+    stenograph += votings.map { |v, idx|
+      link_to v.topic, "#voting-" + v.id.to_s
+    }.join("<br>")
+    stenograph += "</div><pre>"
+    stenograph += s.stenograph
 
     stenograph.gsub! "\r\n", "<br>"
 
@@ -19,14 +26,15 @@ module SessionHelper
     regex_enum.each_with_index do |match, idx|
       options = {
        data: { voting: idx },
-       class: ["btn", "btn-default", "show-voting"]
+       class: ["btn", "btn-default", "show-voting"],
+       id: "voting-" + votings[idx].id.to_s
       }
       output = button_tag options do
         match
       end
       output += "<br><div id='content-#{idx}'></div>".html_safe
     end
-    stenograph
+    stenograph + "<pre>"
   end
 
 end

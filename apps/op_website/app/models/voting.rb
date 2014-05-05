@@ -3,6 +3,9 @@ class Voting < ActiveRecord::Base
   has_many :votes
   has_many :members, through: :votes
 
+  scope :by_session, ->(session) { where(session: session) }
+  scope :ordered, -> { order("voted_at") }
+
   def absent
     self.votes.where(value: "absent")
   end

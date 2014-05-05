@@ -1,5 +1,3 @@
-var voting_ids = [];
-
 $(document).ready(function () {
 
   $('#votings-list a').each(function(idx, el) {
@@ -9,7 +7,7 @@ $(document).ready(function () {
   function session_id() {
     var url = typeof document.URL === "undefined" ? window.location.href : document.URL;
     // matches the last number in the string.
-    return url.match(/\d+(?!.*\d+)/)[0];
+    return url.match(/sessions\/(\d+)/)[1];
   }
 
   $.ajax({
@@ -62,18 +60,19 @@ $(document).ready(function () {
   });
 
   $('.show-voting').on('click', function(event) {
-    var voting_count = parseInt($(this).attr("data-voting"));
     var $el = $(this);
-    var target = $('#content-' + $el.attr('data-voting'))
+    var target = $('#content-' + $el.attr('data-voting'));
+    $el.attr("disabled", "disabled");
 
-    target.html("loading...")
+    target.html("loading...");
 
     $.ajax({
-      url: "/votings/" + voting_ids[voting_count] + "/by_name",
+      url: "/votings/" + $el.attr("id").match(/\d+/)[0] + "/by_name",
       context: document.body
     }).done(function(data) {
       target.html(data)
-      $("svg rect").tooltip({ 'container': 'body', });
+      .find("svg rect")
+      .tooltip({ 'container': 'body', });
     });
 
   });
