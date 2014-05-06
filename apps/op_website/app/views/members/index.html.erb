@@ -9,8 +9,15 @@
       <%= submit_tag("Търси", name: nil, class: "btn btn-default btn-sm") %>
     </span>
   </div>
-  <%= select(nil, :party_id, options_for_select(Structure.parties.pluck("name", "id"), selected: params[:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm"  }) %>
-  <%= select(nil, :assembly_id, options_for_select(Structure.assemblies.pluck("name", "id"), selected: params[:assembly_id]), { include_blank: 'Всички събрания' }, { class: "form-control input-sm"  }) %>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+      <%= select(nil, :party_id, options_for_select(Structure.parties.pluck("name", "id"), selected: params[:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm"  }) %>
+    </div>
+    <div class="col-md-6">
+      <%= select(nil, :assembly_id, options_for_select(Structure.assemblies.pluck("name", "id"), selected: params[:assembly_id]), { include_blank: 'Всички събрания' }, { class: "form-control input-sm"  }) %>
+    </div>
+  </div>
 <% end %>
 
 <%= paginate_always(@members) %>
