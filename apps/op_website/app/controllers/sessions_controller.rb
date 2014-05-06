@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def index
-    @sessions = Session.all
+    @year = params[:year].blank? ? Date.today : Date.new(params[:year].to_i)
+    @sessions = Session.by_year(@year).group_by { |t| t.date.beginning_of_month }
   end
 
   def show

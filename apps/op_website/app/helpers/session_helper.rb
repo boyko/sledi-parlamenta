@@ -34,7 +34,22 @@ module SessionHelper
       end
       output += "<br><div id='content-#{idx}'></div>".html_safe
     end
-    stenograph + "<pre>"
+    stenograph + "</pre>"
+  end
+
+  def calendar(year, &block)
+    year = (year.beginning_of_year..year.end_of_year).map { |d| Date.new(d.year, d.month, 1) }.uniq.in_groups_of(4)
+    content_tag :table, class: "table table-bordered" do
+      year.map do |quarter|
+        content_tag :tr do
+          quarter.map do |month|
+            content_tag :td do
+              self.capture(month, &block)
+            end
+          end.join.html_safe
+        end
+      end.join.html_safe
+    end
   end
 
 end

@@ -1,7 +1,27 @@
-<h1>Сесии</h1>
+<div class="page-header">
+  <h1>Сесии <span class="label label-default"><%= @sessions.values.flatten.count %></span></h1>
+</div>
 
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <%= link_to "<", year: @year.prev_year.strftime("%Y") %>
+    <%= @year.strftime("%Y") %>
+    <% if Date.today.beginning_of_year >= @year.next_year.beginning_of_year %>
+      <%= link_to ">", year: @year.next_year.strftime("%Y") %>
+    <% end %>
+  </div>
+  <%= calendar @year do |month| %>
+    <h5><%= month.strftime("%B") %></h5>
+    <% if @sessions.keys.include?(month) %>
+      <ul>
+      <% @sessions[month].each do |session| %>
+        <li><%= link_to session.date, session_path(session) %></li>
+      <% end%>
+      </ul>
+    <% else %>
+      Няма сесии
+    <% end%>
+  <% end %>
+</div>
 <ul>
-<% @sessions.each do |s| %>
-  <li><%= link_to s.date, session_path(s) %></li>
-<% end %>
 </ul>

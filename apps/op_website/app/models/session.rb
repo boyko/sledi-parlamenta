@@ -3,6 +3,8 @@ class Session < ActiveRecord::Base
   has_many :votes, :through => :votings
   belongs_to :assembly, :class_name => "Structure", :foreign_key => "assembly_id"
 
+  scope :by_year, ->(year) { where("date >= ? and date <= ?", year.to_datetime.beginning_of_year, year.to_datetime.end_of_year) }
+
   def members
     self.votings.first.members
   end
