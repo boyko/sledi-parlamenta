@@ -3,25 +3,22 @@
 </div>
 
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <%= link_to "<", year: @year.prev_year.strftime("%Y") %>
-    <%= @year.strftime("%Y") %>
+  <div class="panel-heading text-center">
+    <%= link_to "<", { year: @year.prev_year.strftime("%Y") }, class: "btn btn-default" %>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+    <%= @year.strftime("%Y") %>&nbsp;&nbsp;&nbsp;&nbsp;
     <% if Date.today.beginning_of_year >= @year.next_year.beginning_of_year %>
-      <%= link_to ">", year: @year.next_year.strftime("%Y") %>
+      <%= link_to ">", { year: @year.next_year.strftime("%Y") }, class: "btn btn-default" %>
     <% end %>
   </div>
+
   <%= calendar @year do |month| %>
-    <h5><%= month.strftime("%B") %></h5>
-    <% if @sessions.keys.include?(month) %>
-      <ul>
-      <% @sessions[month].each do |session| %>
-        <li><%= link_to session.date, session_path(session) %></li>
-      <% end%>
-      </ul>
-    <% else %>
-      Няма сесии
-    <% end%>
+    <p class="bg-primary text-center">
+    <%= month.strftime("%B") %>
+    </p>
+    <%= monthly month %>
   <% end %>
+
 </div>
 <ul>
 </ul>
