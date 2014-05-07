@@ -18,9 +18,18 @@
       <%= select(nil, :assembly_id, options_for_select(Structure.assemblies.pluck("name", "id"), selected: params[:assembly_id]), { include_blank: 'Всички събрания' }, { class: "form-control input-sm"  }) %>
     </div>
   </div>
-<% end %>
+  <br>
 
-<%= paginate_always(@members) %>
+  <div class="row">
+    <div class="col-md-4">
+      <%= select(nil, :order, options_for_select([["Име", "first_name"],["Фамилия", "last_name"],["Възраст", "birthday"]], selected: params[:order]), { include_blank: 'Подреди по:' }, { class: "form-control input-sm"  }) %>
+    </div>
+    <div class="col-md-8 paginate">
+      <%= paginate_always(@members) %>
+    </div>
+  </div>
+
+<% end %>
 
 <table class="table table-striped">
   <tr>

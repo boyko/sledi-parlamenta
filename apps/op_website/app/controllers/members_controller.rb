@@ -6,6 +6,7 @@ class MembersController < ApplicationController
 
     ids = params.slice(:party_id, :assembly_id).values.delete_if { |v| v.blank? }.map { |v| v.to_i }
     query = query.create_joins ids
+    query = query.order(params[:order])
 
     @members = query.paginate(:page => params[:page])
   end
