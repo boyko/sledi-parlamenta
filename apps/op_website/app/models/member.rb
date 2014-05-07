@@ -71,6 +71,12 @@ class Member < ActiveRecord::Base
     participation
   end
 
+  def age
+    dob = self.birthday
+    now = Time.now.utc.to_date
+    now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
+  end
+
   def self.party party_name
     Member.all.joins(:structures).where("structures.kind == ? and structures.name == ?", "party", party_name)
   end
