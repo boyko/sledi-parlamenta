@@ -1,59 +1,48 @@
 <h1><%= @member.names %></h1>
 
-<table border=1>
-  <tr>
-    <td>дата на раждане</td>
-    <td><%= @member.birthday %></td>
-  </tr>
-  <tr>
-    <td>роден град</td>
-    <td><%= @member.hometown %></td>
-  </tr>
-  <tr>
-    <td>професия</td>
-    <td><%= @member.profession %></td>
-  </tr>
-  <tr>
-    <td>езици</td>
-    <td><%= @member.languages %></td>
-  </tr>
-  <tr>
-    <td>женен/неженен</td>
-    <td><%= @member.marital_status %></td>
-  </tr>
-  <tr>
-    <td>избирателен район</td>
-    <td><%= @member.constituency %></td>
-  </tr>
-  <tr>
-    <td>имейл</td>
-    <td><%= @member.email %></td>
-  </tr>
-  <tr>
-    <td>уебсайт</td>
-    <td><%= @member.website %></td>
-  </tr>
-  <tr>
-    <td>независим</td>
-    <td><%= @member.non_affiliated %></td>
-  </tr>
-  <tr>
-    <td>пол</td>
-    <td><%= @member.gender %></td>
-  </tr>
-  <tr>
-    <td>министерски съвет</td>
-    <td><%= @member.council_ministers %></td>
-  </tr>
-  <tr>
-    <td>създаден</td>
-    <td><%= @member.created_at %></td>
-  </tr>
-  <tr>
-    <td>редактиран</td>
-    <td><%= @member.updated_at %></td>
-  </tr>
-</table>
+<div class="row">
+  <div class="col-md-6">
+    dsadsdsa
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h4>Лични данни</h4>
+      </div>
+      <table class="table table-bordered">
+        <tr>
+          <td>дата на раждане</td>
+          <td><%= @member.birthday %></td>
+        </tr>
+        <tr>
+          <td>място на раждане</td>
+          <td><%= @member.hometown %></td>
+        </tr>
+        <tr>
+          <td>професия</td>
+          <td><%= @member.profession %></td>
+        </tr>
+        <tr>
+          <td>езици</td>
+          <td><%= @member.languages %></td>
+        </tr>
+        <tr>
+          <td>семейно положение</td>
+          <td><%= @member.marital_status %></td>
+        </tr>
+        <tr>
+          <td>имейл</td>
+          <td><%= @member.email %></td>
+        </tr>
+        <tr>
+          <td>уебсайт</td>
+          <td><%= @member.website %></td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>
 
 Народни събрания:<br>
 <ul>
