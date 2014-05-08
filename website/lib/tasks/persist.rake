@@ -59,16 +59,6 @@ namespace :persist do
 
       member.save
 
-      # loop speeches
-      member_ob['speeches'].each do |s|
-        speech = {
-          topic: s['topic'],
-          date: s['date'],
-          kind: s['type'],
-          member: member
-        }
-        Speech.create(speech)
-      end
     end
 
     # persist questions
