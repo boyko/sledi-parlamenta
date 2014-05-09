@@ -2,21 +2,21 @@
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 
 npmToInstall=(
-	$BASEDIR/apps/mp-votes
-	$BASEDIR/apps/laws
-	$BASEDIR/apps/government-procurement
-	$BASEDIR/apps/brra.bg-inquirer
-	$BASEDIR/common/node/csv-util
-	$BASEDIR/common/node/downloader
-	$BASEDIR/common/node/logger
-	$BASEDIR/common/node/decaptcha
-	$BASEDIR/common/node/spreadsheet2csv-node
-	$BASEDIR/common/phantom/decaptcha-auto-node
-	$BASEDIR/common/phantom/decaptcha-manual
+	$BASEDIR/data_mining/mp-votes
+	$BASEDIR/data_mining/laws
+	$BASEDIR/data_mining/government-procurement
+	$BASEDIR/data_mining/brra.bg-inquirer
+	$BASEDIR/data_mining/common/node/csv-util
+	$BASEDIR/data_mining/common/node/downloader
+	$BASEDIR/data_mining/common/node/logger
+	$BASEDIR/data_mining/common/node/decaptcha
+	$BASEDIR/data_mining/common/node/spreadsheet2csv-node
+	$BASEDIR/data_mining/common/phantom/decaptcha-auto-node
+	$BASEDIR/data_mining/common/phantom/decaptcha-manual
 )
 
 composerToInstall=(
-	$BASEDIR/apps/spreadsheet2csv
+	$BASEDIR/data_mining/spreadsheet2csv
 )
 
 for path in "${npmToInstall[@]}"
