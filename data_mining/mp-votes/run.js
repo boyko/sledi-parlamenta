@@ -1,6 +1,6 @@
 var Crawler = require('./crawler')
 var TranscriptScraper = require('./transcriptScraper/excel')
-var Downloader = require('../../common/node/downloader')
+var Downloader = require('../common/node/downloader')
 var InputManager = require('./input')
 
 var inputMan = new InputManager();
