@@ -5,7 +5,7 @@ class Structure < ActiveRecord::Base
   scope :parties, -> { where(kind: "party") }
   scope :assemblies, -> { where(kind: "assembly") }
   scope :by_date, ->(date) {
-    where("(start_date < :d and end_date > :d) or (start_date < :d and end_date is NULL)", :d => date)
+    where("(start_date <= :d and end_date >= :d) or (start_date <= :d and end_date is NULL)", :d => date)
   }
   scope :ordered, -> { order("start_date") }
 

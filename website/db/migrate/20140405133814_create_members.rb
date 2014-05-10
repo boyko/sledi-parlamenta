@@ -4,7 +4,7 @@ class CreateMembers < ActiveRecord::Migration
       t.string :first_name
       t.string :sir_name
       t.string :last_name
-      t.integer :gov_site_id, :uniqueness => true
+      t.string :gov_site_id
       t.date :birthday
       t.string :hometown
       t.string :profession
