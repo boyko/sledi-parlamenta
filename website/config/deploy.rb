@@ -1,4 +1,3 @@
-# config valid only for Capistrano 3.1
 lock '3.2.1'
 
 set :application,     'parliament.obshtestvo.bg'
@@ -9,6 +8,7 @@ set :linked_dirs,     %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle pu
 set :keep_releases,   20
 set :rails_env,       'production'
 set :bundle_bins,     fetch(:bundle_bins, []) + %w(puma pumactl)
+set :default_env,     {rails_relative_url_root: '/website'}
 
 namespace :deploy do
   desc 'Restart the application'
