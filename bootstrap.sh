@@ -20,7 +20,7 @@ sed -i.bak 's/^plugins=(.*/plugins=(git zsh-syntax-highlighting)/' $HOME/.zshrc
 # ruby stuff
 \curl -sSL https://get.rvm.io | bash -s stable --ruby=2.1.1
 sudo apt-get install libsqlite3-dev -y
-cd $VAGRANT_DIR/apps/op_website
+cd $VAGRANT_DIR/website
 source $HOME/.rvm/scripts/rvm
 rvm use 2
 bundle install
@@ -43,7 +43,7 @@ sudo apt-get install libfontconfig libfontconfig-dev libfreetype6-dev
 npm install phantomjs -g
 
 # fixtures
-(cd $VAGRANT_DIR/apps/op_website/db/ && wget -qO - https://dl.dropboxusercontent.com/u/4296335/db.dump.gz | zcat | sqlite3 development.sqlite3)
+(cd $VAGRANT_DIR/website/db/ && wget -qO - https://dl.dropboxusercontent.com/u/4296335/db.dump.gz | zcat | sqlite3 development.sqlite3)
 
 # run server
 rails s -d
@@ -55,5 +55,5 @@ bash $VAGRANT_DIR/build.sh
 echo "start on vagrant-mounted
 
 script
-  (cd /vagrant/apps/op_website/ && rails s -d)
+  (cd /vagrant/website/ && rails s -d)
 end script" | sudo tee /etc/init/rails-dev-server.conf
