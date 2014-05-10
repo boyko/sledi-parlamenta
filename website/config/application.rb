@@ -20,6 +20,7 @@ module OpWebsite
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :bg
     config.autoload_paths += %W(#{config.root}/lib/assets)
+    config.eager_load_paths += %W(#{config.root}/lib)
 
     I18n.enforce_available_locales = true
   end
