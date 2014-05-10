@@ -3,8 +3,7 @@
 *.iws
 .idea/
 node_modules
-apps/website/app/secret_settings.py
-apps/government-procurement/settings.secret.js
-apps/spreadsheet2csv/composer.lock
-apps/spreadsheet2csv/vendor/
-apps/op_website/db/schema.rb
+data_mining/government-procurement/settings.secret.js
+data_mining/spreadsheet2csv/composer.lock
+data_mining/spreadsheet2csv/vendor/
+data_mining/op_website/db/schema.rb
