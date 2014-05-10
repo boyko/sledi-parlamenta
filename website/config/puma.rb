@@ -5,7 +5,7 @@ max_threads = (ENV['PUMA_MAX_THREADS'] || 10).to_i
 threads min_threads, max_threads
 
 workers (ENV['PUMA_WORKERS'] || 2).to_i
-state_path File.expand_path('../../website/tmp/pids/puma.state', __FILE__)
+state_path File.expand_path('../../tmp/pids/puma.state', __FILE__)
 
 on_worker_boot do
   ActiveSupport.on_load(:active_record) do
