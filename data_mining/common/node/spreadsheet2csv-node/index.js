@@ -1,7 +1,7 @@
 var path = require('path');
 var exec = require('child_process').exec;
 
-var pathToConvertor = path.join(__dirname,'../../../apps/spreadsheet2csv/spreadsheet2csv.php');
+var pathToConvertor = path.join(__dirname,'../../../spreadsheet2csv/spreadsheet2csv.php');
 
 var Convertor = function (logger) {
 	this.logger = logger;

@@ -8,7 +8,7 @@ var argv = inputMan.getArguments();
 // Run crawler & Scraper
 inputMan.findTargetDates(argv).then(function(target) {
 	// Creates a logger
-	var logger = require('../../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
+	var logger = require('../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
 	// Creates a downloader
 	var downloader =  new Downloader(logger, [1000,5000]);
 	// Creates a crawler
