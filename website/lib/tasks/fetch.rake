@@ -1,6 +1,4 @@
 require 'json'
-require "sqlite3"
-require 'wombat'
 
 def fetch_members_meta_data assembly_url_path
   puts "Fetching data about the members of parliament of the given assembly. URL path: #{assembly_url_path}"
