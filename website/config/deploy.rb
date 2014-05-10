@@ -8,6 +8,8 @@ set :linked_dirs,     %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle pu
 set :keep_releases,   20
 set :rails_env,       'production'
 set :bundle_bins,     fetch(:bundle_bins, []) + %w(puma pumactl)
+set :git_strategy,    GitSubfolderStrategy
+set :git_subfolder,   '/website'
 
 namespace :deploy do
   desc 'Restart the application'
