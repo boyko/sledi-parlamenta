@@ -7,6 +7,7 @@ class Member < ActiveRecord::Base
   has_many :structures, through: :participations
 
   def self.find_by_three_names names
+    return nil if names == nil or names == ""
     names = names.split
     if names[3].nil?
       Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2]).first

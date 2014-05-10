@@ -1,10 +1,177 @@
 <h1><%= @member.names %></h1>
 
 <div class="row">
-  <div class="col-md-6">
-    dsadsdsa
+  <div class="col-md-8 mp-info">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h4>Парламентарна активност</h4>
+      </div>
+
+    <h5 class="ns">Народни събрания:</h5>
+
+    <table class="table">
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.assemblies.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+    </table>
+
+    <h5>Парламентарни групи</h5>
+
+    <table class="table">
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.parties.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+    </table>
+
+   <% if @member.comittees.count == 0 %>
+     <h5>Няма постоянни комисии</h5>
+   <% else %>
+    <h5>Постоянни комисии</h5>
+
+    <table class="table">
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.comittees.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+    </table>
+  <% end %>
+
+   <% if @member.t_comittees.count == 0 %>
+     <h5>Няма временни комисии</h5>
+   <% else %>
+
+    <h5>Временни комисии</h5>
+
+    <table class="table">
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.t_comittees.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+  </table>
+  <% end %>
+
+   <% if @member.subcomittees.count == 0 %>
+     <h5>Няма парламентарни подкомисии</h5>
+   <% else %>
+     <h5>Парламентарни подкомисии</h5>
+
+    <table class="table">
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.subcomittees.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+    </table>
+  <% end %>
+
+   <% if @member.delegations.count == 0 %>
+     <h5>Няма делегации</h5>
+   <% else %>
+     <h5>Делегации</h5>
+    <table class="table">
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.delegations.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+    </table>
+  <% end %>
+
+   <% if @member.friendship_groups.count == 0 %>
+     <h5>Няма групи за приятелство</h5>
+   <% else %>
+    <table class="table">
+     <h5>Групи за приятелство</h5>
+      <tr>
+        <td>От</td>
+        <td>До</td>
+        <td>Име</td>
+        <td>позиция</td>
+      </tr>
+    <% @member.friendship_groups.each do |p| %>
+      <tr>
+        <td><%= p.start_date %></td>
+        <td><%= p.end_date %></td>
+        <td><%= p.structure.name %></td>
+        <td><%= p.position %></td>
+      </tr>
+    <% end %>
+  </table>
+  <% end %>
+
+
+    <h5>Зададени въпроси</h5>
+    <ul>
+    <% @member.questions.each do |q| %>
+      <li>
+        <%= q.topic %>
+      </li>
+    <% end %>
+    </ul>
+    </div>
   </div>
-  <div class="col-md-6">
+
+  <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading text-center">
         <h4>Лични данни</h4>
@@ -43,70 +210,3 @@
 
   </div>
 </div>
-
-Народни събрания:<br>
-<ul>
-<% @member.assemblies.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Партии:<br>
-<ul>
-<% @member.parties.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Постоянни комисии
-<ul>
-<% @member.comittees.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Временни комисии
-<ul>
-<% @member.t_comittees.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Парламентарни подкомисии
-<ul>
-<% @member.subcomittees.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Делегации
-<ul>
-<% @member.delegations.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Групи за приятелство
-<ul>
-<% @member.friendship_groups.each do |p| %>
-  <li><%= p.structure.name %> - <%= p.position %> |<%= p.start_date %>|<%= p.end_date %>|</li>
-<% end %>
-</ul>
-
-Зададени въпроси
-<ul>
-<% @member.questions.each do |q| %>
-  <li>
-    <%= q.topic %>
-  </li>
-<% end %>
-</ul>
-
-Изказвания
-<ul>
-<% @member.speeches.each do |s| %>
-  <li>
-    <%= s.topic %>
-  </li>
-<% end %>
-</ul>
