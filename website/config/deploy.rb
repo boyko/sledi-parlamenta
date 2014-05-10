@@ -10,6 +10,7 @@ set :keep_releases,   20
 set :rails_env,       'production'
 set :bundle_bins,     fetch(:bundle_bins, []) + %w(puma pumactl)
 set :default_env,     {rails_relative_url_root: '/' + fetch(:site_folder)}
+set :bundle_gemfile,  -> { release_path.join(fetch(:site_folder), 'Gemfile') }
 
 namespace :deploy do
   desc 'Restart the application'
