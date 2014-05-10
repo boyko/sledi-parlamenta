@@ -16,7 +16,10 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       within current_path do
-        execute 'pumactl', '--state', current_path.join('tmp/pids/puma.state'), 'restart'
+        puma_state_file = current_path.join('tmp/pids/puma.state')
+        if test :test, '-f', puma_state_file
+          execute :pumactl, '--state', puma_state_file, 'restart'
+        end
       end
     end
   end
