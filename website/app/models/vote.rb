@@ -1,4 +1,6 @@
 class Vote < ActiveRecord::Base
+  enum value: [:yes, :no, :abstain, :absent]
+
   belongs_to :voting
   belongs_to :member
   has_one :session, :through => :voting

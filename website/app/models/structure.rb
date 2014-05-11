@@ -1,4 +1,6 @@
 class Structure < ActiveRecord::Base
+  enum kind: [:assembly, :party, :comittee, :t_comittee, :subcomittee, :delegation, :f_group]
+
   has_many :participations
   has_many :members, through: :participations
 

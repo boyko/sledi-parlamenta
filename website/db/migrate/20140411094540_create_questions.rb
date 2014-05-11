@@ -4,7 +4,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.string :signature
       t.string :gov_site_id
       t.string :status
-      t.string :topic
+      t.text :topic
       t.text :content
       t.text :answer
       t.date :asked

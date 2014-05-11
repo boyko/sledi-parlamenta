@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140418192605) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "members", force: true do |t|
     t.string   "first_name"
     t.string   "sir_name"
@@ -47,14 +50,14 @@ ActiveRecord::Schema.define(version: 20140418192605) do
     t.datetime "updated_at"
   end
 
-  add_index "participations", ["member_id"], name: "index_participations_on_member_id"
-  add_index "participations", ["structure_id"], name: "index_participations_on_structure_id"
+  add_index "participations", ["member_id"], name: "index_participations_on_member_id", using: :btree
+  add_index "participations", ["structure_id"], name: "index_participations_on_structure_id", using: :btree
 
   create_table "questions", force: true do |t|
     t.string   "signature"
     t.string   "gov_site_id"
     t.string   "status"
-    t.string   "topic"
+    t.text     "topic"
     t.text     "content"
     t.text     "answer"
     t.date     "asked"
@@ -65,8 +68,8 @@ ActiveRecord::Schema.define(version: 20140418192605) do
     t.datetime "updated_at"
   end
 
-  add_index "questions", ["questioner_id"], name: "index_questions_on_questioner_id"
-  add_index "questions", ["respondent_id"], name: "index_questions_on_respondent_id"
+  add_index "questions", ["questioner_id"], name: "index_questions_on_questioner_id", using: :btree
+  add_index "questions", ["respondent_id"], name: "index_questions_on_respondent_id", using: :btree
 
   create_table "sessions", force: true do |t|
     t.integer  "assembly_id"
@@ -77,11 +80,11 @@ ActiveRecord::Schema.define(version: 20140418192605) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["assembly_id"], name: "index_sessions_on_assembly_id"
+  add_index "sessions", ["assembly_id"], name: "index_sessions_on_assembly_id", using: :btree
 
   create_table "structures", force: true do |t|
-    t.string   "kind"
-    t.string   "name"
+    t.integer  "kind"
+    t.text     "name"
     t.string   "abbreviation"
     t.text     "info"
     t.date     "start_date"
@@ -94,13 +97,13 @@ ActiveRecord::Schema.define(version: 20140418192605) do
   create_table "votes", force: true do |t|
     t.integer  "member_id"
     t.integer  "voting_id"
-    t.string   "value"
+    t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "votes", ["member_id"], name: "index_votes_on_member_id"
-  add_index "votes", ["voting_id"], name: "index_votes_on_voting_id"
+  add_index "votes", ["member_id"], name: "index_votes_on_member_id", using: :btree
+  add_index "votes", ["voting_id"], name: "index_votes_on_voting_id", using: :btree
 
   create_table "votings", force: true do |t|
     t.integer  "session_id"
@@ -112,7 +115,7 @@ ActiveRecord::Schema.define(version: 20140418192605) do
     t.datetime "updated_at"
   end
 
-  add_index "votings", ["session_id"], name: "index_votings_on_session_id"
-  add_index "votings", ["version_id"], name: "index_votings_on_version_id"
+  add_index "votings", ["session_id"], name: "index_votings_on_session_id", using: :btree
+  add_index "votings", ["version_id"], name: "index_votings_on_version_id", using: :btree
 
 end
