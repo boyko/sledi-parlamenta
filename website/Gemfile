@@ -1,11 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
+gem 'rails', '4.1.1'
 gem 'uglifier', '>= 1.3.0'
 gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jbuilder', '~> 1.2'
-gem 'highcharts-rails', '~> 3.0.0'
 gem 'wombat'
 gem 'resque'
 gem 'will_paginate', '~> 3.0'
@@ -13,6 +12,7 @@ gem 'less-rails-bootstrap'
 gem 'font-awesome-rails'
 gem 'puma'
 gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
+gem 'pg'
 
 group :doc do
   gem 'sdoc', require: false
@@ -24,9 +24,4 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
-  gem 'sqlite3'
-end
-
-group :production do
-  gem 'pg'
 end
