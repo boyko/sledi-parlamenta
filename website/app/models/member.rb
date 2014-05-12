@@ -75,7 +75,7 @@ class Member < ActiveRecord::Base
     else
       sql = query.split.map do |word|
        %w[first_name sir_name last_name].map do |column|
-        sanitize_sql ["#{column} LIKE ?", "%#{word}%"]
+        sanitize_sql ["lower(#{column}) LIKE lower(?)", "%#{word}%"]
        end.join(" or ")
       end.join(") and (")
       where("(#{sql})")
