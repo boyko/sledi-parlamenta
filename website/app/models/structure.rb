@@ -4,8 +4,8 @@ class Structure < ActiveRecord::Base
   has_many :participations
   has_many :members, through: :participations
 
-  scope :parties, -> { where(kind: "party") }
-  scope :assemblies, -> { where(kind: "assembly") }
+  scope :parties, -> { where(kind: Structure.kinds[:party]) }
+  scope :assemblies, -> { where(kind: Structure.kinds[:assembly]) }
   scope :by_date, ->(date) {
     where("(start_date <= :d and end_date >= :d) or (start_date <= :d and end_date is NULL)", :d => date)
   }

@@ -31,45 +31,35 @@ class Member < ActiveRecord::Base
   end
 
   def names
-    (self.first_name + " " + self.sir_name + " " + self.last_name).mb_chars.titleize
+    self.first_name + " " + self.sir_name + " " + self.last_name
   end
 
   def assemblies
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "assembly")
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:assembly]})
   end
 
   def parties
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "party")
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:party]})
   end
 
   def comittees
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "comittee")
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:comittee]})
   end
 
   def t_comittees
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "t_comittee")
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:t_comittee]})
   end
 
   def subcomittees
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "subcomittee")
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:subcomittee]})
   end
 
   def delegations
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "delegation")
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:delegation]})
   end
 
-  def friendship_groups
-    Participation.where(member: self).joins(:structure).where("structures.kind == ?", "f_group")
-  end
-
-  def party date
-    participation = Participation
-      .where("member_id == ? and ((start_date <= ? and end_date >= ?) or (start_date <= ? and end_date is ?)", self.id, date, date, date, nil)
-      .joins(:structure).where("structures.kind == ?", "party").first
-
-    raise "No such party found!" if participation.nil?
-
-    participation
+  def f_groups
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:f_group]})
   end
 
   def age
@@ -77,10 +67,6 @@ class Member < ActiveRecord::Base
     return nil if dob.nil?
     now = Time.now.utc.to_date
     now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
-  end
-
-  def self.party party_name
-    Member.all.joins(:structures).where("structures.kind == ? and structures.name == ?", "party", party_name)
   end
 
   def self.search(query)
@@ -101,7 +87,7 @@ class Member < ActiveRecord::Base
       all
     else
       structure_ids.each_with_index.map { |id, idx|
-        joins("INNER JOIN 'participations' 'p#{idx}' ON 'p#{idx}'.'member_id' = 'members'.'id'")
+        joins("INNER JOIN participations p#{idx} ON p#{idx}.member_id = members.id")
         .where("p#{idx}.structure_id" => id).uniq
       }.reduce(:merge)
     end
