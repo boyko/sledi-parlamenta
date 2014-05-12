@@ -1,0 +1,23 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: openparliament_development
+  pool: 5
+  username: admin
+  password: 2YjqxnvfNi
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: openparliament_development
+  pool: 5
+  username: admin
+  password: 2YjqxnvfNi
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: openparliament_development
+  pool: 5
+  username: openparliament
+  password: 2YjqxnvfNi
