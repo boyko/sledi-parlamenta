@@ -3,7 +3,7 @@ class CreateVotings < ActiveRecord::Migration
     create_table :votings do |t|
       t.references :session, index: true
       t.references :version, index: true
-      t.string :topic
+      t.text :topic
       t.datetime :voted_at
       t.string :result
 

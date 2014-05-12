@@ -12,3 +12,5 @@ data_mining/op_website/db/schema.rb
 data_mining/mp-votes/error.log
 
 website/config/database.yml
+
+website/db/logfile

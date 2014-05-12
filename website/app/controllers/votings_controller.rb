@@ -45,7 +45,7 @@ class VotingsController < ApplicationController
       p[:members].each_with_index do |el, idx|
         x = (idx % cols) * (width + margin) + offset
         y = (idx / cols) * (width + margin)
-        html += "<a xlink:href='/members/#{el[:id]}'><g><rect width='#{width}' height='#{height}' x='#{x}' y='#{y}' class='#{el[:vote]}' data-toggle='tooltip' data-placement='top' title='#{el[:name]}'></g></a>"
+        html += "<a xlink:href='/members/#{el[:id]}'><g><rect width='#{width}' height='#{height}' x='#{x}' y='#{y}' class='#{Vote.values.key(el[:vote]).to_s}' data-toggle='tooltip' data-placement='top' title='#{el[:name]}'></g></a>"
       end
       html += "<text x='#{offset+(outer_idx*10)}' y='210' font-family='Verdana' font-size='10'>#{p[:party]}</text>"
     end

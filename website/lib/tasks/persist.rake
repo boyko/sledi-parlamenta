@@ -1,10 +1,10 @@
 require 'json'
 
-def ttlz str
-  str.mb_chars.titleize.to_s
+class String
+  def ttlz
+    self.mb_chars.titleize.to_s
+  end
 end
-
-#data_path = "lib/assets/"
 
 namespace :persist do
 
@@ -17,9 +17,9 @@ namespace :persist do
 
       # find member - this will merge profiles
       member = Member.find_by_names_and_bd(
-        ttlz(member_ob['first_name']),
-        ttlz(member_ob['sir_name']),
-        ttlz(member_ob['last_name']),
+        member_ob['first_name'].ttlz,
+        member_ob['sir_name'].ttlz,
+        member_ob['last_name'].ttlz,
         member_ob['date_of_birth']
       )
 
@@ -132,9 +132,13 @@ namespace :persist do
   task :svv => :environment do
     File.open("/directory/to/mp-votes.json").each do |voting|
       voting = JSON.load voting
-      member = Member.find_by_three_names voting['name']
 
-      raise "No member with name #{voting['name']} found" if member.nil?
+      member = Member.find_by_three_names voting['name'].ttlz
+
+      if member.nil?
+        puts "No member with name #{voting['name']} found. #{voting['date']}"
+        next
+      end
 
       session_date = voting['date'].to_date
 

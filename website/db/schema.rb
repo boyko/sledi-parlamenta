@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 20140418192605) do
   create_table "votings", force: true do |t|
     t.integer  "session_id"
     t.integer  "version_id"
-    t.string   "topic"
+    t.text     "topic"
     t.datetime "voted_at"
     t.string   "result"
     t.datetime "created_at"
