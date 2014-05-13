@@ -6,6 +6,7 @@ class Voting < ActiveRecord::Base
   scope :by_session, ->(session) { where(session: session) }
   scope :ordered, -> { order("voted_at") }
 
+
   def absent
     self.votes.where(value: "absent")
   end
@@ -20,15 +21,15 @@ class Voting < ActiveRecord::Base
 
   def by_party
     date = self.session.date
-    self.members.joins(:structures)
-    .where("(participations.start_date < :d and participations.end_date > :d) or (participations.start_date < :d and participations.end_date is NULL)", :d => date)
-    .where("structures.kind" => "party").group("structures.name", "votes.value").count
+
+    self.members.joins(:structures).by_date(date)
+    .where(structures: { kind: "party" }).group("structures.name", "votes.value").count
   end
 
   def by_name
     date = self.session.date
-    self.members.joins(:structures).where("structures.kind" => Structure.kinds[:party])
-    .where("(participations.start_date < :d and participations.end_date > :d) or (participations.start_date < :d and participations.end_date is NULL)", :d => date)
+
+    self.members.joins(:structures).where(structures: { kind => Structure.kinds[:party]}).by_date(date)
     .group("structures.name").group("members.id", "members.first_name" ,"members.last_name", "value").count
   end
 

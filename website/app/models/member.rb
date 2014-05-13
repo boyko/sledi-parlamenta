@@ -5,6 +5,12 @@ class Member < ActiveRecord::Base
   has_many :questions, :foreign_key => "questioner_id"
   has_many :participations
   has_many :structures, through: :participations
+  scope :by_date, ->(date) {
+    where(
+      (Participation.arel_table[:start_date].lt(date)).and(Participation.arel_table[:end_date].gt(date)).or(
+      (Participation.arel_table[:start_date].lt(date)).and(Participation.arel_table[:end_date].eq(nil))
+    ))
+  }
 
   def self.find_by_three_names names
     return nil if names == nil or names == ""
