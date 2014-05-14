@@ -19,18 +19,12 @@ class Voting < ActiveRecord::Base
     self.votes.group("value").count
   end
 
-  def by_party
-    date = self.session.date
-
-    self.members.joins(:structures).by_date(date)
-    .where(structures: { kind: "party" }).group("structures.name", "votes.value").count
-  end
-
   def by_name
     date = self.session.date
 
-    self.members.joins(:structures).where(structures: { kind => Structure.kinds[:party]}).by_date(date)
-    .group("structures.name").group("members.id", "members.first_name" ,"members.last_name", "value").count
+    self.members.by_party.by_date(date)
+    .group("structures.name")
+    .group("members.id", "members.first_name" ,"members.last_name", "value").count
   end
 
 end

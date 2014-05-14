@@ -11,6 +11,8 @@ class Member < ActiveRecord::Base
       (Participation.arel_table[:start_date].lt(date)).and(Participation.arel_table[:end_date].eq(nil))
     ))
   }
+  scope :by_party, -> { joins(:structures).where(structures: { kind: Structure.kinds[:party]}) }
+  scope :by_party_name, ->(name) { by_party.where(structures: { name: name }) }
 
   def self.find_by_three_names names
     return nil if names == nil or names == ""
