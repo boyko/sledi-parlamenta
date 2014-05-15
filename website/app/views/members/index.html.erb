@@ -14,8 +14,11 @@
     <div class="col-md-6">
       <%= select(nil, :party_id, options_for_select(Structure.parties.pluck("name", "id"), selected: params[:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm"  }) %>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
       <%= select(nil, :assembly_id, options_for_select(Structure.assemblies.pluck("name", "id"), selected: params[:assembly_id]), { include_blank: 'Всички събрания' }, { class: "form-control input-sm"  }) %>
+    </div>
+    <div class="col-md-3">
+      <%= select(nil, :constituency, options_for_select(Participation.where.not(constituency: nil).pluck(:constituency).uniq.each do |v| [v , v] end, selected: params[:constituency]), { include_blank: 'Избирателен район' }, { class: "form-control input-sm"  }) %>
     </div>
   </div>
   <br>

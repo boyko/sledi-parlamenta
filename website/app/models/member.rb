@@ -13,6 +13,7 @@ class Member < ActiveRecord::Base
   }
   scope :by_party, -> { joins(:structures).where(structures: { kind: Structure.kinds[:party]}) }
   scope :by_party_name, ->(name) { by_party.where(structures: { name: name }) }
+  scope :by_constituency, ->(constituency) { joins(:participations).where(participations: { constituency: constituency }).uniq }
 
   def self.find_by_three_names names
     return nil if names == nil or names == ""
