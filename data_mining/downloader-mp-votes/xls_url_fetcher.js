@@ -5,12 +5,16 @@ var assemblies = {
   42: "http://www.parliament.bg/bg/plenaryst/ns/50",
 }
 
-var c = new Crawler({ "maxConnections": 10, });
+var c = new Crawler({ "maxConnections": 10 });
 
 function cbSession(error, result, $) {
-  path = $(".frontList a[href$='.xls']").eq(1).attr("href");
-  url = "http://www.parliament.bg" + path;
-  console.log(url);
+  var date = $(".marktitle").eq(0).text().match(/\d+\/\d+\/\d+/g)[0]
+             .replace(/(\d+)\/(\d+)\/(\d+)/g, function(match, d, m, y) { return [y, m, d].join("-") });
+
+  $(".frontList a[href$='.xls']").each(function(idx, el) {
+    var url = "http://www.parliament.bg" + $(el).attr('href');
+    console.log(date + " " +url);
+  })
 }
 
 function cbMonth(error, result, $) {
