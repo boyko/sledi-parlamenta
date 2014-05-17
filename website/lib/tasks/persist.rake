@@ -25,6 +25,18 @@ namespace :persist do
 
       member_ob['structures'].each do |s|
 
+        abbreviation = ""
+        abbreviations = {
+          "ПП ГЕРБ" => "ГЕРБ",
+          "Атака" => "Атака",
+          "Национално движение Симеон Втори" => "НДСВ",
+          "Национално движение за стабилност и възход" => "НДСВ",
+          "Коалиция за България" => "КБ",
+          "Ред, законност и справедливост" => "РЗС",
+          "Движение за права и свободи" => "ДПС",
+          "Синята коалиция - СДС, ДСБ, Обединени земеделци, БСДП, РДП" => "СК",
+        }
+
         type = case s['type']
           when "Членове на Народно събрание" then "assembly"
           when "Парламентарни групи" then "party"
@@ -45,6 +57,9 @@ namespace :persist do
             .gsub("партия Атака", "Атака")
             .gsub("Коалиция Атака", "Атака")
             .gsub("Нечленуващи в ПГ", "Независими")
+
+
+          abbreviation = abbreviations[name]
         end
 
         if type == "assembly"
@@ -57,7 +72,7 @@ namespace :persist do
 
         name = name.gsub("\n", "").gsub("\r\n", "")
 
-        structure = Structure.find_or_create_by(name: name, kind: Structure.kinds[type.to_sym])
+        structure = Structure.find_or_create_by(name: name, kind: Structure.kinds[type.to_sym], abbreviation: abbreviation)
         constituency = type == "party" ? member_ob['constituency'] : nil
         Participation.create({
           member: member,
