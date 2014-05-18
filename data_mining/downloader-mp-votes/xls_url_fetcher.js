@@ -8,13 +8,21 @@ var assemblies = {
 var c = new Crawler({ "maxConnections": 10 });
 
 function cbSession(error, result, $) {
+  var urls = [];
   var date = $(".marktitle").eq(0).text().match(/\d+\/\d+\/\d+/g)[0]
              .replace(/(\d+)\/(\d+)\/(\d+)/g, function(match, d, m, y) { return [y, m, d].join("-") });
 
   $(".frontList a[href$='.xls']").each(function(idx, el) {
-    var url = "http://www.parliament.bg" + $(el).attr('href');
-    console.log(date + " " +url);
+    urls.push(el.href);
   })
+
+  var stenograph = $(".markcontent").text();
+
+  console.log(JSON.stringify({
+    date: date,
+    urls: urls,
+    stenograph: stenograph
+  }));
 }
 
 function cbMonth(error, result, $) {
