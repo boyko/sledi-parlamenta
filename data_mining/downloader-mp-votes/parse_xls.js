@@ -2,23 +2,11 @@
 
 var fs = require('fs');
 var XLS = require('xlsjs');
+var LineStream = require('byline').LineStream;
 
 // helper functions
-function isIV(xls) {
+function isIndividualVoting(xls) {
   return xls.SheetNames.indexOf("Регистрации и гласувания по ПГ") === -1;
-}
-
-function getXLSFilePaths(dir) {
-  return fs.readdirSync(dir)
-           .map(function(file) { return dir + "/" + file })
-           .filter(function(file) { return /\.xls/.test(file) });
-}
-
-function getFolders(dir) {
-  var list = fs.readdirSync(dir)
-  return list.filter(function(file_or_folder_name) {
-    return fs.statSync(dir + "/" + file_or_folder_name).isDirectory();
-  }).map(function(folder) { return dir + "/" + folder });
 }
 
 function splitter(sheet) {
@@ -83,27 +71,17 @@ function parseData(iv_sheet, gv_sheet) {
   console.log(JSON.stringify(session));
 }
 
-function getOrder(file_paths) {
-  xls_0 = XLS.readFile(file_paths[0]);
-  xls_1 = XLS.readFile(file_paths[1]);
+function init(paths) {
+  var xls = [XLS.readFile(paths[0]), XLS.readFile(paths[1])]
 
-  if(isIV(xls_0))
-    parseData(getFirstSheet(xls_0), getFirstSheet(xls_1));
-  else
-    parseData(getFirstSheet(xls_1), getFirstSheet(xls_0));
+  if(!isIndividualVoting(xls[0]))
+    xls.reverse()
+
+  parseData(getFirstSheet(xls[0]), getFirstSheet(xls[1]));
 }
 
-function fetchSessions(session_dirs) {
-  session_dirs.forEach(function(session_dir) {
-    var file_paths = getXLSFilePaths(session_dir);
-    getOrder(file_paths);
-  });
-}
 
-function init() {
-  var dir = process.argv[2];
-  fetchSessions(getFolders(dir))
-}
-
-init();
-
+//process.stdin.resume();
+process.stdin.pipe(new LineStream()).on('data', function(line) {
+  init(JSON.parse(line.toString()))
+})
