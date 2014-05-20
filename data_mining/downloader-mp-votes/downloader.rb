@@ -9,7 +9,7 @@ STDIN.read.split("\n").each do |line|
   `mkdir -p #{session_path}`
   names = []
   ob["xls"].each do |url|
-    names << url.split('/')[-1]
+    names << session_path + "/" + url.split('/')[-1]
     `cd #{session_path}; curl -sO #{url}`
     sleep (rand()*4).round+1
   end
