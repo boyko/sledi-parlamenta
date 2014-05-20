@@ -3,6 +3,7 @@
 var fs = require('fs');
 var XLS = require('xlsjs');
 var LineStream = require('byline').LineStream;
+var parse = require('csv-parse');
 
 // helper functions
 function isIndividualVoting(xls) {
@@ -10,8 +11,20 @@ function isIndividualVoting(xls) {
 }
 
 function splitter(sheet) {
-  var rows = XLS.utils.sheet_to_csv(sheet).split("\n");
-  return rows.map(function(row) { return row.split(",") });
+  output = [];
+  parser = parse({delimiter: ','})
+  parser.on('readable', function(){
+    while(row = parser.read()){
+      output.push(row)
+    }
+  });
+  parser.on('error', function(err){
+    // TODO implement with logger
+  });
+  parser.write(XLS.utils.sheet_to_csv(sheet));
+  parser.end();
+
+  return output;
 }
 
 function isNumber(n) {
@@ -79,7 +92,6 @@ function init(paths) {
 
   parseData(getFirstSheet(xls[0]), getFirstSheet(xls[1]));
 }
-
 
 //process.stdin.resume();
 process.stdin.pipe(new LineStream()).on('data', function(line) {
