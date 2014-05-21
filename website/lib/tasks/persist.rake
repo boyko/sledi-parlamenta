@@ -126,61 +126,6 @@ namespace :persist do
 
   end
 
-  task :stenographs => :environment do
-    sessions = Session.select("id, url").map { |s| [s.id, s.url.match(/\d+$/)[0]]  }
-
-    File.open("/directory/to/stenographs.json").each do |stenograph|
-      stenograph_ob = JSON.load stenograph
-
-      s_id = sessions.select { |s| s[1] == stenograph_ob['id'] }[0][0]
-
-      s = Session.find(s_id)
-      raise "No session with id: #{s_id}" if s.nil?
-
-      s.stenograph = stenograph_ob['text']
-      s.save
-
-    end
-  end
-
-  # run this task when Members are persisted
-  task :svv => :environment do
-    File.open("/directory/to/mp-votes.json").each do |voting|
-      voting = JSON.load voting
-
-      member = Member.find_by_three_names voting['name'].ttlz
-
-      if member.nil?
-        puts "No member with name #{voting['name']} found. #{voting['date']}"
-        next
-      end
-
-      session_date = voting['date'].to_date
-
-      assembly = Structure.assemblies.by_date(session_date).first
-      session = Session.where(date: session_date, assembly: assembly, url: voting['source']).first_or_create
-
-      votes = []
-
-      voting['votes'].each do |vote|
-        voting = Voting.find_or_create_by({
-          session: session,
-          voted_at: Time.zone.parse(vote['time']),
-          topic: vote['topic']
-        })
-
-        votes.push({
-          member: member,
-          voting: voting,
-          value: vote['val']
-        })
-      end
-
-      Vote.transaction do
-        Vote.create(votes)
-      end
-    end
-  end
 
 
 end
