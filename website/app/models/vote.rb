@@ -1,5 +1,5 @@
 class Vote < ActiveRecord::Base
-  enum value: [:yes, :no, :abstain, :absent]
+  enum value: [:yes, :no, :abstain, :absent, :registered, :not_registered, :manually_registered]
 
   belongs_to :voting
   belongs_to :member
