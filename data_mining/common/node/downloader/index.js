@@ -18,9 +18,9 @@ var Downloader = function(logger, rateDelay, maxAttempt) {
 
 Downloader.prototype = {
 	logger: null,
-    lastInQueue: null,
-    rateDelay: null,
-    maxAttempt: null,
+  lastInQueue: null,
+  rateDelay: null,
+  maxAttempt: null,
 	get: function(url, callback, attempt) {
 		var self = this;
         return self.lastInQueue =  self.lastInQueue.then(function() {
