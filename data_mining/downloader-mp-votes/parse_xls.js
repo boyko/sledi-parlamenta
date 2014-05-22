@@ -11,8 +11,8 @@ function isIndividualVoting(xls) {
 }
 
 function splitter(sheet) {
-  output = [];
-  parser = parse({delimiter: ','})
+  var output = [];
+  var parser = parse({delimiter: ','})
   parser.on('readable', function(){
     while(row = parser.read()){
       output.push(row)

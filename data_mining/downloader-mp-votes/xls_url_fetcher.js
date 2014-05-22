@@ -1,42 +1,39 @@
-var Crawler = require("crawler").Crawler;
+var urlInfo = require('url')
+var Downloader = require('../common/node/downloader')
+var InputManager = require('./input')
+var $ = require('cheerio');
 
-var assemblies = {
-  41: "http://www.parliament.bg/bg/plenaryst/ns/7",
-  42: "http://www.parliament.bg/bg/plenaryst/ns/50",
+// input handling
+var inputMan = new InputManager();
+var argv = inputMan.getArguments();
+
+var logger = require('../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
+var downloader =  new Downloader(logger, [300,1000]);
+
+var baseUrl;
+function getFullUrl(el) {
+  return baseUrl + $(el).attr('href');
 }
-var logger = require('../common/node/logger')({
-	"type": "file",
-	"details": {
-		"filename": "error.log"
-	}
-})
 
-
-var c = new Crawler({ "maxConnections": 10 });
-
-function cbSession(error, result, $) {
+function scrapeSession(url, html) {
+  console.log('session', url)
+  var $content = $('#leftcontent', html)
   var xls = [];
-  var url = result.url;
 
-  if (error) {
-    logger.info("Can't retrieve: " + url)
-    return;
-  }
-  var date = $(".marktitle").eq(0).text().match(/\d+\/\d+\/\d+/g)[0]
+  var date = $content.find(".marktitle").eq(0).text().match(/\d+\/\d+\/\d+/g)[0]
              .replace(/(\d+)\/(\d+)\/(\d+)/g, function(match, d, m, y) { return [y, m, d].join("-") });
 
-
-  var $links = $('.frontList a');
+  var $links = $content.find('.frontList a');
   var $spreadsheets = $links.filter('[href$=".xls"]');
   if ($spreadsheets.length < 1) {
     logger.info("Missing XLS document(s) at: " + url)
   }
 
-  $spreadsheets.each(function(idx, el) {
-    xls.push(el.href);
+  $spreadsheets.each(function(i, el) {
+    xls.push(getFullUrl(el));
   })
 
-  var stenograph = $(".markcontent").text();
+  var stenograph = $content.find(".markcontent").text();
 
   console.log(JSON.stringify({
     date: date,
@@ -46,20 +43,31 @@ function cbSession(error, result, $) {
   }));
 }
 
-function scrapeSessions(error, result, $) {
-  $('#monthview a:contains("Пленарно заседание")').each(function(idx, el) {
-    c.queue({ "uri": el.href, "callback": cbSession });
+function scrapeSessions(html) {
+  $('#monthview a:contains("Пленарно заседание")', html).each(function(i, el) {
+    var url = getFullUrl(el)
+    downloader.get(url, function(html) {
+      scrapeSession(url, html);
+    });
   });
 }
 
-function scrapeMonths(error, result, $) {
-  $('.calendar_columns a').each(function(idx, el) {
-    c.queue({ "uri": el.href, "callback": scrapeSessions });
+function scrapeMonths(html) {
+  $('#calendar a', html).each(function(i, el) {
+    var url = getFullUrl(el)
+    downloader.get(url, scrapeSessions);
   });
 }
 
-var chosen = process.argv[2];
+function init() {
+  baseUrl = urlInfo.parse(argv.url);
+  baseUrl = baseUrl.protocol+'//' + baseUrl.host
+  downloader.get(argv.url, scrapeMonths);
+}
 
-c.queue({ "uri": assemblies[chosen], "callback": scrapeMonths });
+init()
 
-
+//var assemblies = {
+//  41: "http://www.parliament.bg/bg/plenaryst/ns/7",
+//  42: "http://www.parliament.bg/bg/plenaryst/ns/50",
+//}

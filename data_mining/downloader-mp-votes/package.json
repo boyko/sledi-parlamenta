@@ -10,6 +10,8 @@
 	"dependencies": {
 		"byline": "git://github.com/antitoxic/node-byline.git",
 		"xlsjs": "*",
+		"yargs": "*",
+		"cheerio": "*",
 		"csv-parse": "*"
 	},
 	"keywords": [
