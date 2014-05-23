@@ -11,7 +11,7 @@ STDIN.read.split("\n").each do |line|
   ob["xls"].each do |url|
     names << session_path + "/" + url.split('/')[-1]
     `cd #{session_path}; curl -sO #{url}`
-    sleep (rand()*4).round+1
+    sleep rand(1..5)
   end
   p names
 end

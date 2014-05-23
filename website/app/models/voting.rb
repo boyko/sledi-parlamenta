@@ -6,7 +6,6 @@ class Voting < ActiveRecord::Base
   scope :by_session, ->(session) { where(session: session) }
   scope :ordered, -> { order("voted_at") }
 
-
   def absent
     self.votes.where(value: "absent")
   end

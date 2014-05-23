@@ -5,6 +5,7 @@ class Member < ActiveRecord::Base
   has_many :questions, :foreign_key => "questioner_id"
   has_many :participations
   has_many :structures, through: :participations
+
   scope :by_date, ->(date) {
     where(
       (Participation.arel_table[:start_date].lt(date)).and(Participation.arel_table[:end_date].gt(date)).or(
@@ -14,14 +15,15 @@ class Member < ActiveRecord::Base
   scope :by_party, -> { joins(:structures).where(structures: { kind: Structure.kinds[:party]}) }
   scope :by_party_name, ->(name) { by_party.where(structures: { name: name }) }
   scope :by_constituency, ->(constituency) { joins(:participations).where(participations: { constituency: constituency }).uniq }
+  scope :order_by_names, -> { order(:first_name, :sir_name, :last_name) }
 
   def self.find_by_three_names names
     return nil if names == nil or names == ""
     names = names.split
     if names[3].nil?
-      Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2]).first
+      Member.where(:first_name => names[0], :sir_name => names[1], :last_name => names[2]).first_or_create
     else
-      Member.where(:first_name => names[0], :sir_name => names[1], :last_name => (names[2] + " " + names[3])).first
+      Member.where(:first_name => names[0], :sir_name => names[1], :last_name => (names[2] + " " + names[3])).first_or_create
     end
   end
 
