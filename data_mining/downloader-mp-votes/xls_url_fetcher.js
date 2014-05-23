@@ -10,9 +10,8 @@ var argv = inputMan.getArguments();
 var logger = require('../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
 var downloader =  new Downloader(logger, [1000, 5000]);
 
-var baseUrl;
 function getFullUrl(el) {
-  return baseUrl + $(el).attr('href');
+  return "http://www.parliament.bg" + $(el).attr('href');
 }
 
 function scrapeSession(url, html) {
@@ -57,8 +56,6 @@ function scrapeMonths(html) {
 }
 
 function init() {
-  baseUrl = urlInfo.parse(argv.url);
-  baseUrl = baseUrl.protocol+'//' + baseUrl.host
   downloader.get(argv.url, scrapeMonths);
 }
 
