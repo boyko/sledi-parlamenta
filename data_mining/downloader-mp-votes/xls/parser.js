@@ -17,7 +17,6 @@ function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-
 var markers = {
   groupVoting: "Регистрации и гласувания по ПГ",
   voting: "ГЛАСУВАНЕ",

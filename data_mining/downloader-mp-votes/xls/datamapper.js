@@ -19,19 +19,23 @@ XLSDataMapper.prototype = {
   eachRow: function(sheet, callback) {
     var self = this;
     var parsing = flow.defer();
-    var parser = CsvParser()
+    var parser = CsvParser();
+
     parser.on('readable', function(){
       var row;
       while(row = parser.read()){
         callback(row)
       }
     });
+
     parser.on('error', function(err){
       self.logger.info('Error while parsing CSV ('+ self.path + '):' + err)
     });
+
     parser.on('finish', function(err){
       parsing.resolve()
     });
+
     parser.write(XLSjs.utils.sheet_to_csv(sheet));
     parser.end();
     return parsing.promise;

@@ -8,7 +8,7 @@ var inputMan = new InputManager();
 var argv = inputMan.getArguments();
 
 var logger = require('../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
-var downloader =  new Downloader(logger, [300,1000]);
+var downloader =  new Downloader(logger, [1000, 5000]);
 
 var baseUrl;
 function getFullUrl(el) {
@@ -16,24 +16,21 @@ function getFullUrl(el) {
 }
 
 function scrapeSession(url, html) {
-  console.log('session', url)
   var $content = $('#leftcontent', html)
+  var stenograph = $content.find(".markcontent").text();
   var xls = [];
-
   var date = $content.find(".marktitle").eq(0).text().match(/\d+\/\d+\/\d+/g)[0]
              .replace(/(\d+)\/(\d+)\/(\d+)/g, function(match, d, m, y) { return [y, m, d].join("-") });
-
   var $links = $content.find('.frontList a');
   var $spreadsheets = $links.filter('[href$=".xls"]');
+
   if ($spreadsheets.length < 1) {
     logger.info("Missing XLS document(s) at: " + url)
   }
 
   $spreadsheets.each(function(i, el) {
     xls.push(getFullUrl(el));
-  })
-
-  var stenograph = $content.find(".markcontent").text();
+  });
 
   console.log(JSON.stringify({
     date: date,
@@ -67,7 +64,3 @@ function init() {
 
 init()
 
-//var assemblies = {
-//  41: "http://www.parliament.bg/bg/plenaryst/ns/7",
-//  42: "http://www.parliament.bg/bg/plenaryst/ns/50",
-//}
