@@ -9,7 +9,10 @@ $stdin.each_line do |line|
   `mkdir -p #{session_path}`
   names = []
   ob["xls"].each do |url|
-    names << session_path + "/" + url.split('/')[-1]
+    names << name = session_path + "/" + url.split('/')[-1]
+
+    next if File.exists?(name)
+
     `cd #{session_path}; curl -sO #{url}`
     sleep rand(1..5)
   end

@@ -6,7 +6,7 @@ $stdin.each_line do |session_str|
 
   date = session['date']
 
-  a = Structure.assemblies.by_date(date)
+  a = Structure.assemblies.by_date(date).first
 
   # We must use find_or_create_by, because there is another script
   # that saves the stenograph and url and we don't know the which
