@@ -2,7 +2,7 @@ require "json"
 
 path = ARGV[0]
 
-STDIN.read.split("\n").each do |line|
+$stdin.each_line do |line|
   ob = JSON.parse line
   date = ob["date"]
   session_path = path + "/" + date
