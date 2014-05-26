@@ -1,5 +1,6 @@
 # Persists members, question, speeches
 
+require File.expand_path('../../../website/config/environment',  __FILE__)
 require 'json'
 
 class String
@@ -8,8 +9,8 @@ class String
   end
 end
 
-$stdin.each_line do |member|
-  member_ob = JSON.load member
+$stdin.each_line do |member_str|
+  member_ob = JSON.load member_str
 
   # find member - this will merge profiles
   member = Member.find_by_names_and_bd(
