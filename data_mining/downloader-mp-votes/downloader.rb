@@ -1,6 +1,8 @@
 require "json"
+require 'logger'
 
 path = ARGV[0]
+logger = Logger.new('downloader.log')
 
 $stdin.each_line do |line|
   ob = JSON.parse line
@@ -16,6 +18,12 @@ $stdin.each_line do |line|
     `cd #{session_path}; curl -sO #{url}`
     sleep rand(1..5)
   end
-  p names
+
+  if names.length < 2
+    logger.warn "Too few xls files: #{names.length}"
+  else
+    p names
+  end
+
 end
 
