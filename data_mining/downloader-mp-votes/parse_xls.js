@@ -6,10 +6,7 @@ var voteMapper = {
   "+": "yes",
   "-": "no",
   "=": "abstain",
-  "0": "absent"
-};
-
-var registrationMapper = {
+  "0": "absent",
   "О": "not_registered",
   "Р": "manually_registered",
   "П": "registered"
@@ -57,13 +54,23 @@ function extractMembers(votesData) {
 };
 
 function extractVotings(votingsData) {
-  return votingsData
+  var votings = votingsData
     .filter(function(row) { return /ГЛАСУВАНЕ/.test(row[0]); } )
     .map(function(voting_name_row) {
       var time = voting_name_row[0].match(markers.timeRegex)[0];
       var topic = voting_name_row[0].split(markers.topicSplitter)[1];
       return [time, topic];
     });
+
+  var registrations = votingsData
+    .filter(function(row) { return /РЕГИСТРАЦИЯ/.test(row[0]); } )
+    .map(function(voting_name_row) {
+      var time = voting_name_row[0].match(markers.timeRegex)[0];
+      var topic = "Регистрация";
+      return [time, topic];
+    });
+
+  return registrations.concat(votings);
 };
 
 function parseData(iv_sheet, gv_sheet) {
@@ -71,16 +78,12 @@ function parseData(iv_sheet, gv_sheet) {
       votesData = prepare(iv_sheet)
         // fetch only rows with the members and corresponding votings.
         // The rows are filtered by the data in the registration cell - it should be only О, П and Р. (cyrillic)
-        .filter(function(row) { return Object.keys(registrationMapper).indexOf(row[4]) > -1 }),
+        .filter(function(row) { return Object.keys(voteMapper).indexOf(row[4]) > -1 }),
       votings = extractVotings(votingsData),
       votes = extractVotesOrRegistrations(votesData, voteMapper),
       session = {
         date: gv_sheet['A2'].v.match(markers.dateRegex)[0],
-        members: extractMembers(votesData),
-        registration: {
-          time: gv_sheet['A2'].v.match(markers.timeRegex)[0],
-          data: column(extractVotesOrRegistrations(votesData, registrationMapper), 0)
-        }
+        members: extractMembers(votesData)
       };
 
   session.votings = votings.map(function(voting, idx) {
@@ -95,7 +98,12 @@ function parseData(iv_sheet, gv_sheet) {
 };
 
 function init(paths) {
-  var xls = [XLS.readFile(paths[0]), XLS.readFile(paths[1])];
+  var xls;
+
+  if (paths.length < 2)
+    return;
+
+  xls = [XLS.readFile(paths[0]), XLS.readFile(paths[1])];
 
   if(isGroupVoting(xls[0]))
     xls.reverse();
