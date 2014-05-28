@@ -20,7 +20,7 @@ $stdin.each_line do |line|
   end
 
   if names.length < 2
-    logger.warn "Too few xls files: #{names.length}"
+    logger.warn "Too few xls files: #{names.length} for date: #{date}"
   else
     p names
   end

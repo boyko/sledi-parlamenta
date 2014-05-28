@@ -1,5 +1,8 @@
 require File.expand_path('../../../website/config/environment',  __FILE__)
 require 'json'
+require 'logger'
+
+logger = Logger.new('persister.log')
 
 $stdin.each_line do |session_str|
   session = JSON.parse session_str
@@ -21,7 +24,13 @@ $stdin.each_line do |session_str|
     v = Voting.create(session: s, topic: voting['topic'], voted_at: time)
 
     voting['votes'].each_with_index do |vote, idx|
-      Vote.create(member: members[idx], voting: v, value: Vote.values[vote.to_sym])
+
+      if vote.in? Vote.values
+        logger.error "Value: '#{vote}' is not valid for member id: #{members[idx].id}, session id: #{s.id}, voting topic: #{v.topic}"
+        next
+      else
+        Vote.create(member: members[idx], voting: v, value: Vote.values[vote.to_sym])
+      end
     end
   end
 
