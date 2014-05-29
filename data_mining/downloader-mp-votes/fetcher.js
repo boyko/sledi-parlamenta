@@ -59,5 +59,5 @@ function init() {
   downloader.get(argv.url, scrapeMonths);
 }
 
-init()
+init();
 

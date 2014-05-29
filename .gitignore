@@ -16,3 +16,5 @@ website/config/database.yml
 website/db/logfile
 
 data_mining/downloader-mp-votes/error.log
+
+data_mining/downloader-mp-votes/downloader.log

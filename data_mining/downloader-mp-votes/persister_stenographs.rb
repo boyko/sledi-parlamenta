@@ -17,5 +17,7 @@ $stdin.each_line do |session_str|
   s.url = session['url']
   s.save
 
+  puts "Successfully persisted stenograph for session on #{date}"
+
 end
 
