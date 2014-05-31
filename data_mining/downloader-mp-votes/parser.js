@@ -13,7 +13,8 @@ var voteMapper = {
 };
 
 var markers = {
-  groupVoting: "Регистрации и гласувания по ПГ",
+  groupVoting: ["Регистрации и гласувания по ПГ",
+    "Регистрации и гласувания по парламентарни групи"],
   topicSplitter: " по тема ",
   timeRegex: /\d{2}:\d{2}/,
   dateRegex: /\d{2}-\d{2}-\d{4}/
@@ -21,7 +22,7 @@ var markers = {
 
 // helper functions
 function isGroupVoting(xls) {
-  return xls.SheetNames.indexOf(markers.groupVoting) > -1;
+  return markers.groupVoting.indexOf(xls.SheetNames[0]) > -1;
 }
 
 // transform the csv to a matrix
@@ -74,6 +75,15 @@ function extractVotings(votingsData) {
 };
 
 function parseData(iv_sheet, gv_sheet) {
+
+  if (typeof gv_sheet['A2'] === "undefined") {
+    console.log("yes");
+    return;
+  }else {
+    console.log("no");
+    return
+  }
+
   var votingsData = prepare(gv_sheet),
       votesData = prepare(iv_sheet)
         // fetch only rows with the members and corresponding votings.
