@@ -76,14 +76,6 @@ function extractVotings(votingsData) {
 
 function parseData(iv_sheet, gv_sheet) {
 
-  if (typeof gv_sheet['A2'] === "undefined") {
-    console.log("yes");
-    return;
-  }else {
-    console.log("no");
-    return
-  }
-
   var votingsData = prepare(gv_sheet),
       votesData = prepare(iv_sheet)
         // fetch only rows with the members and corresponding votings.
