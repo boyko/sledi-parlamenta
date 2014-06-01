@@ -6,7 +6,27 @@ class Session < ActiveRecord::Base
   scope :by_year, ->(year) { where("date >= ? and date <= ?", year.to_datetime.beginning_of_year, year.to_datetime.end_of_year) }
 
   def members
-    self.votings.first.members
+    votings = self.votings
+    s = self
+    while votings.length == 0 do
+      s = s.prev
+      votings = s.votings
+    end
+    votings.first.members
+  end
+
+  def registration
+    self.votings.find_by(topic: "Регистрация")
+  end
+
+  def prev
+    sess = Session.arel_table
+    Session.where(sess[:date].lt(self.date)).order("date desc").first
+  end
+
+  def next
+    sess = Session.arel_table
+    Session.where(sess[:date].gt(self.date)).order("date asc").first
   end
 
   def absent_votes
