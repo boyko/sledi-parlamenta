@@ -16,7 +16,8 @@ module SessionHelper
     stenograph.gsub! "\r\n", "<br>"
 
     members.each do |m|
-      stenograph.gsub! m[1], "<a href='/members/#{m[0]}'>#{m[1]}</a>"
+      regex = /(#{m[1]}|#{m[1].mb_chars.upcase.to_s})/
+      stenograph.gsub! regex, "<a href='/members/#{m[0]}'>#{m[1]}</a>"
     end
 
     regex = /Гласували \d+ народни представители: за (\d+|няма), против (\d+,|няма,|и) (въздържали се|въздържал се) (\d+|няма|– няма)\./
