@@ -18,5 +18,15 @@ class SessionsController < ApplicationController
     render :json => prepare_data(data)
   end
 
+  def prev
+    current_session = Session.find(params[:session_id])
+    redirect_to session_url(current_session.prev)
+  end
+
+  def next
+    current_session = Session.find(params[:session_id])
+    redirect_to session_url(current_session.next)
+  end
+
 end
 

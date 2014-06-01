@@ -2,6 +2,8 @@ OpWebsite::Application.routes.draw do
 
   resources :sessions, :only => [:index, :show] do
     get 'votings'
+    get 'prev'
+    get 'next'
   end
 
   resources :votings, :only => [] do

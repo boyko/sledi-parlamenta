@@ -1,3 +1,6 @@
+<%= link_to "Предходно заседание", session_prev_path(@session), class: 'btn btn-default' %>
+<%= link_to "Следващо заседание", session_next_path(@session), class: 'btn btn-default pull-right' %>
+
 <h3><%= @session.date %></h3>
 
 <%= raw process_stenograph @session %>
