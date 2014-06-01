@@ -3,7 +3,7 @@ module SessionHelper
   # s is for session. 'session' is reserved word for rails
   def process_stenograph s
 
-    members = Member.select("first_name, last_name, id").map { |m| [m.id, m.first_name + " " + m.last_name] }
+    members = s.members.pluck(:id, :first_name, :last_name).map { |m| [m[0], m[1] + " " + m[2]] }
     votings = Voting.select("id", "topic").by_session(s).non_registration.ordered.to_a
 
     stenograph = "<div class='links'>"
@@ -19,9 +19,9 @@ module SessionHelper
       stenograph.gsub! m[1], "<a href='/members/#{m[0]}'>#{m[1]}</a>"
     end
 
-    regex = /Гласували \d+ народни представители: за (\d+|няма), против (\d+|няма), (въздържали се|въздържал се) (\d+|няма|– няма)\./
+    regex = /Гласували \d+ народни представители: за (\d+|няма), против (\d+,|няма,|и) (въздържали се|въздържал се) (\d+|няма|– няма)\./
 
-    regex_enum = stenograph.gsub!(regex)
+    regex_enum = stenograph.gsub! regex
 
     regex_enum.each_with_index do |match, idx|
       options = {
