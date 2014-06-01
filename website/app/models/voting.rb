@@ -5,6 +5,7 @@ class Voting < ActiveRecord::Base
 
   scope :by_session, ->(session) { where(session: session) }
   scope :ordered, -> { order("voted_at") }
+  scope :non_registration, -> { where.not(topic: "Регистрация") }
 
   def absent
     self.votes.where(value: "absent")

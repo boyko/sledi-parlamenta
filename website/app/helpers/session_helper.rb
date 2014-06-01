@@ -4,7 +4,7 @@ module SessionHelper
   def process_stenograph s
 
     members = Member.select("first_name, last_name, id").map { |m| [m.id, m.first_name + " " + m.last_name] }
-    votings = Voting.select("id", "topic").by_session(s).ordered.to_a
+    votings = Voting.select("id", "topic").by_session(s).non_registration.ordered.to_a
 
     stenograph = "<div class='links'>"
     stenograph += votings.map { |v, idx|
