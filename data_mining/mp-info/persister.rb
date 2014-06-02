@@ -108,16 +108,21 @@ end
 
 # all members, structures, questions and speeches are persisted by now.
 # Get assemblies and assign them the timerange.
+# Data is collected from: http://en.wikipedia.org/wiki/National_Assembly_(Bulgaria)
 
-data = [["39-то Народно събрание", "05.07.2001", "17.06.2005"],
+data = [["36-то Народно събрание", "04.11.1991", "17.10.1994"],
+        ["37-мо Народно събрание", "12.01.1995", "13.02.1997"],
+        ["38-мо Народно събрание", "07.05.1997", "19.04.2001"],
+        ["39-то Народно събрание", "05.07.2001", "17.06.2005"],
         ["40-то Народно събрание", "11.07.2005", "25.06.2009"],
         ["41-во Народно събрание", "14.07.2009", "15.03.2013"],
         ["42-ро Народно събрание", "21.05.2013", nil]]
 
-data.each do |a|
-  s = Structure.find_by_name(a[0])
-  s.start_date = a[1]
-  s.end_date = a[2]
+data.each do |assembly|
+  s = Structure.find_or_create_by(name: assembly[0])
+  s.kind = Structure.kinds[:assembly]
+  s.start_date = assembly[1]
+  s.end_date = assembly[2]
   s.save
 end
 
