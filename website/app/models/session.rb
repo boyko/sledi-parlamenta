@@ -7,12 +7,11 @@ class Session < ActiveRecord::Base
 
   def members
     votings = self.votings
-    s = self
-    while votings.length == 0 do
-      s = s.prev
-      votings = s.votings
+    if votings.length == 0
+      Member.none
+    else
+      votings.first.members
     end
-    votings.first.members
   end
 
   def registration
