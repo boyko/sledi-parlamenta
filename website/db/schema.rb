@@ -102,7 +102,6 @@ ActiveRecord::Schema.define(version: 20140418192605) do
 
   create_table "votings", force: true do |t|
     t.integer  "session_id"
-    t.integer  "version_id"
     t.text     "topic"
     t.datetime "voted_at"
     t.string   "result"
@@ -111,6 +110,5 @@ ActiveRecord::Schema.define(version: 20140418192605) do
   end
 
   add_index "votings", ["session_id"], name: "index_votings_on_session_id", using: :btree
-  add_index "votings", ["version_id"], name: "index_votings_on_version_id", using: :btree
 
 end
