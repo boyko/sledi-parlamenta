@@ -10,6 +10,8 @@ OpWebsite::Application.routes.draw do
     get 'by_name'
   end
 
+  resources :structures, :only => [:index, :show]
+
   resources :members, :only => [:index, :show]
 
   root :to => "members#index"
