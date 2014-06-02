@@ -80,17 +80,14 @@ class Member < ActiveRecord::Base
     now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
   end
 
+  # only non-empty queries allowed
   def self.search(query)
-    if query.blank?
-      all
-    else
-      sql = query.split.map do |word|
-       %w[first_name sir_name last_name].map do |column|
-        sanitize_sql ["lower(#{column}) LIKE lower(?)", "%#{word}%"]
-       end.join(" or ")
-      end.join(") and (")
-      where("(#{sql})")
-    end
+    sql = query.split.map do |word|
+     %w[first_name sir_name last_name].map do |column|
+      sanitize_sql ["lower(#{column}) LIKE lower(?)", "%#{word}%"]
+     end.join(" or ")
+    end.join(") and (")
+    where("(#{sql})")
   end
 
   def self.create_joins structure_ids

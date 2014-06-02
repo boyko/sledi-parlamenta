@@ -2,7 +2,8 @@ class MembersController < ApplicationController
   def index
 
     query = Member.all
-    query = query.search(member_params[:q])
+    search_query = member_params[:q]
+    query = query.search(search_query) unless search_query.blank?
 
     order = member_params[:order] || "first_name"
     constituency = member_params[:constituency]
