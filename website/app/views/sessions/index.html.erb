@@ -6,7 +6,20 @@
   <div class="panel-heading text-center">
     <%= link_to "<", { year: @year.prev_year.strftime("%Y") }, class: "btn btn-default" %>
       &nbsp;&nbsp;&nbsp;&nbsp;
-    <%= @year.strftime("%Y") %>&nbsp;&nbsp;&nbsp;&nbsp;
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <%= @year.strftime("%Y") %> <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <% (Session.order("date").first.date.year..Time.now.year).to_a.each do |year| %>
+        <%= content_tag(:li, link_to("#{year}", year: year )) %>
+      <% end %>
+    </ul>
+  </div>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
     <% if Date.today.beginning_of_year >= @year.next_year.beginning_of_year %>
       <%= link_to ">", { year: @year.next_year.strftime("%Y") }, class: "btn btn-default" %>
     <% end %>
