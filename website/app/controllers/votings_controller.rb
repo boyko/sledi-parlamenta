@@ -21,7 +21,7 @@ class VotingsController < ApplicationController
 
   def create_svg_diagram data
 
-    data = data.keys.group_by { |r| r[0] }.map { |k, v|
+    data = data.keys.group_by { |r| r[0] }.map do |k, v|
       {
         party: k,
         members: v.map { |i|
@@ -32,14 +32,16 @@ class VotingsController < ApplicationController
           }
         }
       }
-    }
+    end
     cols = 8
     width = 15
     height = 15
     margin = 1
     gr_margin = 20
 
-    html = "<br><svg width='1000' height='220'>"
+    width_svg = (width+margin)*cols*data.length
+
+    html = "<br><svg width='#{width_svg}' height='220'>"
     data.each_with_index do |p, outer_idx|
       offset = outer_idx * (cols * (width + margin) + gr_margin)
       p[:members].each_with_index do |el, idx|

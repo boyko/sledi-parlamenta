@@ -14,8 +14,8 @@ class SessionsController < ApplicationController
   end
 
   def votings
-    data = Session.find(params[:session_id]).votes_by_voting
-    render :json => prepare_data(data)
+    s = Session.find(params[:session_id])
+    render :json => s.votings.ordered.pluck(:id, :topic, :voted_at)
   end
 
   def prev
