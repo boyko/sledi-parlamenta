@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Структури</h1>
+  <h1>Структури <span class="label label-default"><%= @structures.count%></span></h1>
 </div>
 
 <%= form_tag("/structures", method: "get", html: { class: "form-inline"} ) do %>
@@ -29,12 +29,12 @@
     <td>Създадена</td>
     <td>Закрита</td>
   </tr>
-    <% @structures.each_with_index do |m, index| %>
+    <% @structures.each_with_index do |s, index| %>
   <tr>
-    <td><%= link_to m.name, structure_path(m) %></td>
-    <td><%= m.kind %></td>
-    <td><%= m.start_date %></td>
-    <td><%= m.end_date %></td>
+    <td><%= link_to s.name, structure_path(s) %></td>
+    <td><%= Structure.bg_kinds.key(Structure.kinds[s.kind]) %></td>
+    <td><%= s.start_date %></td>
+    <td><%= s.end_date %></td>
   </tr>
 <% end %>
 
