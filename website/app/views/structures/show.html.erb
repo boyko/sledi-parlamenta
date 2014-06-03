@@ -1,1 +1,27 @@
-<%= @structure.name %>
+<div class="page-header">
+  <h1><%= @structure.name %></h1>
+</div>
+
+<h3>Членове</h3>
+
+<table class="table table-striped">
+  <tr>
+    <td>Имена</td>
+    <td>Възраст</td>
+    <td>Роден град</td>
+    <td>Езици</td>
+    <td>Професия</td>
+    <td>email</td>
+  </tr>
+    <% @structure.members.uniq.each_with_index do |m, index| %>
+  <tr>
+    <td><%= link_to m.names, member_path(m) %></td>
+    <td><%= m.age %></td>
+    <td><%= m.hometown %></td>
+    <td><%= m.languages %></td>
+    <td><%= m.profession %></td>
+    <td><%= m.email %></td>
+  </tr>
+<% end %>
+
+</table>
