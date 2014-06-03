@@ -1,9 +1,21 @@
 class StructuresController < ApplicationController
   def index
-    @structures = Structure.all
+    query = Structure.all
+    search_query = structure_params[:q]
+    kind = structure_params[:kind]
+    query = query.search(search_query) unless search_query.blank?
+    query = query.by_kind(kind) unless kind.blank?
+
+    @structures = query.paginate(:page => structure_params[:page])
   end
 
   def show
     @structure = Structure.find(params[:id])
+  end
+
+  private
+
+  def structure_params
+    params.slice(:q, :kind, :page)
   end
 end

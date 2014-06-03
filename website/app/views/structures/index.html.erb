@@ -2,6 +2,26 @@
   <h1>Структури</h1>
 </div>
 
+<%= form_tag("/structures", method: "get", html: { class: "form-inline"} ) do %>
+  <div class="input-group">
+    <%= text_field_tag(:q, params[:q], class: "form-control input-sm", placeholder: "търси") %>
+    <span class="input-group-btn">
+      <%= submit_tag("Търси", name: nil, class: "btn btn-default btn-sm") %>
+    </span>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col-md-4">
+      <%= select(nil, :kind, options_for_select(Structure.bg_kinds, selected: params[:kind]), { include_blank: 'Всички структури' }, { class: "form-control input-sm"  }) %>
+    </div>
+    <div class="col-md-8 paginate">
+      <%= paginate_always(@structures) %>
+    </div>
+  </div>
+
+<% end %>
+
 <table class="table table-striped">
   <tr>
     <td>Име</td>
