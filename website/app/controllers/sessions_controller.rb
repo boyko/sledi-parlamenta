@@ -6,6 +6,10 @@ class SessionsController < ApplicationController
 
   def show
     @session = Session.find(params[:id])
+    @votings = @session.votings
+    if @votings.count == 0
+      flash.now[:notice] = "Не бяха намерени гласувания за тази сесия."
+    end
   end
 
   def attendance
