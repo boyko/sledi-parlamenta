@@ -4,6 +4,10 @@ class Session < ActiveRecord::Base
   belongs_to :structure
 
   scope :by_year, ->(year) { where("date >= ? and date <= ?", year.to_datetime.beginning_of_year, year.to_datetime.end_of_year) }
+  scope :assemblies, -> { joins(:structure).where(structures: { kind: Structure.kinds[:assembly] }) }
+  scope :committees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:committee] }) }
+  scope :t_committees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:t_committee] }) }
+  scope :subcommittees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:subcommittee] }) }
 
   def members
     votings = self.votings
