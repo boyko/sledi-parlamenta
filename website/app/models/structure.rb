@@ -1,5 +1,5 @@
 class Structure < ActiveRecord::Base
-  enum kind: [:assembly, :party, :comittee, :t_comittee, :subcomittee, :delegation, :f_group]
+  enum kind: [:assembly, :party, :committee, :t_committee, :subcommittee, :delegation, :f_group]
   enum bg_kind: ["Народно събрание", "Партия", "Постоянна комисия", "Временна комисия", "Подкомисия", "Делегация", "Група за приятелство"]
 
   has_many :participations

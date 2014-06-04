@@ -45,7 +45,7 @@
     <% end %>
     </table>
 
-   <% if @member.comittees.count == 0 %>
+   <% if @member.committees.count == 0 %>
      <h5>Няма постоянни комисии</h5>
    <% else %>
     <h5>Постоянни комисии</h5>
@@ -57,7 +57,7 @@
         <td>Име</td>
         <td>позиция</td>
       </tr>
-    <% @member.comittees.each do |p| %>
+    <% @member.committees.each do |p| %>
       <tr>
         <td><%= p.start_date %></td>
         <td><%= p.end_date %></td>
@@ -68,7 +68,7 @@
     </table>
   <% end %>
 
-   <% if @member.t_comittees.count == 0 %>
+   <% if @member.t_committees.count == 0 %>
      <h5>Няма временни комисии</h5>
    <% else %>
 
@@ -81,7 +81,7 @@
         <td>Име</td>
         <td>позиция</td>
       </tr>
-    <% @member.t_comittees.each do |p| %>
+    <% @member.t_committees.each do |p| %>
       <tr>
         <td><%= p.start_date %></td>
         <td><%= p.end_date %></td>
@@ -92,7 +92,7 @@
   </table>
   <% end %>
 
-   <% if @member.subcomittees.count == 0 %>
+   <% if @member.subcommittees.count == 0 %>
      <h5>Няма парламентарни подкомисии</h5>
    <% else %>
      <h5>Парламентарни подкомисии</h5>
@@ -104,7 +104,7 @@
         <td>Име</td>
         <td>позиция</td>
       </tr>
-    <% @member.subcomittees.each do |p| %>
+    <% @member.subcommittees.each do |p| %>
       <tr>
         <td><%= p.start_date %></td>
         <td><%= p.end_date %></td>

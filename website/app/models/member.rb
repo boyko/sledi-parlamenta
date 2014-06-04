@@ -53,16 +53,16 @@ class Member < ActiveRecord::Base
     Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:party]})
   end
 
-  def comittees
-    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:comittee]})
+  def committees
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:committee]})
   end
 
-  def t_comittees
-    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:t_comittee]})
+  def t_committees
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:t_committee]})
   end
 
-  def subcomittees
-    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:subcomittee]})
+  def subcommittees
+    Participation.where(member: self).joins(:structure).where(structures: { kind: Structure.kinds[:subcommittee]})
   end
 
   def delegations

@@ -37,9 +37,9 @@ $stdin.each_line do |member_str|
     type = case s['type']
       when "Членове на Народно събрание" then "assembly"
       when "Парламентарни групи" then "party"
-      when "Постоянни парламентарни комисии" then "comittee"
-      when "Временни парламентарни комисии" then "t_comittee"
-      when "Парламентарни подкомисии" then "subcomittee"
+      when "Постоянни парламентарни комисии" then "committee"
+      when "Временни парламентарни комисии" then "t_committee"
+      when "Парламентарни подкомисии" then "subcommittee"
       when "Парламентарни делегации" then "delegation"
       when "Групи за приятелство" then "f_group"
       else "Unknown type"
@@ -65,7 +65,7 @@ $stdin.each_line do |member_str|
         .gsub("41-о Народно събрание", "41-во Народно събрание")
     end
 
-    name = name.mb_chars.downcase.capitalize.to_s if type == "comittee"
+    name = name.mb_chars.downcase.capitalize.to_s if type == "committee"
 
     name = name.gsub("\n", "").gsub("\r\n", "")
 
