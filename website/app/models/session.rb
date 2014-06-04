@@ -1,7 +1,7 @@
 class Session < ActiveRecord::Base
   has_many :votings
   has_many :votes, :through => :votings
-  belongs_to :assembly, :class_name => "Structure", :foreign_key => "assembly_id"
+  belongs_to :structure
 
   scope :by_year, ->(year) { where("date >= ? and date <= ?", year.to_datetime.beginning_of_year, year.to_datetime.end_of_year) }
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418192605) do
+ActiveRecord::Schema.define(version: 20140604081709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20140418192605) do
   add_index "questions", ["respondent_id"], name: "index_questions_on_respondent_id", using: :btree
 
   create_table "sessions", force: true do |t|
-    t.integer  "assembly_id"
+    t.integer  "structure_id"
     t.string   "url"
     t.text     "stenograph"
     t.date     "date"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20140418192605) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["assembly_id"], name: "index_sessions_on_assembly_id", using: :btree
+  add_index "sessions", ["structure_id"], name: "index_sessions_on_structure_id", using: :btree
 
   create_table "structures", force: true do |t|
     t.integer  "kind"
