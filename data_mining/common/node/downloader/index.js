@@ -23,39 +23,39 @@ Downloader.prototype = {
   maxAttempt: null,
 	get: function(url, callback, attempt) {
 		var self = this;
-        return self.lastInQueue =  self.lastInQueue.then(function() {
-            var done = flow.defer();
-            request({
-                "url": url,
-                "headers": headers
-            }, function (err, res, html) {
-                done.resolve()
-                if (err || res.statusCode != 200) {
-                    self.logger.error("Can't retrieve " + url + ", "+res.statusCode + ", err: "+res.statusCode);
-                }
-                if (typeof(callback) == 'function') callback(html);
-            })
-            .on('error', function(err) {
-                self.logger.error("Can't retrieve " + url + ", " + err);
-                if (typeof attempt != 'undefined' && attempt==self.maxAttempt) return;
-                attempt = typeof attempt == 'undefined' ? 0 : attempt;
-                self.get(url, callback, attempt++)
-            })
-            return done.promise;
-        }).delay(Math.floor(Math.random()*(self.rateDelay[1]-self.rateDelay[0]+1)+self.rateDelay[0]))
+      return self.lastInQueue = self.lastInQueue.then(function() {
+        var done = flow.defer();
+        request({
+          "url": url,
+          "headers": headers
+        }, function (err, res, html) {
+          done.resolve()
+          if (err || res.statusCode != 200) {
+            self.logger.error("Can't retrieve " + url + ", "+res.statusCode + ", err: "+res.statusCode);
+          }
+          if (typeof(callback) == 'function') callback(html);
+        })
+        .on('error', function(err) {
+          self.logger.error("Can't retrieve " + url + ", " + err);
+          if (typeof attempt != 'undefined' && attempt==self.maxAttempt) return;
+          attempt = typeof attempt == 'undefined' ? 0 : attempt;
+          self.get(url, callback, attempt++)
+        })
+        return done.promise;
+      }).delay(Math.floor(Math.random()*(self.rateDelay[1]-self.rateDelay[0]+1)+self.rateDelay[0]));
 	},
 	save: function(url, destination, callback, attempt) {
-        var self = this;
+    var self = this;
 		request({
 			"url": url,
 			"headers": headers
 		})
-        .on('error', function(err) {
-            self.logger.error("Can't retrieve " + url + ", " + err);
-            if (typeof attempt != 'undefined' && attempt>0) return;
-            self.save(url, destination, callback, 1)
-        })
-        .pipe(fs.createWriteStream(destination)).on("finish", callback)
+    .on('error', function(err) {
+      self.logger.error("Can't retrieve " + url + ", " + err);
+      if (typeof attempt != 'undefined' && attempt>0) return;
+      self.save(url, destination, callback, 1)
+    })
+    .pipe(fs.createWriteStream(destination)).on("finish", callback)
 	}
 }
 exports = module.exports = Downloader;
