@@ -4,7 +4,7 @@
   <div class="col-md-8 mp-info">
     <div class="panel panel-default">
       <div class="panel-heading text-center">
-        <h4>Парламентарна активност</h4>
+        <h4 class="panel-title">Парламентарна активност</h4>
       </div>
 
     <h5 class="ns">Народни събрания:</h5>
@@ -171,9 +171,22 @@
   </div>
 
   <div class="col-md-4">
+
+
     <div class="panel panel-default">
       <div class="panel-heading text-center">
-        <h4>Лични данни</h4>
+        <h3 class="panel-title">Снимка</h3>
+      </div>
+      <div class="panel-body text-center">
+        <% @member.gov_site_ids.split(", ").each do |id| %>
+          <%= image_tag("/members/#{id}.png") %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">Лични данни</h3>
       </div>
       <table class="table table-bordered">
         <tr>
