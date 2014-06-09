@@ -11,6 +11,8 @@ class StructuresController < ApplicationController
 
   def show
     @structure = Structure.find(params[:id])
+    @year = params[:year].blank? ? Date.today : Date.new(params[:year].to_i)
+    @sessions = Session.by_structure_name(@structure.name).by_year(@year).group_by { |s| s.date }
   end
 
   private
