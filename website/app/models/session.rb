@@ -25,12 +25,14 @@ class Session < ActiveRecord::Base
 
   def prev
     sess = Session.arel_table
-    Session.where(sess[:date].lt(self.date)).order("date desc").first
+    structure_name = self.structure.name
+    Session.by_structure_name(structure_name).where(sess[:date].lt(self.date)).order("date desc").first
   end
 
   def next
     sess = Session.arel_table
-    Session.where(sess[:date].gt(self.date)).order("date asc").first
+    structure_name = self.structure.name
+    Session.by_structure_name(structure_name).where(sess[:date].gt(self.date)).order("date asc").first
   end
 
   def absent_votes
