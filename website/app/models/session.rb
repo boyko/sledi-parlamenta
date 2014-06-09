@@ -8,6 +8,7 @@ class Session < ActiveRecord::Base
   scope :committees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:committee] }) }
   scope :t_committees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:t_committee] }) }
   scope :subcommittees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:subcommittee] }) }
+  scope :by_structure_name, ->(name) { joins(:structure).where(structures: { name: name }) }
 
   def members
     votings = self.votings
