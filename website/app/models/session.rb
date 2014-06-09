@@ -1,6 +1,7 @@
 class Session < ActiveRecord::Base
   has_many :votings
   has_many :votes, :through => :votings
+  has_many :members, :through => :structure
   belongs_to :structure
 
   scope :by_year, ->(year) { where("date >= ? and date <= ?", year.to_datetime.beginning_of_year, year.to_datetime.end_of_year) }
@@ -9,15 +10,6 @@ class Session < ActiveRecord::Base
   scope :t_committees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:t_committee] }) }
   scope :subcommittees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:subcommittee] }) }
   scope :by_structure_name, ->(name) { joins(:structure).where(structures: { name: name }) }
-
-  def members
-    votings = self.votings
-    if votings.length == 0
-      Member.none
-    else
-      votings.first.members
-    end
-  end
 
   def registration
     self.votings.find_by(topic: "Регистрация")
