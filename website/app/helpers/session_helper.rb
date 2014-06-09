@@ -6,12 +6,13 @@ module SessionHelper
     members = s.members.pluck(:id, :first_name, :last_name).map { |m| [m[0], m[1] + " " + m[2]] }
     votings = Voting.select("id", "topic").by_session(s).non_registration.ordered.to_a
 
-    stenograph = "<div class='links'>"
-    stenograph += votings.map { |v, idx|
+    votings_list = "<div class='links'>"
+    votings_list += votings.map { |v, idx|
       link_to v.topic, "#voting-" + v.id.to_s
     }.join("<br>")
-    stenograph += "</div><pre>"
-    stenograph += s.stenograph
+    votings_list += "</div><br><pre>"
+
+    stenograph = s.stenograph
 
     stenograph.gsub! "\r\n", "<br>"
 
@@ -39,7 +40,7 @@ module SessionHelper
       end
     end
 
-    stenograph + "</pre>"
+    votings_list + stenograph + "</pre>"
   end
 
   def calendar year, &block
