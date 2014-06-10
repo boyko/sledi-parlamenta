@@ -4,6 +4,7 @@ class Structure < ActiveRecord::Base
 
   has_many :participations
   has_many :members, through: :participations
+  has_many :sessions
 
   scope :parties, -> { where(kind: Structure.kinds[:party]) }
   scope :assemblies, -> { where(kind: Structure.kinds[:assembly]) }
