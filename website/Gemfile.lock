@@ -51,6 +51,9 @@ GEM
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano3-puma (0.5.1)
+      capistrano (~> 3.0)
+      puma (>= 2.6)
     coderay (1.1.0)
     commonjs (0.2.7)
     debug_inspector (0.0.2)
@@ -175,6 +178,7 @@ DEPENDENCIES
   capistrano
   capistrano-bundler
   capistrano-rails
+  capistrano3-puma
   font-awesome-rails
   jbuilder (~> 1.2)
   jquery-rails
