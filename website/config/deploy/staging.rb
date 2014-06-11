@@ -1,3 +1,1 @@
-server 'marla.ludost.net', user: 'openparliament', roles: %w(app web db)
-
-set :deploy_to, '/home/openparliament/staging.parliament.obshtestvo.bg'
+set :deploy_to, '/var/www/staging.parliament.obshtestvo.bg'
