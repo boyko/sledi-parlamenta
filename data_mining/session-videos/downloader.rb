@@ -26,7 +26,15 @@ sessions.map do |d|
   d.strftime("%Y_%m_%d")
 end.each do |date|
   (1..10).each do |part|
-    url = "193.109.55.86/video/archive-#{date}_#{part}.mp4"
+    name = "archive-#{date}_#{part}.mp4"
+    url = "193.109.55.86/video/" + name
+    full_path = path + name
+
+    if File.file?(full_path)
+      logger.info "Video for date: #{date}, part: #{part} already exists on #{full_path}. Skipping..."
+      next
+    end
+
     res = `curl --head -s #{url}`
     if res.include? "HTTP/1.1 200 OK"
       `cd #{path}; curl -O #{url}`
