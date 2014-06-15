@@ -47,8 +47,14 @@ class Session < ActiveRecord::Base
   end
 
   def votes_by_voting
-    # The query may seems odd, but we can call 'joins' on #<ActiveRecord::Relation []>
-    Session.where(id: self.id).joins(:votes).group("votings.topic", "votes.value").count
+    participation = Participation.arel_table
+    date = self.date
+
+    self.votes.joins({ member: :structures }).order("votings.voted_at")
+    .where((participation[:start_date].lt(date)).and(participation[:end_date].gt(date)).or(
+           (participation[:start_date].lt(date)).and(participation[:end_date].eq(nil))))
+    .where(structures: { kind: Structure.kinds[:party]})
+    .group("votings.voted_at", "structures.name", "members.id", "members.first_name", "members.last_name", "value").count
   end
 
 end

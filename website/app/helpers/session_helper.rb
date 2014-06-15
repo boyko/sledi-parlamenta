@@ -4,15 +4,9 @@ module SessionHelper
   def process_stenograph s
 
     members = s.members.pluck(:id, :first_name, :last_name).map { |m| [m[0], m[1] + " " + m[2]] }
-    votings = Voting.select("id", "topic").by_session(s).non_registration.ordered.to_a
+    votings = s.votes_by_voting.keys.group_by { |v| v[0] }.values
 
-    votings_list = "<div class='links'>"
-    votings_list += votings.map { |v, idx|
-      link_to v.topic, "#voting-" + v.id.to_s
-    }.join("<br>")
-    votings_list += "</div><br><pre>"
-
-    stenograph = s.stenograph
+    stenograph = "<pre>" + s.stenograph
 
     stenograph.gsub! "\r\n", "<br>"
 
@@ -21,26 +15,61 @@ module SessionHelper
       stenograph.gsub! regex, "<a href='/members/#{m[0]}'>#{m[1]}</a>"
     end
 
-    regex = /Гласували \d+ народни представители: за (\d+|няма), против (\d+,|няма,|и) (въздържали се|въздържал се) (\d+|няма|– няма)\./
-
     if votings.length > 0
 
+      regex = /Гласували \d+ народни представители: за (\d+|няма), против (\d+,|няма,|и) въздържал(и се| се) (– )?(\d+|няма)\./
       regex_enum = stenograph.gsub! regex
 
       regex_enum.each_with_index do |match, idx|
-        options = {
-         data: { voting: idx },
-         class: ["btn", "btn-default", "show-voting"],
-         id: "voting-" + votings[idx].id.to_s
-        }
-        output = button_tag options do
-          match
-        end
-        output += "<br><div id='content-#{idx}'></div>".html_safe
+        match + svg_diagram(votings[idx])
       end
     end
 
-    votings_list + stenograph + "</pre>"
+    stenograph + "</pre>"
+  end
+
+  private
+
+  def svg_diagram voting
+
+    return "" if voting.nil?
+
+    by_parties = voting.group_by { |v| v[1] }
+    data = by_parties.map do |k, v|
+      {
+        party: k,
+        members: v.map { |i|
+          {
+            id: i[2],
+            name: i[3] + " " + i[4],
+            vote: i[5]
+          }
+        }
+      }
+    end
+
+    cols = 8
+    width = 15
+    height = 15
+    margin = 1
+    gr_margin = 20
+
+    width_svg = (width+margin)*cols*data.length
+
+    html = "<br><svg width='#{width_svg}' height='220'>"
+    data.each_with_index do |p, outer_idx|
+      offset = outer_idx * (cols * (width + margin) + gr_margin)
+      p[:members].each_with_index do |el, idx|
+        x = (idx % cols) * (width + margin) + offset
+        y = (idx / cols) * (width + margin)
+        html += "<a xlink:href='/members/#{el[:id]}'><g><rect width='#{width}' height='#{height}' x='#{x}' y='#{y}' class='#{Vote.values.key(el[:vote]).to_s}' data-toggle='tooltip' data-placement='top' title='#{el[:name]}'></g></a>"
+      end
+      html += "<text x='#{offset+(outer_idx*10)}' y='210' font-family='Verdana' font-size='10'>#{p[:party]}</text>"
+    end
+
+    html += "</svg>"
+    html.html_safe
+
   end
 
   def calendar year, &block
