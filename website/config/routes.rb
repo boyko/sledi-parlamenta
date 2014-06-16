@@ -14,6 +14,8 @@ OpWebsite::Application.routes.draw do
 
   resources :members, :only => [:index, :show]
 
+  match "faq" => "application#faq", :via => :get
+
   root :to => "members#index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

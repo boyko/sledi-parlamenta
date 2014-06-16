@@ -24,6 +24,7 @@
             <li <%= controller_name == "members" ? "class=active" : "" %>> <%= link_to t('nav.members'), members_path %> </li>
             <li <%= controller_name == "sessions" ? "class=active" : "" %>> <%= link_to t('nav.sessions'), sessions_path %> </li>
             <li <%= controller_name == "structures" ? "class=active" : "" %>> <%= link_to t('nav.structures'), structures_path %> </li>
+            <li <%= controller_name == "application" ? "class=active" : "" %>> <%= link_to t('nav.faq'), faq_path %> </li>
           </ul>
         </div>
       </div>
@@ -34,6 +35,7 @@
       <div class="alert alert-danger fade in">
         <button class="close" data-dismiss="alert">×</button>
         Този сайт е прототип в много ранна фаза на развитие. Предстоят много промени по дизайна, структурата и функционалността. Информацията в този сайт е събрана от публично достъпни източници като <%= link_to "официалната страница на Народното събрание", "http://parliament.bg"%>. Може да следите или да се включите в разработването на сайта <%= link_to "от тук", "https://www.facebook.com/groups/obshtestvo.parlament/"%>.
+        Посетете нашата страница за <%= link_to "често задавани въпроси", "/faq"%> за допълнителна информация.
       </div>
 
     <% flash.each do |type, message| %>
