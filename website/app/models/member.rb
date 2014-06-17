@@ -7,11 +7,13 @@ class Member < ActiveRecord::Base
   has_many :structures, through: :participations
 
   scope :by_date, ->(date) {
+    participation = Participation.arel_table
     where(
-      (Participation.arel_table[:start_date].lt(date)).and(Participation.arel_table[:end_date].gt(date)).or(
-      (Participation.arel_table[:start_date].lt(date)).and(Participation.arel_table[:end_date].eq(nil))
+      (participation[:start_date].lt(date)).and(participation[:end_date].gt(date)).or(
+      (participation[:start_date].lt(date)).and(participation[:end_date].eq(nil))
     ))
   }
+
   scope :by_party, -> { joins(:structures).where(structures: { kind: Structure.kinds[:party]}) }
   scope :by_party_name, ->(name) { by_party.where(structures: { name: name }) }
   scope :by_constituency, ->(constituency) { joins(:participations).where(participations: { constituency: constituency }).uniq }
