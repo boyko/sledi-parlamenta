@@ -1,4 +1,3 @@
-var urlInfo = require('url')
 var Downloader = require('../common/node/downloader')
 var InputManager = require('./input')
 var $ = require('cheerio');
