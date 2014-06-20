@@ -16,9 +16,9 @@ function getFullUrl(el) {
 function scrapeBills(url, html) {
   var $content = $('table.bills', html),
       gov_id = url.match(/\d+$/g)[0],
-      name = $("tr:contains('Име на законопроекта') td strong", $content).innerHTML,
-      signature = $("tr:contains('Сигнатура') td", $content)[1].innerHTML,
-      date = $("tr:contains('Дата на постъпване') td", $content)[1].innerHTML,
+      name = $("tr:contains('Име на законопроекта') td strong", $content).eq(0).text(),
+      signature = $("tr:contains('Сигнатура') td", $content).eq(1).text(),
+      date = $("tr:contains('Дата на постъпване') td", $content).eq(1).text(),
       rtf = $("tr:contains('Текст на законопроекта') td a:contains('RTF')", $content).attr('href'),
       importers = [],
       committees = [],
@@ -51,12 +51,12 @@ function scrapeBills(url, html) {
     gov_id: gov_id,
     name: name,
     date: date,
+    signature: signature,
     importers: importers,
     comittees: committees,
     reports: reports,
     history: history,
-    rtf: rtf,
-    url: url,
+    rtf: rtf
   }));
 }
 
