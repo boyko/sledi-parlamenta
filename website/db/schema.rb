@@ -11,10 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140604081709) do
+ActiveRecord::Schema.define(version: 20140621074637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bills", force: true do |t|
+    t.text     "name"
+    t.text     "content"
+    t.string   "session"
+    t.string   "signature"
+    t.string   "file_author"
+    t.string   "file_editor"
+    t.string   "file_company"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "bills_members", id: false, force: true do |t|
+    t.integer "bill_id",   null: false
+    t.integer "member_id", null: false
+  end
 
   create_table "members", force: true do |t|
     t.string   "first_name"
@@ -66,6 +83,20 @@ ActiveRecord::Schema.define(version: 20140604081709) do
   add_index "questions", ["questioner_id"], name: "index_questions_on_questioner_id", using: :btree
   add_index "questions", ["respondent_id"], name: "index_questions_on_respondent_id", using: :btree
 
+  create_table "reviews", force: true do |t|
+    t.integer  "bill_id"
+    t.integer  "structure_id"
+    t.date     "date"
+    t.text     "report_content"
+    t.date     "report_date"
+    t.boolean  "leading"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reviews", ["bill_id"], name: "index_reviews_on_bill_id", using: :btree
+  add_index "reviews", ["structure_id"], name: "index_reviews_on_structure_id", using: :btree
+
   create_table "sessions", force: true do |t|
     t.integer  "structure_id"
     t.string   "url"
@@ -76,6 +107,16 @@ ActiveRecord::Schema.define(version: 20140604081709) do
   end
 
   add_index "sessions", ["structure_id"], name: "index_sessions_on_structure_id", using: :btree
+
+  create_table "statuses", force: true do |t|
+    t.integer  "bill_id"
+    t.integer  "value"
+    t.date     "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "statuses", ["bill_id"], name: "index_statuses_on_bill_id", using: :btree
 
   create_table "structures", force: true do |t|
     t.integer  "kind"
