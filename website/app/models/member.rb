@@ -5,6 +5,7 @@ class Member < ActiveRecord::Base
   has_many :questions, :foreign_key => "questioner_id"
   has_many :participations
   has_many :structures, through: :participations
+  has_and_belongs_to_many :bills
 
   scope :by_date, ->(date) {
     participation = Participation.arel_table
