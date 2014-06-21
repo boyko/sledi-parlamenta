@@ -33,10 +33,11 @@ function scrapeBills(url, html) {
     });
   });
 
-  $("tr:contains('Разпределение по комисии') a", $content).each(function(idx, el) {
+  $("tr:contains('Разпределение по комисии') li", $content).each(function(idx, el) {
     committees.push({
-      link: $(el).attr("href"),
-      name: $(el).text()
+      link: $("a", el).attr("href"),
+      name: $("a", el).text(),
+      leading: $(el).text().match(/\((.*)\)$/)[1]
     });
   });
 
