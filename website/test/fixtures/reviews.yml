@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bill_id: 
+  structure_id: 
+  date: 2014-06-21
+  report_content: MyText
+  report_date: 2014-06-21
+  leading: false
+
+two:
+  bill_id: 
+  structure_id: 
+  date: 2014-06-21
+  report_content: MyText
+  report_date: 2014-06-21
+  leading: false
