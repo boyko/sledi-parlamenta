@@ -12,9 +12,11 @@ $stdin.each_line do |line|
   filepath = File.join(path, signature + ".rtf")
   if url.nil?
     logger.warn "rft file not found for bill with id #{ob['gov_id']}"
+    puts "rft file not found for bill with id #{ob['gov_id']}"
     next
   elsif File.exists?(filepath)
     logger.info "rft file already exists for bill with id #{ob['gov_id']}"
+    puts "rft file already exists for bill with id #{ob['gov_id']}"
     next
   else
     `cd #{path}; curl -sO #{url}`

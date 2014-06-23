@@ -2,6 +2,7 @@ bg:
   sledi-parlamenta: "Следи парламента"
   nav:
     sessions: "Сесии"
+    bills: "Проектозакони"
     members: "Депутати"
     votings: "Гласувания"
     structures: "Структури"
