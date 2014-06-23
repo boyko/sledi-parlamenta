@@ -1,0 +1,21 @@
+<div class="page-header">
+  <h1><%= t('nav.bills') %> <span class="label label-default"><%= @bills.count%></span></h1>
+</div>
+
+<table class="table table-striped">
+  <tr>
+    <td>Име</td>
+    <td>Сигнатура</td>
+    <td>Сесия</td>
+  </tr>
+    <% @bills.each_with_index do |b| %>
+  <tr>
+    <td><%= link_to b.name, bill_path(b) %></td>
+    <td><%= b.signature %></td>
+    <td><%= b.session %></td>
+  </tr>
+<% end %>
+
+</table>
+
+<%= paginate_always(@bills) %>

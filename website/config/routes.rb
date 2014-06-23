@@ -6,6 +6,8 @@ OpWebsite::Application.routes.draw do
     get 'next'
   end
 
+  resources :bills, :only => [:index, :show]
+
   resources :votings, :only => [] do
     get 'by_name'
   end
