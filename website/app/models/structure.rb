@@ -6,6 +6,9 @@ class Structure < ActiveRecord::Base
   has_many :members, through: :participations
   has_many :sessions
 
+  has_many :reviews
+  has_many :bills, through: :reviews
+
   scope :parties, -> { where(kind: Structure.kinds[:party]) }
   scope :assemblies, -> { where(kind: Structure.kinds[:assembly]) }
   scope :by_date, ->(date) {
