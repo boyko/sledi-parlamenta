@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20140621074637) do
 
   create_table "bills", force: true do |t|
     t.text     "name"
+    t.integer  "gov_id"
     t.text     "content"
     t.string   "session"
     t.string   "signature"
@@ -110,7 +111,7 @@ ActiveRecord::Schema.define(version: 20140621074637) do
 
   create_table "statuses", force: true do |t|
     t.integer  "bill_id"
-    t.integer  "value"
+    t.string   "value"
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
