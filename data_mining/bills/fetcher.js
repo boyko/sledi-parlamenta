@@ -47,7 +47,7 @@ function scrapeBills(url, html) {
 
   $("tr:contains('Хронология') li", $content).each(function(idx, el) {
     var text = $(el).text();
-    var status = text.match(/\d{2}\/\d{2}\/\d{4} - (.*)/)[1]
+    var status = text.match(/\d{2}\/\d{2}\/\d{4} - (.*)/)[1];
     var date = text.match(/\d{2}\/\d{2}\/\d{4}/)[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/, function(match, d, m, y) { return [y, m, d].join("-") });
 
     history.push({
@@ -63,7 +63,7 @@ function scrapeBills(url, html) {
     signature: signature,
     session: session,
     importers: importers,
-    comittees: committees,
+    committees: committees,
     reports: reports,
     history: history,
     rtf: rtf
