@@ -29,7 +29,7 @@ Downloader.prototype = {
           "url": url,
           "headers": headers
         }, function (err, res, html) {
-          done.resolve()
+          done.resolve(html)
           if (err || res.statusCode != 200) {
             self.logger.error("Can't retrieve " + url + ", "+res.statusCode + ", err: "+res.statusCode);
           }
