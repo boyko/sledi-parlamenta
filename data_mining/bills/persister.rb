@@ -15,8 +15,9 @@ $stdin.each_line do |bill_str|
 
   bill['committees'].each do |committee|
     committee_name = committee['name']
+    leading = committee['leading'] == "водеща"
     c = Structure.find_or_create_by(name: committee_name)
-    Review.create(bill: b, structure: c)
+    Review.create(bill: b, structure: c, leading: leading)
   end
 
   bill['importers'].each do |member|
