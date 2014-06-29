@@ -1,2 +1,26 @@
 <h1><%= @bill.name %></h1>
 
+
+история:
+
+<ul>
+  <% @bill.statuses.each do |status| %>
+    <li><%= status.date %> - <%= status.value %></li>
+  <% end %>
+</ul>
+
+доклади:
+
+<ul>
+  <% @bill.reviews.each do |review| %>
+    <li><%= link_to review.structure.name, structure_path(review.structure) %> - 
+      <% if review.leading %>
+        Водеща
+      <% else %>
+        Участваща
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+
