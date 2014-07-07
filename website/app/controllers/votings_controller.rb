@@ -9,6 +9,7 @@ class VotingsController < ApplicationController
   end
 
   def show
+    @voting = Voting.find(votings_params[:id])
   end
 
   def by_party

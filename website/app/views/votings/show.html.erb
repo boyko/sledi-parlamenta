@@ -1,0 +1,28 @@
+<div class="page-header">
+  <h1><%= @voting.topic %></h1>
+</div>
+
+<h3>Резултатие от гласуването</h3>
+
+<table class="table table-striped">
+  <tr>
+    <td>Имена</td>
+    <td>партия</td>
+    <td>Роден град</td>
+    <td>Езици</td>
+    <td>Професия</td>
+    <td>email</td>
+  </tr>
+    <% @voting.members.each_with_index do |m, index| %>
+  <tr>
+    <td><%= link_to m.names, member_path(m) %></td>
+    <td><%= m.age %></td>
+    <td><%= m.hometown %></td>
+    <td><%= m.languages %></td>
+    <td><%= m.profession %></td>
+    <td><%= m.email %></td>
+  </tr>
+<% end %>
+
+</table>
+
