@@ -1,0 +1,36 @@
+<div class="page-header">
+  <h1>Гласувания <span class="label label-default"><%= @votings.count%></span></h1>
+</div>
+
+<%= form_tag("/votings", method: "get", html: { class: "form-inline"} ) do %>
+  <div class="input-group">
+    <%= text_field_tag(:q, params[:q], class: "form-control input-sm", placeholder: "търси") %>
+    <span class="input-group-btn">
+      <%= submit_tag("Търси", name: nil, class: "btn btn-default btn-sm") %>
+    </span>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8 paginate">
+      <%= paginate_always(@votings) %>
+    </div>
+  </div>
+
+<% end %>
+
+<table class="table table-striped">
+  <tr>
+    <td>Заглавие</td>
+    <td>Дата и час</td>
+  </tr>
+    <% @votings.each_with_index do |v, index| %>
+  <tr>
+    <td><%= link_to v.topic, voting_path(v) %></td>
+    <td><%= v.voted_at %></td>
+  </tr>
+<% end %>
+
+</table>

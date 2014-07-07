@@ -27,5 +27,10 @@ class Voting < ActiveRecord::Base
     .group("members.id", "members.first_name" ,"members.last_name", "value").count
   end
 
+
+  def self.search search_query
+    Voting.where(Voting.arel_table[:topic].matches("%#{search_query}%"))
+  end
+
 end
 

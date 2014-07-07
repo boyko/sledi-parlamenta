@@ -1,5 +1,16 @@
 class VotingsController < ApplicationController
 
+  def index
+    query = Voting.all
+    search_query = votings_params[:q]
+    query = query.search(search_query)
+
+    @votings = query.paginate(:page => votings_params[:page])
+  end
+
+  def show
+  end
+
   def by_party
     data = Voting.find(params[:voting_id]).by_party
     render :json => prepare_data(data)
@@ -47,6 +58,10 @@ class VotingsController < ApplicationController
 
     html += "</svg>"
     html.html_safe
+  end
+
+  def votings_params
+    params.slice(:id, :page, :q)
   end
 
 end

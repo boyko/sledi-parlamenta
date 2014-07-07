@@ -8,7 +8,7 @@ OpWebsite::Application.routes.draw do
 
   resources :bills, :only => [:index, :show]
 
-  resources :votings, :only => [] do
+  resources :votings, :only => [:index, :show] do
     get 'by_name'
   end
 
