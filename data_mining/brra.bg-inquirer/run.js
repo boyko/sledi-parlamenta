@@ -21,9 +21,9 @@ var argv = require('optimist')
     .argv;
 
 if (argv.decaptcha=='auto') {
-    Decaptcha = require('../../common/phantom/decaptcha-auto-node')
+    Decaptcha = require('./node_modules/phantom-decaptcher/auto')
 } else {
-    Decaptcha = require('../../common/phantom/decaptcha-manual')
+    Decaptcha = require('./node_modules/phantom-decaptcher/manual')
 }
 
 var input = fs.open(argv.input, "r")

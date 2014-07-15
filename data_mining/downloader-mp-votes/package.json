@@ -12,7 +12,9 @@
 		"xlsjs": "*",
 		"yargs": "*",
 		"cheerio": "*",
-		"csv-parse": "*"
+		"csv-parse": "*",
+        "logger-generator": "git+https://github.com/obshtestvo-utilities/node-logger-generator.git",
+		"downloader": "git+https://github.com/obshtestvo-utilities/node-downloader.git"
 	},
 	"keywords": [
 		"gatherer",

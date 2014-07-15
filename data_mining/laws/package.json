@@ -12,7 +12,9 @@
 		"cheerio": "*",
 		"xml2js": "*",
 		"request": "*",
-		"optimist": "*"
+		"optimist": "*",
+        "logger-generator": "git+https://github.com/obshtestvo-utilities/node-logger-generator.git",
+        "downloader": "git+https://github.com/obshtestvo-utilities/node-downloader.git"
 	},
 	"keywords": [
 		"gatherer",

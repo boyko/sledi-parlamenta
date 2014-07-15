@@ -1,7 +1,0 @@
-{
-	"type": "loggly",
-	"details": {
-		"subdomain": "THE_SUBDOMAIN_GOES_HERE",
-		"inputToken": "THE_INPUT_TOKEN_GOES_HERE"
-	}
-}

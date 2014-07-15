@@ -8,6 +8,7 @@
 	},
 	"main": "./run.js",
 	"dependencies": {
+		"phantom-decaptcher": "git+https://github.com/obshtestvo-utilities/phantom-decaptcher.git",
 		"phantomjs-nodify": "git://github.com/jgonera/phantomjs-nodify.git",
         "optimist": "*",
         "q": "*"

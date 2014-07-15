@@ -7,7 +7,7 @@ var XLSDataMapper = require('./datamapper')
 var inputMan = new InputManager();
 var argv = inputMan.getArguments();
 
-var logger = require('../../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
+var logger = require('logger-generator')(inputMan.retrieveLoggerConfig(argv))
 
 function getColumn(matrix, idx) {
   return matrix.map(function(row) { return row[idx] });

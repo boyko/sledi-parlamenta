@@ -1,12 +1,12 @@
-var Downloader = require('../common/node/downloader')
-var InputManager = require('./input')
+var Downloader = require('downloader');
+var InputManager = require('./input');
 var $ = require('cheerio');
 
 // input handling
 var inputMan = new InputManager();
 var argv = inputMan.getArguments();
 
-var logger = require('../common/node/logger')(inputMan.retrieveLoggerConfig(argv))
+var logger = require('logger-generator')(inputMan.retrieveLoggerConfig(argv))
 var downloader =  new Downloader(logger, [1000, 5000]);
 
 function getFullUrl(el) {

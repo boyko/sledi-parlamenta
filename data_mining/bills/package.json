@@ -1,0 +1,25 @@
+{
+    "name": "bulgarian-bills-gatherer",
+    "description": "Bulgarian bills gatherer",
+    "version": "0.0.1",
+    "author": {
+        "name": "Общество",
+        "email": "info@obshtestvo.bg"
+    },
+    "main": "./fetcher.js",
+    "dependencies": {
+        "byline": "git://github.com/antitoxic/node-byline.git",
+        "q": "*",
+        "yargs": "*",
+        "cheerio": "*",
+        "logger-generator": "git+https://github.com/obshtestvo-utilities/node-logger-generator.git",
+        "downloader": "git+https://github.com/obshtestvo-utilities/node-downloader.git"
+    },
+    "keywords": [
+        "gatherer",
+        "scraper",
+        "crawler",
+        "bulgaria",
+        "web"
+    ]
+}
