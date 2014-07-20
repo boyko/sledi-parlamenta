@@ -2,6 +2,7 @@ class Voting < ActiveRecord::Base
   belongs_to :session
   has_many :votes
   has_many :members, through: :votes
+  has_many :aggregate_votings
 
   scope :by_session, ->(session) { where(session: session) }
   scope :ordered, -> { order("voted_at") }

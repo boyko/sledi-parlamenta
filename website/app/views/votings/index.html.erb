@@ -13,6 +13,43 @@
 
   <div class="row">
     <div class="col-md-4">
+      <%= select("filter", "party_id", options_for_select(Structure.parties.pluck("name", "id"), selected: params[:filter][0][:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm", name: "filter[][party_id]"  }) %>
+    </div>
+    <div class="col-md-1">
+      <%= select("filter", "value", options_for_select(["За", "Против", "Въздържал се", "Отсъства"], selected: params[:filter][0][:value]), {}, { class: "form-control input-sm", name: "filter[][value]" }) %>
+    </div>
+    <div class="col-md-1">
+      <%= text_field_tag 'filter[][count]', params[:filter][0][:count], maxlength: 3, class: "form-control input-sm" %>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-4">
+      <%= select("filter", "party_id", options_for_select(Structure.parties.pluck("name", "id"), selected: params[:filter][1][:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm", name: "filter[][party_id]"  }) %>
+    </div>
+    <div class="col-md-1">
+      <%= select("filter", "value", options_for_select(["За", "Против", "Въздържал се", "Отсъства"], selected: params[:filter][1][:value]), {}, { class: "form-control input-sm", name: "filter[][value]" }) %>
+    </div>
+    <div class="col-md-1">
+      <%= text_field_tag 'filter[][count]', params[:filter][1][:count], maxlength: 3, class: "form-control input-sm" %>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-4">
+      <%= select("filter", "party_id", options_for_select(Structure.parties.pluck("name", "id"), selected: params[:filter][2][:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm", name: "filter[][party_id]"  }) %>
+    </div>
+    <div class="col-md-1">
+      <%= select("filter", "value", options_for_select(["За", "Против", "Въздържал се", "Отсъства"], selected: params[:filter][2][:value]), {}, { class: "form-control input-sm", name: "filter[][value]" }) %>
+    </div>
+    <div class="col-md-1">
+      <%= text_field_tag 'filter[][count]', params[:filter][2][:count], maxlength: 3, class: "form-control input-sm" %>
+    </div>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col-md-4">
     </div>
     <div class="col-md-8 paginate">
       <%= paginate_always(@votings) %>

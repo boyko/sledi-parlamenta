@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621074637) do
+ActiveRecord::Schema.define(version: 20140708081742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "aggregate_votings", force: true do |t|
+    t.integer  "voting_id"
+    t.integer  "structure_id"
+    t.integer  "yes"
+    t.integer  "no"
+    t.integer  "abstain"
+    t.integer  "absent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "bills", force: true do |t|
     t.text     "name"
