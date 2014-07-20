@@ -18,7 +18,6 @@ function scrapeReport(url, html) {
   var text = $("#leftcontent1 .markcontent", html).text(),
       date = $('#leftcontent1 .dateclass', html).text().trim(),
       committee = $('#leftcontent1 .marktitle', html).contents()[0].data;
-      console.log(date);
 
   return {
     url: url,
@@ -63,7 +62,8 @@ function scrapeBills(url, html) {
   $("tr:contains('Хронология') li", $content).each(function(idx, el) {
     var text = $(el).text();
     var status = text.match(/\d{2}\/\d{2}\/\d{4} - (.*)/)[1];
-    var date = text.match(/\d{2}\/\d{2}\/\d{4}/)[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/, function(match, d, m, y) { return [y, m, d].join("-") });
+    var date = text.match(/\d{2}\/\d{2}\/\d{4}/)[0]
+      .replace(/(\d{2})\/(\d{2})\/(\d{4})/, function(match, d, m, y) { return [y, m, d].join("-") });
 
     history.push({
       date: date,
@@ -73,8 +73,8 @@ function scrapeBills(url, html) {
 
   promisedReports = reports.map(function(report_path) {
     var report_url = getFullUrl(report_path);
-    return downloader.get(report_url).then(function(html) { return scrapeReport(report_url, html) }, 
-                                           function(error) { logger.error(error) });
+    return downloader.get(report_url).then(function(html) { return scrapeReport(report_url, html) },
+                                           logger.error);
   });
 
   // when reports are fetched - assemble the final results and print to STDOUT.
@@ -93,13 +93,13 @@ function scrapeBills(url, html) {
       rtf: rtf
     }));
 
-  }, function(error) { logger.error(error) });
+  }, logger.error);
 
 }
 
 function scrapeBillURLS(html) {
   $("#monthview ul.frontList li a", html).each(function(idx, el) {
-    var url = getFullUrl(el)
+    var url = getFullUrl(el);
     downloader.get(url, function(html) {
       scrapeBills(url, html);
     });
@@ -108,7 +108,7 @@ function scrapeBillURLS(html) {
 
 function scrapeMonths(html) {
   $(".calendar_columns a", html).each(function(idx, el) {
-    var url = getFullUrl(el)
+    var url = getFullUrl(el);
     downloader.get(url, scrapeBillURLS);
   });
 }
