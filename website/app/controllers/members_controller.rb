@@ -23,6 +23,6 @@ class MembersController < ApplicationController
   private
 
   def member_params
-    params.slice(:q, :order, :party_id, :assembly_id, :constituency, :page)
+    params.permit(:q, :order, :party_id, :assembly_id, :constituency, :page)
   end
 end

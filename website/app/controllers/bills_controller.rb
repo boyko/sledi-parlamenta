@@ -9,7 +9,7 @@ class BillsController < ApplicationController
   end
 
   def bills_params
-    params.slice(:id, :page)
+    params.permit(:id, :page)
   end
 
 end

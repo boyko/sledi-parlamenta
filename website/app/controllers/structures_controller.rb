@@ -18,6 +18,6 @@ class StructuresController < ApplicationController
   private
 
   def structure_params
-    params.slice(:q, :kind, :page)
+    params.permit(:q, :kind, :page)
   end
 end

@@ -62,7 +62,7 @@ class VotingsController < ApplicationController
   end
 
   def votings_params
-    params.slice(:id, :page, :q)
+    params.permit(:id, :page, :q, :party_id, :value, :count)
   end
 
 end
