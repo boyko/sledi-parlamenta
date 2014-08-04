@@ -2,14 +2,21 @@ class VotingsController < ApplicationController
 
   def index
     query = Voting.all
-    search_query = votings_params[:q]
-    query = query.search(search_query)
+    search_query = voting_params[:topic]
+    query = query.search(search_query) unless search_query.blank?
 
-    @votings = query.paginate(:page => votings_params[:page])
+    ag_voting = voting_params[:aggregate_votings_attributes]
+    query = query.filter_by_voting(ag_voting) unless ag_voting.blank?
+
+    @votings = query.paginate(:page => params[:page])
+
+    # perhaps I should make form object?
+    @voting = Voting.new voting_params
+    3.times { @voting.aggregate_votings.build } if voting_params.empty?
   end
 
   def show
-    @voting = Voting.find(votings_params[:id])
+    @voting = Voting.find(params[:id])
   end
 
   def by_party
@@ -61,8 +68,12 @@ class VotingsController < ApplicationController
     html.html_safe
   end
 
-  def votings_params
-    params.permit(:id, :page, :q, :party_id, :value, :count)
+  def voting_params
+    if params[:voting]
+      params.require(:voting).permit(:topic, :aggregate_votings_attributes => [:structure_id, :yes, :no, :abstain, :absent])
+    else
+      {}
+    end
   end
 
 end

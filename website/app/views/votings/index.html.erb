@@ -1,23 +1,44 @@
 <div class="page-header">
-  <h1>Гласувания <span class="label label-default"><%= @votings.count%></span></h1>
+  <h1>Гласувания <span class="label label-default"><%= @votings.count %></span></h1>
 </div>
 
-<%= form_tag("/votings", method: "get", html: { class: "form-inline"} ) do %>
+<%= form_for @voting, method: "get", html: { class: "form-inline"} do |f| %>
   <div class="input-group">
-    <%= text_field_tag(:q, params[:q], class: "form-control input-sm", placeholder: "търси") %>
+    <%= f.text_field :topic, class: "form-control input-sm", placeholder: "търси" %>
     <span class="input-group-btn">
-      <%= submit_tag("Търси", name: nil, class: "btn btn-default btn-sm") %>
+      <%= f.submit "Търси", name: nil, class: "btn btn-default btn-sm" %>
     </span>
   </div>
   <br />
 
   <div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-8 paginate">
-      <%= select(:filter, :party_id, options_for_select(Structure.parties.pluck("name", "id"), selected: params[:party_id]), { include_blank: 'Всички партии' }, { class: "form-control input-sm"  }) %>
+    <div class="col-md-12">
+
+      <% options = Structure.parties.pluck(:name, :id) %>
+
+      <table style="width: 100%">
+        <tr>
+          <td style="width: 45%">Партия</td>
+          <td style="width: 15%">За</td>
+          <td style="width: 15%">Не</td>
+          <td style="width: 15%">Въздържал се</td>
+          <td style="width: 10%">Отсъства</td>
+        </tr>
+      </table>
+
+      <%= f.fields_for :aggregate_votings do |av_form| %>
+        <div class="input-group">
+          <%= av_form.select :structure_id, options_for_select(options, av_form.object.structure_id), :include_blank => true %>
+          <%= av_form.text_field :yes %>
+          <%= av_form.text_field :no %>
+          <%= av_form.text_field :abstain %>
+          <%= av_form.text_field :absent %>
+        </div>
+      <br />
+      <% end %>
     </div>
   </div>
+  <br />
 
   <div class="row">
     <div class="col-md-4">
@@ -37,7 +58,7 @@
     <% @votings.each_with_index do |v, index| %>
   <tr>
     <td><%= link_to v.topic, voting_path(v) %></td>
-    <td><%= v.voted_at %></td>
+    <td><%= v.voted_at.to_date %></td>
   </tr>
 <% end %>
 
