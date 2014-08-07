@@ -26,10 +26,9 @@ class Voting < ActiveRecord::Base
     date = self.session.date
 
     self.members.by_party.by_date(date)
-    .group("structures.name")
-    .group("members.id", "members.first_name" ,"members.last_name", "value").count
+    .group("structures.abbreviation")
+    .group("members.id", "members.first_name" ,"members.last_name", "value").order("structures.abbreviation").count.keys
   end
-
 
   def self.search search_query
     where(Voting.arel_table[:topic].matches("%#{search_query}%"))

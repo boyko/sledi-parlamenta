@@ -4,25 +4,33 @@
 
 <h3>Резултатие от гласуването</h3>
 
-<table class="table table-striped">
-  <tr>
-    <td>Имена</td>
-    <td>партия</td>
-    <td>Роден град</td>
-    <td>Езици</td>
-    <td>Професия</td>
-    <td>email</td>
-  </tr>
-    <% @voting.members.each_with_index do |m, index| %>
-  <tr>
-    <td><%= link_to m.names, member_path(m) %></td>
-    <td><%= m.age %></td>
-    <td><%= m.hometown %></td>
-    <td><%= m.languages %></td>
-    <td><%= m.profession %></td>
-    <td><%= m.email %></td>
-  </tr>
-<% end %>
+<% parties = Structure.parties.pluck(:id, :name) %>
 
-</table>
+<div class="row">
+  <div class="col-md-4">
+
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">Партия</h3>
+      </div>
+      <table class="table table-condensed">
+        <tr>
+          <td>Партия</td>
+          <td>Име</td>
+          <td>Глас</td>
+        </tr>
+          <% @voting.by_name.each do |m| %>
+            <tr class="<%= choose_class m[4] %>">
+          <td><%= m[0] %></td>
+          <td><%= link_to m[2] + " " + m[3], member_path(m[1]) %></td>
+          <td><%= choose_icon m[4] %></td>
+        </tr>
+      <% end %>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+
 

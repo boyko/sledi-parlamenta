@@ -14,7 +14,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <% options = Structure.parties.pluck(:name, :id) %>
+      <% options = Structure.parties.where.not(abbreviation: nil).pluck(:abbreviation, :id) %>
 
       <table style="width: 100%">
         <tr>
