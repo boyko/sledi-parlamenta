@@ -42,12 +42,12 @@
           <td>Партия</td>
           <td>За</td>
           <td>Против</td>
-          <td>Въздържал се</td>
-          <td>Отсъства</td>
+          <td>Въздържали се</td>
+          <td>Отсъстват</td>
         </tr>
-          <% @voting.aggregate_votings.each do |av| %>
+      <% @voting.aggregate_votings.each do |av| %>
         <tr>
-          <td><%= parties[av.structure_id] %></td>
+          <td><%= link_to parties[av.structure_id], structure_path(av.structure_id) %></td>
           <td><%= av.yes %></td>
           <td><%= av.no %></td>
           <td><%= av.abstain %></td>
@@ -57,6 +57,24 @@
 
       </table>
     </div>
+    <br />
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">Допълнителна информация</h3>
+      </div>
+      <table class="table table-hover">
+        <tr>
+          <td>Сесия</td>
+          <td><%= link_to @voting.voted_at.to_date, session_path(@voting.session) %></td>
+        </tr>
+        <tr>
+          <td>Гласувано в</td>
+          <td><%= @voting.voted_at.strftime("%H:%m") %></td>
+        </tr>
+      </table>
+    </div>
+
+
   </div>
 
 </div>

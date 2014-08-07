@@ -37,7 +37,7 @@ class Voting < ActiveRecord::Base
 
   def self.filter_by_voting ag_votings
     vote_values = [:yes, :no, :abstain, :absent]
-    filter = ag_votings.values
+    filter = ag_votings.values.delete_if { |av| av[:structure_id].blank? }
     av = AggregateVoting.arel_table
 
     query = filter.map do |f|

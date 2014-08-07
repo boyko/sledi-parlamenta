@@ -14,7 +14,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <% options = Structure.parties.where.not(abbreviation: nil).pluck(:abbreviation, :id) %>
+      <% options = Structure.parties.pluck(:name, :id) %>
 
       <table style="width: 100%">
         <tr>
@@ -58,7 +58,7 @@
     <% @votings.each_with_index do |v, index| %>
   <tr>
     <td><%= link_to v.topic, voting_path(v) %></td>
-    <td><%= v.voted_at.to_date %></td>
+    <td><%= v.voted_at %></td>
   </tr>
 <% end %>
 
