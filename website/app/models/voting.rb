@@ -27,7 +27,8 @@ class Voting < ActiveRecord::Base
 
     self.members.by_party.by_date(date)
     .group("structures.abbreviation")
-    .group("members.id", "members.first_name" ,"members.last_name", "value").order("structures.abbreviation").count.keys
+    .group("members.id", "members.first_name" ,"members.last_name", "value").order("structures.abbreviation")
+    .count.keys
   end
 
   def self.search search_query

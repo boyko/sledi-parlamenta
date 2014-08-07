@@ -4,25 +4,23 @@
 
 <h3>Резултатие от гласуването</h3>
 
-<% parties = Structure.parties.pluck(:id, :name) %>
-
 <div class="row">
   <div class="col-md-4">
 
     <div class="panel panel-default">
       <div class="panel-heading text-center">
-        <h3 class="panel-title">Партия</h3>
+        <h3 class="panel-title">Поименно гласуване</h3>
       </div>
       <table class="table table-condensed">
         <tr>
-          <td>Партия</td>
           <td>Име</td>
+          <td>Партия</td>
           <td>Глас</td>
         </tr>
           <% @voting.by_name.each do |m| %>
             <tr class="<%= choose_class m[4] %>">
-          <td><%= m[0] %></td>
           <td><%= link_to m[2] + " " + m[3], member_path(m[1]) %></td>
+          <td><%= m[0] %></td>
           <td><%= choose_icon m[4] %></td>
         </tr>
       <% end %>
@@ -31,6 +29,36 @@
     </div>
 
   </div>
+
+  <% parties = Structure.parties.pluck(:id, :name).to_h %>
+
+  <div class="col-md-8">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">По групи</h3>
+      </div>
+      <table class="table table-hover">
+        <tr>
+          <td>Партия</td>
+          <td>За</td>
+          <td>Против</td>
+          <td>Въздържал се</td>
+          <td>Отсъства</td>
+        </tr>
+          <% @voting.aggregate_votings.each do |av| %>
+        <tr>
+          <td><%= parties[av.structure_id] %></td>
+          <td><%= av.yes %></td>
+          <td><%= av.no %></td>
+          <td><%= av.abstain %></td>
+          <td><%= av.absent %></td>
+        </tr>
+      <% end %>
+
+      </table>
+    </div>
+  </div>
+
 </div>
 
 
