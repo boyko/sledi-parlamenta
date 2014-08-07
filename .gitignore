@@ -18,3 +18,7 @@ data_mining/downloader-mp-votes/error.log
 data_mining/downloader-mp-votes/downloader.log
 
 data_mining/session-videos/client_secrets.json
+
+data_mining/eu-tenders/model/*.bak
+data_mining/eu-tenders/output/*
+!data_mining/eu-tenders/output/.keep
