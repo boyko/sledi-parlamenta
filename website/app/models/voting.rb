@@ -31,6 +31,15 @@ class Voting < ActiveRecord::Base
     .count.keys
   end
 
+  def grouped
+    date = self.session.date
+
+    self.members.by_party.by_date(date)
+    .group("structures.id")
+    .group("value").order("structures.id")
+    .count
+  end
+
   def self.search search_query
     where(Voting.arel_table[:topic].matches("%#{search_query}%"))
   end

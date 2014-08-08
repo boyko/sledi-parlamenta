@@ -27,14 +27,12 @@
       </table>
 
       <%= f.fields_for :aggregate_votings do |av_form| %>
-        <div class="input-group">
-          <%= av_form.select :structure_id, options_for_select(options, av_form.object.structure_id), :include_blank => true %>
-          <%= av_form.text_field :yes %>
-          <%= av_form.text_field :no %>
-          <%= av_form.text_field :abstain %>
-          <%= av_form.text_field :absent %>
-        </div>
-      <br />
+        <%= av_form.select :structure_id, options_for_select(options, av_form.object.structure_id), :include_blank => true %>
+        <%= av_form.text_field :yes %>
+        <%= av_form.text_field :no %>
+        <%= av_form.text_field :abstain %>
+        <%= av_form.text_field :absent %>
+        <br />
       <% end %>
     </div>
   </div>

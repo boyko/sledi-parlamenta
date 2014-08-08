@@ -11,24 +11,41 @@ class CreateAggregateVotings < ActiveRecord::Migration
       t.timestamps
     end
 
-    Voting.non_registration.each do |v|
+    votings = Voting.all.in_groups_of(500)
+    votings[-1].compact!
 
-      date = v.session.date
-      res = v.members.by_party.by_date(date).group("structure_id", "votes.value").count
+    votings.each_with_index do |bulk, index|
+      all = []
 
-      res.keys.map { |r| r[0] }.uniq.each do |party_id|
+      bulk.each do |voting|
 
-        AggregateVoting.create!({
-          voting_id: v.id,
-          structure_id: party_id,
-          yes: res[[party_id, Vote.values[:yes]]].nil? ? Vote.values[:yes] : res[[party_id, Vote.values[:yes]]],
-          no: res[[party_id, Vote.values[:no]]].nil? ? Vote.values[:no] : res[[party_id, Vote.values[:no]]],
-          abstain: res[[party_id, Vote.values[:abstain]]].nil? ? Vote.values[:abstain] : res[[party_id, Vote.values[:abstain]]],
-          absent: res[[party_id, Vote.values[:absent]]].nil? ? Vote.values[:absent] : res[[party_id, Vote.values[:absent]]],
-        })
+        sorted = {}
+        voting.grouped.each do |key, value|
+          sorted[key[0]] ||= []
+          sorted[key[0]] << [key[1], value]
+        end
 
+        sorted.each do |party_id, votes_and_counts|
+
+          ob = {}
+
+          [:yes, :no, :abstain, :absent].each do |k|
+            res = votes_and_counts.select { |v| v[0] == Vote.values[k] }
+            ob[k] = res.empty? ? 0 : res[0][1]
+          end
+
+          ob[:voting_id] = voting.id
+          ob[:structure_id] = party_id
+
+          all.push ob
+        end
       end
 
+      transaction do
+        AggregateVoting.create!(all)
+      end
+
+      p index
     end
 
   end
