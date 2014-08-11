@@ -32,7 +32,18 @@ class SessionsController < ApplicationController
     redirect_to session_url(current_session.next)
   end
 
+  def aggregated
+    data = AggregateVoting.joins(:voting).where(votings: { session_id: sessions_params[:session_id] })
+    .ordered_by_time.ordered_by_structure_id.pluck(:voting_id, :structure_id, :yes, :no, :abstain, :absent)
+    .group_by { |av| av[0] }
 
+    render :json => data
+  end
+
+  def members
+    members = Member.joins(:votings).where("session_id = 59").uniq.pluck(:id, :first_name, :last_name)
+    render :json => members
+  end
 
 end
 

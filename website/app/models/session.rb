@@ -1,6 +1,7 @@
 class Session < ActiveRecord::Base
   has_many :votings
   has_many :votes, :through => :votings
+  has_many :aggregate_votings, :through => :votings
   has_many :members, :through => :structure
   belongs_to :structure
 
