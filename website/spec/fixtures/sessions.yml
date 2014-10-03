@@ -1,9 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
+old:
   url: MyString
-  date: 2014-04-08
+  date: 2013-04-08
+  stenograph: Т'ва е много старо, братле
+  structure_id: 1
 
-two:
+new:
   url: MyString
   date: 2014-04-08
+  stenograph: Е т'ва е новото
+  structure_id: 1

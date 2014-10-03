@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def index
     @year = sessions_params[:year].blank? ? Date.today : Date.new(sessions_params[:year].to_i)
+
     @sessions = Session.assemblies.by_year(@year).group_by(&:date)
   end
 
