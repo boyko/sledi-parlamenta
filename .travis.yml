@@ -3,6 +3,5 @@ rvm:
   - 2.1.2
 cache:
   - bundler
-install: cd website && bundle install
-before_script: cd website
+before_install: cd website
 script: bundle exec rspec
