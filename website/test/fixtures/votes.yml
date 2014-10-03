@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  bill_id: 
-  member_id: 
-  date: 2014-04-05 16:29:19
+  voting_id:
+  member_id:
+  created_at: 2014-04-05 16:29:19
   value: 1
 
 two:
-  bill_id: 
-  member_id: 
-  date: 2014-04-05 16:29:19
+  voting_id:
+  member_id:
+  created_at: 2014-04-05 16:29:19
   value: 1
