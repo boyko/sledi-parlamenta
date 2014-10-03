@@ -3,9 +3,7 @@
 one:
   name: MyString
   info: MyText
-  continuous: false
 
 two:
   name: MyString
   info: MyText
-  continuous: false

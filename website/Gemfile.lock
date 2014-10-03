@@ -238,6 +238,7 @@ DEPENDENCIES
   jquery-rails
   less-rails-bootstrap
   pg
+  pry
   puma
   quiet_assets
   rails (= 4.1.1)

@@ -1,13 +1,13 @@
 require 'test_helper'
 
-class MemberControllerTest < ActionController::TestCase
+class MembersControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
   end
 
   test "should get show" do
-    get :show
+    get :show, id: Member.last.id
     assert_response :success
   end
 

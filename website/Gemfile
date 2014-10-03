@@ -29,4 +29,5 @@ group :development do
   gem 'capistrano3-puma'
   gem 'rspec-rails'
   gem 'guard-rspec'
+  gem 'pry'
 end
