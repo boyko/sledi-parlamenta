@@ -1,3 +1,5 @@
+Master tests: [![Build Status](https://travis-ci.org/obshtestvo/sledi-parlamenta.svg?branch=master)](https://travis-ci.org/obshtestvo/sledi-parlamenta)
+
 ## Често задавани въпроси
 
 ### Какво представлява проектът?
