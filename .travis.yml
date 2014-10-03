@@ -4,4 +4,7 @@ rvm:
 cache:
   - bundler
 before_install: cd website
+before_script:
+  - psql -c 'create database openparliament_test;' -U admin
+  - cp config/database.yml.travis config/database.yml
 script: bundle exec rspec

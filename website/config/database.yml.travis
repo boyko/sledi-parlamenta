@@ -1,0 +1,6 @@
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: openparliament_test
+  pool: 5
+  username: admin
