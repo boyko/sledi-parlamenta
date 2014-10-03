@@ -12,7 +12,7 @@ describe SessionsController do
 
   describe 'show' do
     it 'should render OK' do
-      get :show, id: Session.last
+      get :show, id: Session.last.id
       expect(response).to be_successful
     end
   end
