@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   def index
     @year = sessions_params[:year].blank? ? Date.today : Date.new(sessions_params[:year].to_i)
-    @sessions = Session.assemblies.by_year(@year).group_by { |s| s.date }
+    @sessions = Session.assemblies.by_year(@year).group_by(&:date)
   end
 
   def show
@@ -45,10 +45,9 @@ class SessionsController < ApplicationController
     render :json => members
   end
 
-end
-
-private
+  private
 
   def sessions_params
     params.slice(:id, :session_id, :year)
   end
+end
