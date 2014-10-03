@@ -12,6 +12,7 @@ class CreateAggregateVotings < ActiveRecord::Migration
     end
 
     votings = Voting.all.in_groups_of(500)
+    return if votings.empty?
     votings[-1].compact!
 
     votings.each_with_index do |bulk, index|

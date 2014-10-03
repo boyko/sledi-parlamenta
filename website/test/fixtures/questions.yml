@@ -3,21 +3,21 @@
 one:
   asked: 2014-04-11
   replied: 2014-04-11
-  questioner_id: 
-  respondent_id: 
-  title: MyString
+  questioner_id:
+  respondent_id:
+  topic: MyString
   content: MyText
-  ansewer: MyText
+  answer: MyText
   signature: MyString
   status: MyString
 
 two:
   asked: 2014-04-11
   replied: 2014-04-11
-  questioner_id: 
-  respondent_id: 
-  title: MyString
+  questioner_id:
+  respondent_id:
+  topic: MyString
   content: MyText
-  ansewer: MyText
+  answer: MyText
   signature: MyString
   status: MyString
