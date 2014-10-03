@@ -1,6 +1,4 @@
 test:
   adapter: postgresql
-  encoding: unicode
-  database: openparliament_test
-  pool: 5
-  username: admin
+  database: travis_ci_test
+  username: postgres
