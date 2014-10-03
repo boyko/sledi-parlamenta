@@ -1,5 +1,5 @@
 language: ruby
 rvm:
   - 2.1.2
-script:
-  - cd website && bundle exec rake
+before_script: cd website
+script: bundle exec rake
