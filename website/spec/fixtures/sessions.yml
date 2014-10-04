@@ -6,8 +6,20 @@ old:
   stenograph: Т'ва е много старо, братле
   structure_id: 1
 
-new:
+new_1:
   url: MyString
   date: 2014-04-08
   stenograph: Е т'ва е новото
+  structure_id: 1
+
+new_2:
+  url: MyString
+  date: 2014-05-09
+  stenograph: Bacon is the shit, братле
+  structure_id: 1
+
+new_3:
+  url: MyString
+  date: 2014-05-11
+  stenograph: Стенограма, братле
   structure_id: 1

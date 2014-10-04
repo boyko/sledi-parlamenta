@@ -27,6 +27,12 @@ Phasellus dictum justo feugiat, consequat tortor vitae, varius mi. Morbi eget au
 )
 
 Session.create(
+  date: Date.parse('2013-05-10'),
+  stenograph: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla cursus lectus quis dolor viverra aliquet. Nullam consequat ultricies nulla, non condimentum arcu tempus nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis a interdum velit. Morbi pellentesque, lacus eu commodo fringilla, massa magna condimentum mi, a condimentum justo mi vel ex. Donec justo tortor, pharetra at libero ornare, congue dapibus sapien. Mauris viverra, orci ac pulvinar porttitor, mi ipsum cursus mauris, sed cursus enim odio ut sem. Donec euismod fermentum magna nec ullamcorper.',
+  structure: Structure.last
+)
+
+Session.create(
   date: Date.parse('2014-05-11'),
   stenograph: 'Bacon ipsum dolor sit amet beef meatloaf beef ribs, ribeye sausage salami chicken pig. Pig short ribs ground round tri-tip swine. Brisket pork chop boudin, tenderloin short loin ground round filet mignon kielbasa hamburger meatloaf prosciutto pork. Jowl ground round tri-tip shank capicola kielbasa meatloaf turducken landjaeger pig frankfurter. Swine meatloaf jowl, tenderloin pork loin beef ribs bresaola shank ribeye brisket bacon leberkas short loin.
 Porchetta cow biltong corned beef, kielbasa pork pig kevin andouille chicken t-bone turducken. Turducken venison swine brisket andouille. T-bone fatback turducken filet mignon. Leberkas capicola kielbasa, ground round filet mignon bacon pork chop bresaola strip steak doner ribeye frankfurter biltong short loin andouille.

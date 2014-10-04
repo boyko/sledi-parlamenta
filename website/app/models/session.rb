@@ -11,6 +11,7 @@ class Session < ActiveRecord::Base
   scope :t_committees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:t_committee] }) }
   scope :subcommittees, -> { joins(:structure).where(structures: { kind: Structure.kinds[:subcommittee] }) }
   scope :by_structure_name, ->(name) { joins(:structure).where(structures: { name: name }) }
+  scope :with_text, ->(text) { where('stenograph ILIKE ?', "%#{text}%") }
 
   def registration
     self.votings.find_by(topic: "Регистрация")
