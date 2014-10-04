@@ -1,7 +1,9 @@
 class SessionsController < ApplicationController
   def index
-    @year = sessions_params[:year].blank? ? Date.today : Date.new(sessions_params[:year].to_i)
-    @sessions = Session.assemblies.by_year(@year).group_by(&:date)
+    sessions_scope = Session.assemblies.by_year(year)
+    sessions_scope = sessions_scope.with_text(params[:query]) if params[:query].present?
+
+    @sessions = sessions_scope.group_by(&:date)
   end
 
   def show
@@ -14,12 +16,12 @@ class SessionsController < ApplicationController
 
   def attendance
     data = Session.find(sessions_params[:session_id]).absent_count_by_voting
-    render :json => data
+    render json: data
   end
 
   def votings
     s = Session.find(sessions_params[:session_id])
-    render :json => s.votings.ordered.pluck(:id, :topic, :voted_at)
+    render json: s.votings.ordered.pluck(:id, :topic, :voted_at)
   end
 
   def prev
@@ -37,15 +39,19 @@ class SessionsController < ApplicationController
     .ordered_by_time.ordered_by_structure_id.pluck(:voting_id, :structure_id, :yes, :no, :abstain, :absent)
     .group_by { |av| av[0] }
 
-    render :json => data
+    render json: data
   end
 
   def members
     members = Member.joins(:votings).where("session_id = 59").uniq.pluck(:id, :first_name, :last_name)
-    render :json => members
+    render json: members
   end
 
   private
+
+  def year
+    @year ||= sessions_params[:year].blank? ? Date.today : Date.new(sessions_params[:year].to_i)
+  end
 
   def sessions_params
     params.slice(:id, :session_id, :year)

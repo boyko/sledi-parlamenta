@@ -2,9 +2,20 @@
   <h1>Сесии <span class="label label-default"><%= @sessions.values.flatten.count %></span></h1>
 </div>
 
+<div class="panel">
+  <%= form_tag sessions_path, method: 'GET' do %>
+    <div class="input-group">
+      <%= text_field_tag(:query, params[:query], class: "form-control input-sm", placeholder: "Търсене по текст") %>
+      <span class="input-group-btn">
+        <%= submit_tag("Търси", name: nil, class: "btn btn-default btn-sm") %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
 <div class="panel panel-default">
   <div class="panel-heading text-center">
-    <%= link_to "<", { year: @year.prev_year.strftime("%Y") }, class: "btn btn-default" %>
+    <%= link_to "<", params.merge(year: @year.prev_year.strftime("%Y")), class: "btn btn-default" %>
       &nbsp;&nbsp;&nbsp;&nbsp;
 
   <div class="btn-group">
@@ -13,7 +24,7 @@
     </button>
     <ul class="dropdown-menu" role="menu">
       <% (Session.order("date").first.date.year..Time.now.year).to_a.each do |year| %>
-        <%= content_tag(:li, link_to("#{year}", year: year )) %>
+        <%= content_tag(:li, link_to("#{year}", params.merge(year: year) )) %>
       <% end %>
     </ul>
   </div>
@@ -21,7 +32,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;
 
     <% if Date.today.beginning_of_year >= @year.next_year.beginning_of_year %>
-      <%= link_to ">", { year: @year.next_year.strftime("%Y") }, class: "btn btn-default" %>
+      <%= link_to ">", params.merge(year: @year.next_year.strftime("%Y")), class: "btn btn-default" %>
     <% end %>
   </div>
 

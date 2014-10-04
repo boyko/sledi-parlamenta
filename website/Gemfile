@@ -30,4 +30,5 @@ group :development do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'pry'
+  gem 'timecop'
 end
