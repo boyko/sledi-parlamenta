@@ -20,7 +20,7 @@ describe SessionsController do
       it 'should only show sessions from that year' do
         get :index, year: '2013'
 
-        expect(assigns[:sessions].values.flatten).to eql([session])
+        expect(assigns[:sessions].values.flatten).to match_array([session])
       end
     end
 
@@ -28,7 +28,7 @@ describe SessionsController do
       it 'should only show sessions from the current year' do
         get :index
 
-        expect(assigns[:sessions].values.flatten).to eql(
+        expect(assigns[:sessions].values.flatten).to match_array(
           [sessions(:new_1), sessions(:new_2), sessions(:new_3)]
         )
       end
@@ -42,7 +42,7 @@ describe SessionsController do
           matched_sesion_1 = sessions(:new_2)
           matched_sesion_2 = sessions(:new_3)
 
-          expect(assigns[:sessions].values.flatten).to eql(
+          expect(assigns[:sessions].values.flatten).to match_array(
             [matched_sesion_1, matched_sesion_2]
           )
         end
@@ -52,7 +52,7 @@ describe SessionsController do
         it 'retrieves the matching sessions from the given year' do
           get :index, query: 'братле', year: '2013'
 
-          expect(assigns[:sessions].values.flatten).to eql([sessions(:old)])
+          expect(assigns[:sessions].values.flatten).to match_array([sessions(:old)])
         end
       end
     end
