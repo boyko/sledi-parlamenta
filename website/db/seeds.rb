@@ -20,7 +20,7 @@ Pellentesque in blandit urna, et tincidunt leo. Ut lacinia sed augue eu volutpat
 Phasellus dictum justo feugiat, consequat tortor vitae, varius mi. Morbi eget augue ut arcu mattis molestie. Vestibulum libero sapien, posuere non quam nec, imperdiet ultrices turpis. Aenean vel ipsum accumsan orci interdum pellentesque. Vivamus faucibus quis risus sit amet ultricies. Sed leo velit, aliquet eu sem eget, dignissim euismod metus. Proin ut hendrerit turpis, at accumsan leo. In in tellus magna. Duis non dui imperdiet, pulvinar ligula eget, feugiat arcu. Vivamus eros est, dictum sit amet erat porta, elementum sollicitudin ipsum. Donec sodales lectus sed ex feugiat laoreet id et sapien.',
   structure: Structure.create(
     kind: :assembly,
-    name: 'Подли гадове IV',
+    name: 'Партия 1',
     start_date: Date.parse('2014-01-01'),
     end_date: Date.parse('2014-12-01')
   )
